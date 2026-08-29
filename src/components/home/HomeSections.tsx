@@ -21,7 +21,18 @@ const workflow = [
 ];
 
 const featuredWork = visualWorks.find((work) => work.id === "ocean-content-thumbnail") ?? visualWorks[0];
-const reelWorks = visualWorks.filter((work) => work.id !== featuredWork.id && work.ratio !== "detail").slice(0, 6);
+const reelWorkIds = [
+  "traffic-safety-thumbnail",
+  "safety-ga-sister-thumbnail",
+  "editor-pick-dochi-caption",
+  "standards-event",
+  "shopping-live-highlight",
+  "innos-monster-tv-banner",
+  "sea-forest-invitation-thumbnail",
+];
+const reelWorks = reelWorkIds
+  .map((id) => visualWorks.find((work) => work.id === id))
+  .filter((work): work is (typeof visualWorks)[number] => Boolean(work));
 
 export function HomeSections() {
   return (

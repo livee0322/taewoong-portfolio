@@ -10,8 +10,8 @@ export default function WorksPage() {
       <section className="works-page-hero">
         <SectionHeading
           eyebrow="작업 모음"
-          title="매체가 달라져도, 먼저 보여야 할 것을 정리했습니다."
-          description="영상의 첫 장면, 이벤트 참여 방법, 상품의 장점처럼 각 작업에서 가장 먼저 읽혀야 할 정보를 화면으로 만들었습니다. 공개 가능한 실무 결과물만 골랐습니다."
+          title="일하면서 만든 것들을 모았습니다."
+          description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 콘텐츠, 상세페이지 중 공개할 수 있는 작업을 추렸습니다."
           as="h1"
         />
       </section>
@@ -24,7 +24,6 @@ export default function WorksPage() {
               <div className="works-category-heading">
                 <p className="eyebrow">{String(workCategories.indexOf(category) + 1).padStart(2, "0")}</p>
                 <h2 id={`category-${category}`}>{category}</h2>
-                <p>{categoryWorks.length}개의 선별 작업</p>
               </div>
               <div className="works-category-grid">
                 {categoryWorks.map((work) => (

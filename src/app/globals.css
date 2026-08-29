@@ -304,9 +304,8 @@ ul, ol { margin: 0; padding: 0; }
 .works-masonry-full .work-card:nth-child(7) { grid-column: 8 / span 5; }
 .works-categories { margin-top: var(--space-16); }
 .works-category + .works-category { margin-top: var(--space-section); }
-.works-category-heading { display: grid; grid-template-columns: 3fr 5fr 4fr; gap: 24px; align-items: end; padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-border); }
+.works-category-heading { display: grid; grid-template-columns: 3fr 9fr; gap: 24px; align-items: end; padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-border); }
 .works-category-heading h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
-.works-category-heading > p:last-child { color: var(--color-muted); font-size: 0.9375rem; }
 .works-category-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: var(--space-media-gap); margin-top: var(--space-8); }
 .works-category-grid .work-card { grid-column: auto; }
 .works-category-grid .work-card:nth-child(3n + 1) { grid-column: span 5; }
@@ -341,7 +340,7 @@ ul, ol { margin: 0; padding: 0; }
   .representative-note { grid-template-columns: repeat(8, minmax(0, 1fr)); }
   .representative-note > .eyebrow { grid-column: 1 / span 2; }
   .representative-note > div { grid-column: 3 / span 5; }
-  .works-category-heading { grid-template-columns: 2fr 4fr 2fr; }
+  .works-category-heading { grid-template-columns: 2fr 6fr; }
   .works-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .works-category-grid .work-card:nth-child(n) { grid-column: auto; }
   .works-category-grid .work-card:only-child { grid-column: 1 / -1; width: min(70%, 32rem); justify-self: center; }
@@ -427,7 +426,6 @@ ul, ol { margin: 0; padding: 0; }
   .representative-note h3 { font-size: 1.5rem; }
   .works-category-heading { display: block; }
   .works-category-heading h2 { margin-top: var(--space-2); }
-  .works-category-heading > p:last-child { margin-top: var(--space-2); }
   .works-category-grid { display: flex; gap: 16px; overflow-x: auto; padding-right: var(--space-page-edge); padding-bottom: 8px; scroll-snap-type: inline mandatory; -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); }
   .works-category-grid .work-card { flex: 0 0 calc(100vw - 76px); }
   .works-category-grid .work-card:only-child { width: auto; justify-self: auto; }
