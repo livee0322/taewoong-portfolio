@@ -11,7 +11,7 @@ export const projects: Project[] = [
     roles: ["Product Planning", "UX/UI", "AI Workflow", "Browser QA", "Project Management"],
     tools: ["Figma", "Asana", "Obsidian", "ChatGPT", "Claude", "Codex", "GitHub", "Vercel"],
     summary:
-      "쇼핑라이브 현장에서 반복되는 불분명한 요청과 섭외 방식을, 조건을 확인할 수 있는 서비스 흐름으로 바꿔보는 개인 프로젝트입니다. 문제 정의부터 화면 기준, 구현 검토와 브라우저 QA까지 직접 연결합니다.",
+      "쇼핑라이브 현장에서 반복되는 불분명한 요청과 섭외 방식을, 조건을 확인할 수 있는 서비스 흐름으로 바꿔보는 개인 프로젝트입니다. 문제 정의부터 화면 기준, 구현 검토와 브라우저 QA까지 직접 연결했습니다.",
     hero: {
       src: "/images/livbee/main-desktop.png",
       alt: "LIVBEE 프리뷰의 데스크톱 메인 화면. 쇼호스트 매칭 배너와 쇼핑라이브 목록이 보인다.",
@@ -31,13 +31,13 @@ export const projects: Project[] = [
       {
         label: "Flow / Scope",
         title: "화면보다 먼저, 사용 흐름과 예외를 맞춥니다.",
-        body: "각 기능에서 사용자가 무엇을 확인하고 다음에 무엇을 할 수 있어야 하는지 정리했습니다. 개발 협업에서는 문제, 목적, 현재 상태, 기대 결과, 사용자 흐름, 예외 상황, 범위를 한 단위로 확인합니다.",
+        body: "각 기능에서 사용자가 무엇을 확인하고 다음에 무엇을 할 수 있어야 하는지 정리했습니다. 개발 협업에서는 문제, 목적, 현재 상태, 기대 결과, 사용자 흐름, 예외 상황, 범위를 한 단위로 확인했습니다.",
         items: ["Problem", "Purpose", "User flow", "Exceptions", "Scope"],
       },
       {
         label: "Build / QA",
-        title: "AI 도구를 활용하되, 구현 결과는 직접 확인합니다.",
-        body: "IDEA → PLAN → BUILD → REVIEW → QA의 흐름으로 ChatGPT, Claude, Codex를 활용합니다. 요구사항을 정리하고 개발 작업을 나누며, 실제 브라우저 화면에서 구현 결과를 검토해 문제를 다시 수정합니다.",
+        title: "AI 도구를 활용하되, 구현 결과는 직접 확인했습니다.",
+        body: "IDEA → PLAN → BUILD → REVIEW → QA의 흐름으로 ChatGPT, Claude, Codex를 활용했습니다. 요구사항을 정리하고 개발 작업을 나누며, 실제 브라우저 화면에서 구현 결과를 검토해 문제를 다시 수정했습니다.",
         items: ["ChatGPT · Claude · Codex", "GitHub · Vercel", "Responsive QA", "Iteration"],
       },
     ],
@@ -85,7 +85,7 @@ export const projects: Project[] = [
       caption: "Commerce content · YouTube thumbnail",
     },
     intro:
-      "쇼핑라이브는 방송 전의 준비에서 많은 부분이 결정됩니다. 상품의 포인트와 필요한 장면을 정리한 뒤, 상세페이지·프로모션·현장 운영까지 하나의 판매 맥락으로 연결했습니다.",
+      "쇼핑라이브는 방송 전의 준비에서 많은 부분이 결정됐습니다. 상품의 포인트와 필요한 장면을 정리한 뒤, 상세페이지·프로모션·현장 운영까지 하나의 판매 맥락으로 연결했습니다.",
     sections: [
       {
         label: "Preparation",

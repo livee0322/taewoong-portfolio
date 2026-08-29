@@ -14,10 +14,10 @@ const capabilities = [
 ];
 
 const workflow = [
-  ["Design", "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리합니다.", "Figma · Photoshop · Illustrator"],
-  ["Content", "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만듭니다.", "Camera workflow · Premiere Pro"],
-  ["Commerce", "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비합니다.", "Promotion · Detail page · Shopping Live"],
-  ["Service QA", "실제 웹과 앱 화면을 확인하고, 수정이 반복되는 요소는 컴포넌트 기준으로 정리합니다.", "QA checklist · Figma components"],
+  ["Design", "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리했습니다.", "Figma · Photoshop · Illustrator"],
+  ["Content", "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만들었습니다.", "Camera workflow · Premiere Pro"],
+  ["Commerce", "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비했습니다.", "Promotion · Detail page · Shopping Live"],
+  ["Service QA", "실제 웹과 앱 화면을 확인하고, 수정이 반복되는 요소는 컴포넌트 기준으로 정리했습니다.", "QA checklist · Figma components"],
 ];
 
 export function HomeSections() {
@@ -67,7 +67,7 @@ export function HomeSections() {
         <SectionHeading
           eyebrow="대표 프로젝트"
           title="대표 작업"
-          description="LIVBEE에서는 서비스의 흐름과 화면을, 쇼핑라이브 작업에서는 상품을 보여주고 판매를 준비하는 과정을 다룹니다."
+          description="LIVBEE에서는 서비스의 흐름과 화면을, 쇼핑라이브 작업에서는 상품을 보여주고 판매를 준비하는 과정을 다뤘습니다."
         />
         <div className="projects-list">
           {projects.map((project) => <ProjectCard key={project.slug} project={project} />)}
@@ -114,7 +114,7 @@ export function HomeSections() {
         <article className="sellerchart-note">
           <p className="eyebrow">GPA KOREA / SellerChart</p>
           <div>
-            <h3>셀러차트의 웹·앱을 QA하고, 화면의 기준을 정리합니다.</h3>
+            <h3>셀러차트의 웹·앱을 QA하고, 화면의 기준을 정리했습니다.</h3>
             <p>웹과 앱 화면을 확인하며 QA와 디자인 수정을 진행하고, 반복되는 요소는 Figma Auto Layout과 컴포넌트로 정리했습니다.</p>
             <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
           </div>
@@ -141,8 +141,8 @@ export function HomeSections() {
       <section className="workflow section page-shell">
         <SectionHeading
           eyebrow="작업 방식"
-          title="결과물이 실제로 작동하는지까지 확인합니다."
-          description="디자인을 만들고, 촬영·영상·상품·서비스 화면으로 이어진 결과를 확인합니다. 필요한 도구는 일의 목적에 맞춰 익히고 적용합니다."
+          title="결과물이 실제로 작동하는지까지 확인했습니다."
+          description="디자인을 만들고, 촬영·영상·상품·서비스 화면으로 이어진 결과를 확인했습니다. 필요한 도구는 일의 목적에 맞춰 익히고 적용했습니다."
         />
         <div className="workflow-list">
           {workflow.map(([area, work, tools]) => (

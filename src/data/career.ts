@@ -20,15 +20,6 @@ export const careerEntries: CareerEntry[] = [
     highlights: ["Photo & video", "Promotion", "Shopping Live"],
   },
   {
-    period: "2021.12 — 2022.02",
-    company: "켈러리",
-    team: "Commerce Content",
-    position: "Content Designer",
-    role: "상세페이지 / 배너 / 쇼핑라이브 기획·진행",
-    description: "상품 상세페이지와 배너를 제작하고, 쇼핑라이브의 기획·운영과 사진·영상 촬영을 맡았습니다.",
-    highlights: ["Detail pages", "Live planning", "Photo & video"],
-  },
-  {
     period: "2022.03 — 2022.10",
     company: "다빈치커뮤니케이션",
     team: "Digital Content",
@@ -45,15 +36,6 @@ export const careerEntries: CareerEntry[] = [
     role: "제품 촬영 기획 / 상세페이지 / 프로모션 / 마케팅 디자인",
     description: "제품 촬영을 기획하고 상세페이지와 이벤트·프로모션 그래픽을 제작해 판매 채널의 맥락으로 연결했습니다.",
     highlights: ["Content direction", "Detail pages", "Promotion"],
-  },
-  {
-    period: "2023.09",
-    company: "중국 현지 제품 소싱",
-    team: "Commerce",
-    position: "Product Review",
-    role: "현지 샘플 확인 / 품질·디자인·상품성 검토",
-    description: "해외에서 소싱한 제품의 샘플을 현지에서 확인하고, 품질과 디자인, 상품성을 검토해 판매 여부를 판단하는 과정에 참여했습니다.",
-    highlights: ["Sourcing", "Sample inspection", "Product review"],
   },
   {
     period: "2024.06 — 현재",
