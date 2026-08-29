@@ -72,6 +72,14 @@ export function HomeSections() {
         <div className="projects-list">
           {projects.map((project) => <ProjectCard key={project.slug} project={project} />)}
         </div>
+        <article className="representative-note">
+          <p className="eyebrow">GPA KOREA / SellerChart</p>
+          <div>
+            <h3>셀러차트의 웹·앱을 QA하고, 화면의 기준을 정리했습니다.</h3>
+            <p>웹과 앱 화면을 확인하며 QA와 디자인 수정을 진행하고, 반복되는 요소는 Figma Auto Layout과 컴포넌트로 정리했습니다.</p>
+            <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
+          </div>
+        </article>
       </section>
 
       <section id="works" className="selected-works section page-shell">
@@ -79,7 +87,7 @@ export function HomeSections() {
           <SectionHeading
             eyebrow="작업 모음"
             title="분류별 작업"
-            description="유튜브 썸네일과 타이틀, 이벤트 그래픽, 쇼핑라이브, 상세페이지 작업을 실제 제작 이미지로 선별했습니다."
+            description="유튜브 썸네일, 자막·타이틀 디자인, 이벤트 배너, 쇼핑라이브 콘텐츠, 상세페이지 작업을 실제 제작 이미지로 선별했습니다."
           />
           <TextLink href="/works">작업 전체 보기</TextLink>
         </div>
@@ -111,14 +119,6 @@ export function HomeSections() {
           title="디자인으로 시작해, 제품과 서비스의 흐름까지."
           description="제품 촬영과 상세페이지에서 시작해 콘텐츠·쇼핑라이브·서비스 출시와 QA까지 경험했습니다. 필요한 일이 생길 때마다 직접 익히고 다음 업무에 활용하며 범위를 넓혀왔습니다."
         />
-        <article className="sellerchart-note">
-          <p className="eyebrow">GPA KOREA / SellerChart</p>
-          <div>
-            <h3>셀러차트의 웹·앱을 QA하고, 화면의 기준을 정리했습니다.</h3>
-            <p>웹과 앱 화면을 확인하며 QA와 디자인 수정을 진행하고, 반복되는 요소는 Figma Auto Layout과 컴포넌트로 정리했습니다.</p>
-            <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
-          </div>
-        </article>
         <div className="career-route">
           {capabilities.map(([, title]) => <span key={title}>{title}</span>)}
         </div>

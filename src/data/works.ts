@@ -23,9 +23,9 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "traffic-safety-title",
-    category: "영상 타이틀",
-    title: "생활권 안심도로 타이틀",
-    description: "영상의 주제를 시작 화면에서 읽을 수 있도록 타이틀 그래픽으로 구성했습니다.",
+    category: "자막·타이틀 디자인",
+    title: "생활권 안심도로 영상 타이틀",
+    description: "영상의 주제와 핵심 문장을 시작 화면에서 바로 읽도록 자막형 타이틀로 구성했습니다.",
     tone: "sand",
     ratio: "wide",
     src: "/images/selected-works/traffic-safety-title.jpg",
@@ -33,7 +33,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "safe-tv-event",
-    category: "이벤트 그래픽",
+    category: "이벤트 배너",
     title: "안전한TV 이벤트 결과 발표",
     description: "이벤트의 결과와 참여자 안내를 한 화면에서 확인하도록 구성했습니다.",
     tone: "rose",
@@ -43,7 +43,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "standards-event",
-    category: "이벤트 그래픽",
+    category: "이벤트 배너",
     title: "양자기술 4행시 이벤트",
     description: "참여 방법과 주제를 또렷하게 읽을 수 있도록 만든 이벤트 그래픽입니다.",
     tone: "paper",
@@ -53,7 +53,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "shopping-live-studio",
-    category: "쇼핑라이브",
+    category: "쇼핑라이브 콘텐츠",
     title: "쇼핑라이브 현장 썸네일",
     description: "제품 전시장과 진행 장면을 함께 보여주도록 구성한 쇼핑라이브 썸네일입니다.",
     tone: "stone",

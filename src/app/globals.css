@@ -170,12 +170,12 @@ ul, ol { margin: 0; padding: 0; }
 .work-card-copy > p:last-child { margin-top: 0.35rem; color: var(--color-muted); font-size: 0.9375rem; }
 
 .career { border-top: 1px solid var(--color-border); }
-.sellerchart-note { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; margin-top: var(--space-12); padding-block: var(--space-8); border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-border); }
-.sellerchart-note > .eyebrow { grid-column: 1 / span 3; padding-top: 0.35rem; }
-.sellerchart-note > div { grid-column: 5 / span 6; }
-.sellerchart-note h3 { font-size: clamp(1.5rem, 2.3vw, 2.15rem); line-height: 1.35; }
-.sellerchart-note p:not(.eyebrow) { margin-top: var(--space-4); color: var(--color-muted); font-size: 0.9375rem; }
-.sellerchart-note .text-link { margin-top: var(--space-6); }
+.representative-note { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; margin-top: var(--space-12); padding-block: var(--space-8); border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-border); }
+.representative-note > .eyebrow { grid-column: 1 / span 3; padding-top: 0.35rem; }
+.representative-note > div { grid-column: 5 / span 6; }
+.representative-note h3 { font-size: clamp(1.5rem, 2.3vw, 2.15rem); line-height: 1.35; }
+.representative-note p:not(.eyebrow) { margin-top: var(--space-4); color: var(--color-muted); font-size: 0.9375rem; }
+.representative-note .text-link { margin-top: var(--space-6); }
 .career-route { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: var(--space-12); }
 .career-route span { display: inline-flex; align-items: center; min-height: 2.3rem; padding: 0.35rem 0.7rem; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-muted); font-size: 0.8125rem; }
 .career-route span + span::before { content: "→"; margin-right: 0.75rem; color: var(--color-soft); }
@@ -249,6 +249,14 @@ ul, ol { margin: 0; padding: 0; }
 .works-masonry-full { margin-top: var(--space-8); }
 .works-masonry-full .work-card:nth-child(6) { grid-column: 1 / span 7; }
 .works-masonry-full .work-card:nth-child(7) { grid-column: 8 / span 5; }
+.works-categories { margin-top: var(--space-16); }
+.works-category + .works-category { margin-top: var(--space-20); }
+.works-category-heading { display: grid; grid-template-columns: 3fr 5fr 4fr; gap: 24px; align-items: end; padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-border); }
+.works-category-heading h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
+.works-category-heading > p:last-child { color: var(--color-muted); font-size: 0.9375rem; }
+.works-category-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: var(--space-8); }
+.works-category-grid .work-card { grid-column: auto; }
+.works-category-grid .work-card-copy h3 { font-size: 1.2rem; }
 
 .not-found { min-height: 70svh; padding-top: clamp(6rem, 14vw, 13rem); }
 .not-found h1 { margin-top: var(--space-4); font-size: clamp(3rem, 6vw, 5.5rem); }
@@ -273,9 +281,11 @@ ul, ol { margin: 0; padding: 0; }
   .work-card:nth-child(3), .work-card:nth-child(4), .work-card:nth-child(5) { grid-column: span 4; }
   .work-card:nth-child(6) { grid-column: span 5; }
   .work-card:nth-child(7) { grid-column: 4 / span 5; }
-  .sellerchart-note { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  .sellerchart-note > .eyebrow { grid-column: 1 / span 2; }
-  .sellerchart-note > div { grid-column: 3 / span 5; }
+  .representative-note { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .representative-note > .eyebrow { grid-column: 1 / span 2; }
+  .representative-note > div { grid-column: 3 / span 5; }
+  .works-category-heading { grid-template-columns: 2fr 4fr 2fr; }
+  .works-category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .career-item { grid-template-columns: 1.6fr 1.75fr 3fr; }
   .workflow-item { grid-template-columns: 1fr; }
   .workflow-item .workflow-tools { grid-column: auto; }
@@ -338,9 +348,15 @@ ul, ol { margin: 0; padding: 0; }
   .work-card:nth-child(even) .media-placeholder { width: 74%; margin-left: auto; }
   .work-card-copy { max-width: 20rem; }
   .career-list { margin-top: var(--space-8); }
-  .sellerchart-note { display: block; margin-top: var(--space-8); padding-block: var(--space-6); }
-  .sellerchart-note > div { margin-top: var(--space-4); }
-  .sellerchart-note h3 { font-size: 1.5rem; }
+  .representative-note { display: block; margin-top: var(--space-8); padding-block: var(--space-6); }
+  .representative-note > div { margin-top: var(--space-4); }
+  .representative-note h3 { font-size: 1.5rem; }
+  .works-category-heading { display: block; }
+  .works-category-heading h2 { margin-top: var(--space-2); }
+  .works-category-heading > p:last-child { margin-top: var(--space-2); }
+  .works-category-grid { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; }
+  .works-category-grid .work-card { flex: 0 0 min(78vw, 300px); }
+  .works-category-grid .work-card .media-placeholder { width: 100%; margin-left: 0; }
   .career-route { margin-top: var(--space-8); }
   .career-route span + span::before { display: none; }
   .career-item { display: block; padding-block: var(--space-6); }
