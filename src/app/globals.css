@@ -94,11 +94,11 @@ ul, ol { margin: 0; padding: 0; }
 .home-hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(22rem, 5fr); align-items: end; min-height: calc(100svh - 76px); gap: clamp(2rem, 6vw, 7rem); padding-top: clamp(5.5rem, 11vw, 9.5rem); padding-bottom: clamp(4rem, 8vw, 7rem); }
 .hero-eyebrow { margin-bottom: var(--space-8); }
 .home-hero h1 { max-width: 10ch; font-size: clamp(4rem, 8.1vw, 7.75rem); letter-spacing: -0.075em; }
-.hero-statement { max-width: 26ch; margin-top: var(--space-8); font-size: clamp(1.15rem, 1.75vw, 1.55rem); line-height: 1.55; }
+.hero-statement { max-width: 26ch; margin-top: var(--space-8); font-size: clamp(1.15rem, 1.75vw, 1.55rem); line-height: 1.55; word-break: keep-all; }
 .hero-composition { position: relative; align-self: center; padding-bottom: clamp(2rem, 4vw, 4rem); }
 .hero-media-main { width: min(100%, 39rem); margin-left: auto; box-shadow: 0 18px 45px color-mix(in srgb, var(--color-text) 11%, transparent); }
 .hero-media-detail { position: absolute; right: 0; bottom: clamp(3.2rem, 5vw, 5rem); width: clamp(8rem, 16vw, 13rem); box-shadow: 0 18px 45px color-mix(in srgb, var(--color-text) 16%, transparent); }
-.hero-domains { position: absolute; bottom: 0.55rem; left: 0; max-width: 18ch; color: var(--color-muted); font-size: 0.8125rem; line-height: 1.5; }
+.hero-domains { position: absolute; bottom: 0.55rem; left: 0; max-width: 24ch; color: var(--color-muted); font-size: 0.8125rem; line-height: 1.5; }
 
 .identity { border-top: 1px solid var(--color-border); }
 .identity-layout { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; margin-top: var(--space-16); }
@@ -160,16 +160,23 @@ ul, ol { margin: 0; padding: 0; }
 .work-card { min-width: 0; }
 .work-card:nth-child(1) { grid-column: span 7; }
 .work-card:nth-child(2) { grid-column: span 5; }
-.work-card:nth-child(3) { grid-column: 2 / span 3; }
-.work-card:nth-child(4) { grid-column: 6 / span 7; }
-.work-card:nth-child(5) { grid-column: 1 / span 5; }
-.work-card:nth-child(6) { grid-column: 7 / span 5; }
+.work-card:nth-child(3) { grid-column: 2 / span 4; }
+.work-card:nth-child(4) { grid-column: 7 / span 3; }
+.work-card:nth-child(5) { grid-column: 10 / span 3; }
+.work-card:nth-child(6) { grid-column: 1 / span 7; }
+.work-card:nth-child(7) { grid-column: 10 / span 2; }
 .work-card:hover .media-real-image, .work-card:focus-within .media-real-image { transform: scale(1.025); }
 .work-card-copy { padding-top: var(--space-4); }
 .work-card-copy h3, .work-card-copy h2 { margin-top: 0.35rem; font-size: 1.25rem; }
 .work-card-copy > p:last-child { margin-top: 0.35rem; color: var(--color-muted); font-size: 0.9375rem; }
 
 .career { border-top: 1px solid var(--color-border); }
+.sellerchart-note { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; margin-top: var(--space-12); padding-block: var(--space-8); border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-border); }
+.sellerchart-note > .eyebrow { grid-column: 1 / span 3; padding-top: 0.35rem; }
+.sellerchart-note > div { grid-column: 5 / span 6; }
+.sellerchart-note h3 { font-size: clamp(1.5rem, 2.3vw, 2.15rem); line-height: 1.35; }
+.sellerchart-note p:not(.eyebrow) { margin-top: var(--space-4); color: var(--color-muted); font-size: 0.9375rem; }
+.sellerchart-note .text-link { margin-top: var(--space-6); }
 .career-route { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: var(--space-12); }
 .career-route span { display: inline-flex; align-items: center; min-height: 2.3rem; padding: 0.35rem 0.7rem; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-muted); font-size: 0.8125rem; }
 .career-route span + span::before { content: "→"; margin-right: 0.75rem; color: var(--color-soft); }
@@ -238,7 +245,8 @@ ul, ol { margin: 0; padding: 0; }
 .works-page-hero .section-heading > h1 { font-size: clamp(3.5rem, 6vw, 5.5rem); }
 .works-page-hero .section-heading { min-height: 25rem; }
 .works-masonry-full { margin-top: var(--space-8); }
-.works-masonry-full .work-card:nth-child(6) { grid-column: 7 / span 5; }
+.works-masonry-full .work-card:nth-child(6) { grid-column: 1 / span 7; }
+.works-masonry-full .work-card:nth-child(7) { grid-column: 10 / span 2; }
 
 .not-found { min-height: 70svh; padding-top: clamp(6rem, 14vw, 13rem); }
 .not-found h1 { margin-top: var(--space-4); font-size: clamp(3rem, 6vw, 5.5rem); }
@@ -259,10 +267,12 @@ ul, ol { margin: 0; padding: 0; }
   .project-card:nth-child(odd) .project-card-media, .project-card:nth-child(even) .project-card-media { grid-column: 1 / span 5; order: initial; }
   .project-card:nth-child(odd) .project-card-meta, .project-card:nth-child(even) .project-card-meta { grid-column: 6 / -1; }
   .works-masonry { grid-template-columns: repeat(8, minmax(0, 1fr)); }
-  .work-card:nth-child(1), .work-card:nth-child(4) { grid-column: span 5; }
-  .work-card:nth-child(2), .work-card:nth-child(5) { grid-column: span 3; }
-  .work-card:nth-child(3) { grid-column: 2 / span 2; }
-  .work-card:nth-child(6) { grid-column: 4 / span 4; }
+  .work-card:nth-child(1), .work-card:nth-child(3), .work-card:nth-child(6) { grid-column: span 5; }
+  .work-card:nth-child(2), .work-card:nth-child(4), .work-card:nth-child(5) { grid-column: span 3; }
+  .work-card:nth-child(7) { grid-column: 4 / span 2; }
+  .sellerchart-note { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .sellerchart-note > .eyebrow { grid-column: 1 / span 2; }
+  .sellerchart-note > div { grid-column: 3 / span 5; }
   .career-item { grid-template-columns: 1.6fr 1.75fr 3fr; }
   .workflow-item { grid-template-columns: 1fr; }
   .workflow-item .workflow-tools { grid-column: auto; }
@@ -325,6 +335,9 @@ ul, ol { margin: 0; padding: 0; }
   .work-card:nth-child(even) .media-placeholder { width: 74%; margin-left: auto; }
   .work-card-copy { max-width: 20rem; }
   .career-list { margin-top: var(--space-8); }
+  .sellerchart-note { display: block; margin-top: var(--space-8); padding-block: var(--space-6); }
+  .sellerchart-note > div { margin-top: var(--space-4); }
+  .sellerchart-note h3 { font-size: 1.5rem; }
   .career-route { margin-top: var(--space-8); }
   .career-route span + span::before { display: none; }
   .career-item { display: block; padding-block: var(--space-6); }

@@ -8,8 +8,8 @@ export default function WorksPage() {
       <section className="works-page-hero">
         <SectionHeading
           eyebrow="Selected visual works"
-          title="디자인 작업의 장면들."
-          description="작업 유형을 계속 분리하지 않고, 실제 프로젝트를 보완하는 시각 작업을 한 흐름으로 보여줍니다."
+          title="작업 모음"
+          description="유튜브 썸네일과 타이틀, 이벤트 그래픽, 쇼핑라이브, 상세페이지. 이전 포트폴리오의 분류 기준에 맞춰 실제 제작 이미지를 다시 선별했습니다."
           as="h1"
         />
       </section>

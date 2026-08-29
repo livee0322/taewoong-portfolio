@@ -2,9 +2,9 @@
 
 ## Purpose and positioning
 
-This portfolio helps a hiring manager, practitioner, or collaborator understand what TaeWoong Lee can take from ambiguity to a real output. His career started in design and expanded through content production, commerce, service planning, UI/UX, QA, and collaboration with developers.
+This portfolio introduces TaeWoong Lee through the work he has actually made. His career started with product photography, retouching, and detail pages, then expanded through video content, commerce, shopping live, web and app QA, and Figma component work.
 
-The positioning is not “a designer who can do a little of everything.” It is a practitioner who learns the work a project needs and connects planning, making, and operation. The site should leave visitors with a practical impression: design is hands-on, and product, selling context, and implementation conversations are understood too.
+The positioning is not “a designer who can do a little of everything.” It is a designer who understands how a message becomes a visible result across content, commerce, and product screens. The site should leave visitors with a practical impression: the work is hands-on and the wording stays within the evidence.
 
 Use the rule **Portfolio First, Project Second**. The home page must first make TaeWoong’s range and visual judgement legible; project pages provide the deeper evidence only where it is supported by real material.
 
@@ -43,6 +43,5 @@ Every detail page starts with a project overview, then uses available sections f
 
 1. LIVBEE: service planning, UX/UI, QA, project management, AI-assisted development workflow.
 2. Shopping Live / Content: product analysis, campaign, detail page, preparation, and live operation shown with approved final imagery.
-3. New App Launch / GPA: keep as a compact career record until Figma screens or reviewable release material can support a deeper project page.
-4. Product sourcing: keep as a compact career record unless final, relevant assets and a verifiable story are available.
-5. Selected visual works: a carefully edited supporting record, not the primary narrative.
+3. GPA KOREA / SellerChart: web and app QA, design revisions, and Figma components. Keep this as a clear career record unless approved SellerChart materials support a deeper project page.
+4. Selected visual works: use the original portfolio categories — YouTube thumbnails, video titles, event graphics, shopping live, and detail pages — with visually checked Drive originals.

@@ -10,7 +10,7 @@ The portfolio does not claim that TaeWoong is a developer when the role was prod
 
 `무엇을 정리했는지 → 어떻게 함께 진행했는지 → 무엇을 확인했는지`
 
-Example: “화면과 기능을 Figma로 정리하고 개발자와 구현 방법을 조율했습니다.”
+Example: “셀러차트 웹과 앱의 화면을 QA하고, 디자인 수정 사항을 반영했습니다. 반복되는 요소는 Figma 컴포넌트로 정리했습니다.”
 
 Avoid vague claims such as “혁신적인 솔루션”, “최적의 결과”, “사용자 중심의 경험”, “시너지”, “새로운 가치”, or “끊임없이 성장”. Do not inflate a small contribution and do not hide useful work behind abstract collaboration language.
 
@@ -21,6 +21,7 @@ Avoid vague claims such as “혁신적인 솔루션”, “최적의 결과”,
 - Process steps describe a visible decision or handoff, not a generic project phase.
 - Results only use measurements that are known and reviewable. Otherwise use a specific learning or operational outcome.
 - Media alt text identifies the project, object, and relevant state; it is not filename text.
+- Career statements follow the source portfolio’s actual work categories. GPA KOREA work is described as SellerChart web/app QA, design revisions, and Figma components; do not relabel it as an app launch or general service planning.
 
 Long narrative material can live under `content/projects/`; keep the route-facing summary and metadata in the typed project record.
 

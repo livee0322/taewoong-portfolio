@@ -7,18 +7,17 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TextLink } from "@/components/ui/TextLink";
 
 const capabilities = [
-  ["01", "Design", "UI/UX · Graphic · Artwork"],
-  ["02", "Content", "촬영 기획 · 영상 · YouTube"],
-  ["03", "Commerce", "상품 · Promotion · Shopping Live"],
-  ["04", "Planning", "서비스 구조 · 기능 정의 · UX Flow"],
-  ["05", "Product", "구현 협업 · Browser QA · Iteration"],
+  ["01", "Design", "UI/UX · 그래픽 · 상세페이지"],
+  ["02", "Content", "촬영 기획 · YouTube 썸네일 · 타이틀/자막"],
+  ["03", "Commerce", "상품 정보 · 프로모션 · 쇼핑라이브"],
+  ["04", "Service QA", "웹·앱 QA · 디자인 수정 · Figma 컴포넌트"],
 ];
 
 const workflow = [
-  ["Design", "화면과 정보의 우선순위를 시각 언어로 정리합니다.", "Figma · Photoshop · Illustrator · Premiere Pro"],
-  ["Work system", "일의 맥락, 범위, 다음 결정을 문서에서 이어갑니다.", "Asana · Obsidian"],
-  ["AI workflow", "IDEA → PLAN → BUILD → REVIEW → QA로 구현을 검토합니다.", "ChatGPT · Claude · Codex"],
-  ["Shipping", "변경 단위를 기록하고 실제 브라우저에서 결과를 확인합니다.", "GitHub · Vercel"],
+  ["Design", "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리합니다.", "Figma · Photoshop · Illustrator"],
+  ["Content", "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만듭니다.", "Camera workflow · Premiere Pro"],
+  ["Commerce", "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비합니다.", "Promotion · Detail page · Shopping Live"],
+  ["Service QA", "실제 웹과 앱 화면을 확인하고, 수정이 반복되는 요소는 컴포넌트 기준으로 정리합니다.", "QA checklist · Figma components"],
 ];
 
 export function HomeSections() {
@@ -26,50 +25,50 @@ export function HomeSections() {
     <main>
       <section className="home-hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">Independent practitioner · Seoul</p>
-          <h1 id="hero-title">LEE TAE WOONG</h1>
-          <p className="hero-statement">디자인에서 시작해 기획하고, 만들고, 실제 결과까지 가져갑니다.</p>
+          <p className="eyebrow hero-eyebrow">Designer · Seoul</p>
+          <h1 id="hero-title">이태웅</h1>
+          <p className="hero-statement">디자인에서 시작해 콘텐츠, 커머스, 서비스 화면까지 경험을 넓혀왔습니다.</p>
         </div>
         <div className="hero-composition">
           <MediaPlaceholder
             className="hero-media hero-media-main"
             priority
             media={{
-              src: "/images/selected-works/live-commerce-banner.jpg",
-              alt: "자연 풍경과 디지털 기기를 배경으로 구성된 쇼핑라이브 런칭 배너",
+              src: "/images/selected-works/traffic-safety-motorcycle-thumbnail.jpg",
+              alt: "오토바이 옆 인물과 안전 관련 문구가 들어간 교통안전 콘텐츠 썸네일",
               ratio: "wide",
-              tone: "ink",
-              caption: "Live commerce",
+              tone: "sage",
+              caption: "유튜브 썸네일",
             }}
           />
           <MediaPlaceholder
             className="hero-media hero-media-detail"
             media={{
-              src: "/images/selected-works/ocean-content-thumbnail.jpg",
-              alt: "잠수부와 바다 풍경이 보이는 수중 콘텐츠 썸네일",
+              src: "/images/selected-works/tv-purchase-knowhow-thumbnail.jpg",
+              alt: "TV 전시장과 진행자 두 명, TV 구매 관련 문구가 들어간 유튜브 썸네일",
               ratio: "portrait",
-              tone: "sage",
-              caption: "Content",
+              tone: "stone",
+              caption: "커머스 콘텐츠",
             }}
           />
-          <p className="hero-domains">Planning · Design · Content · Commerce · Product</p>
+          <p className="hero-domains">Design · Content · Commerce · Service QA</p>
         </div>
       </section>
 
       <section id="about" className="identity section page-shell">
         <SectionHeading
-          eyebrow="About / Identity"
-          title="한 장면을 만들고, 그 장면이 실제로 작동할 때까지 봅니다."
-          description="디자인으로 커리어를 시작했습니다. 이후 제품, 촬영, 영상, 콘텐츠, 쇼핑라이브, 서비스 기획과 개발 협업을 직접 경험하며 필요한 역할을 넓혀왔습니다."
+          eyebrow="About"
+          title="필요한 것을 배우고, 다음 작업에 직접 적용해 왔습니다."
+          description="2019년부터 상세페이지, 배너, 프로모션 이미지를 만들며 일을 시작했습니다. 무엇을 판매하고 누구에게 보여야 하는지부터 이해해야 디자인이 실제 결과와 이어진다고 생각해, 촬영·영상·쇼핑라이브·서비스 화면까지 업무 범위를 넓혀왔습니다."
         />
         <div className="identity-layout">
           <MediaPlaceholder
             media={{
-              src: "/images/selected-works/ocean-content-title.jpg",
-              alt: "해양 현장 콘텐츠의 제목과 바다 아이콘으로 구성된 타이틀 그래픽",
-              ratio: "portrait",
-              tone: "paper",
-              caption: "Content title",
+              src: "/images/selected-works/traffic-safety-title.jpg",
+              alt: "도로 위 차량 장면과 생활권 안심도로 문구가 있는 영상 타이틀 그래픽",
+              ratio: "wide",
+              tone: "sand",
+              caption: "영상 타이틀",
             }}
           />
           <div className="capability-list">
@@ -87,8 +86,8 @@ export function HomeSections() {
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
           eyebrow="Selected projects"
-          title="작업부터 봅니다."
-          description="무엇을 할 수 있는지 한눈에 보이도록 대표 사례만 깊게 둡니다. LIVBEE는 서비스의 판단과 화면을, 쇼핑라이브는 판매 장면을 만드는 실무를 보여줍니다."
+          title="대표 작업"
+          description="LIVBEE에서는 서비스의 흐름과 화면을, 쇼핑라이브 작업에서는 상품을 보여주고 판매를 준비하는 과정을 다룹니다."
         />
         <div className="projects-list">
           {projects.map((project) => <ProjectCard key={project.slug} project={project} />)}
@@ -99,8 +98,8 @@ export function HomeSections() {
         <div className="works-heading-row">
           <SectionHeading
             eyebrow="Selected visual works"
-            title="결과로 남은 장면들."
-            description="라이브커머스, 캠페인, 상세페이지, 영상 콘텐츠에서 실제로 사용한 이미지와 그래픽을 선별했습니다."
+            title="분류별 작업"
+            description="유튜브 썸네일과 타이틀, 이벤트 그래픽, 쇼핑라이브, 상세페이지 작업을 실제 제작 이미지로 선별했습니다."
           />
           <TextLink href="/works">All visual works</TextLink>
         </div>
@@ -129,9 +128,17 @@ export function HomeSections() {
       <section id="experience" className="career section page-shell">
         <SectionHeading
           eyebrow="Career / Experience"
-          title="Design → Content → Commerce → Planning → Product"
-          description="회사 이름을 나열하기보다, 어떤 일을 직접 해보며 판단의 범위를 넓혔는지 보여줍니다. 제품 소싱과 GPA App Launch는 과장하지 않고 이 이력의 맥락으로 남깁니다."
+          title="디자인으로 시작해, 제품과 서비스의 흐름까지."
+          description="제품 촬영과 상세페이지에서 시작해 콘텐츠·쇼핑라이브·서비스 출시와 QA까지 경험했습니다. 필요한 일이 생길 때마다 직접 익히고 다음 업무에 활용하며 범위를 넓혀왔습니다."
         />
+        <article className="sellerchart-note">
+          <p className="eyebrow">GPA KOREA / SellerChart</p>
+          <div>
+            <h3>셀러차트의 웹·앱을 QA하고, 화면의 기준을 정리합니다.</h3>
+            <p>웹과 앱 화면을 확인하며 QA와 디자인 수정을 진행하고, 반복되는 요소는 Figma Auto Layout과 컴포넌트로 정리했습니다.</p>
+            <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
+          </div>
+        </article>
         <div className="career-route">
           {capabilities.map(([, title]) => <span key={title}>{title}</span>)}
         </div>
@@ -153,9 +160,9 @@ export function HomeSections() {
 
       <section className="workflow section page-shell">
         <SectionHeading
-          eyebrow="Tools / Workflow"
-          title="도구는 앞세우지 않고, 일의 흐름 안에 둡니다."
-          description="작업의 목적과 판단 기준을 먼저 맞춘 뒤 그에 맞는 제작 도구, 협업 도구, 검토 도구를 사용합니다."
+          eyebrow="Workflow"
+          title="결과물이 실제로 작동하는지까지 확인합니다."
+          description="디자인을 만들고, 촬영·영상·상품·서비스 화면으로 이어진 결과를 확인합니다. 필요한 도구는 일의 목적에 맞춰 익히고 적용합니다."
         />
         <div className="workflow-list">
           {workflow.map(([area, work, tools]) => (
@@ -171,9 +178,9 @@ export function HomeSections() {
       <section id="contact" className="contact section page-shell">
         <p className="eyebrow">Contact</p>
         <div className="contact-layout">
-          <h2>다음 결과를 함께 만들 준비가 되어 있습니다.</h2>
+          <h2>다음 작업을 함께 이야기해 주세요.</h2>
           <div>
-            <p>프로젝트와 이력의 맥락이 더 궁금하다면, 대표 사례와 작업 이미지를 먼저 확인해 주세요. 연락처와 이력서 공개 범위는 최종 확인 후 연결합니다.</p>
+            <p>프로젝트와 이력의 맥락이 더 궁금하다면 대표 사례와 작업 이미지를 먼저 확인해 주세요. 연락처와 이력서 공개 범위는 최종 확인 후 연결하겠습니다.</p>
             <TextLink href="/projects/livbee">LIVBEE 사례 보기</TextLink>
           </div>
         </div>
