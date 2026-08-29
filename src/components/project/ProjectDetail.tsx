@@ -85,6 +85,11 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
               <figure className="project-gallery-item" data-reveal key={media.caption}>
                 <MediaPlaceholder media={media} />
                 <figcaption>{media.caption}</figcaption>
+                {media.ratio === "detail" && media.src ? (
+                  <a className="detail-view-link" href={media.src} target="_blank" rel="noreferrer">
+                    원본 전체 보기 ↗
+                  </a>
+                ) : null}
               </figure>
             ))}
           </div>

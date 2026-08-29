@@ -52,7 +52,9 @@ Use a major divider only for a chapter change and a minor divider for repeated r
 
 ## Image grouping
 
-- Preserve the source ratio for thumbnails, posters, detail pages, desktop UI, and mobile UI.
-- A visual series shares its baseline, caption position, and media gap even when individual ratios differ.
+- Preserve the source ratio for thumbnails, posters, desktop UI, and mobile UI.
+- A long vertical detail page is the one exception: it shows a fixed-height top crop (`aspect-ratio: 4 / 5`, `object-fit: cover`) inside the same card pattern as other work, with a text link to the original file so the full page is never lost, only summarized.
+- A visual series shares its baseline, caption position, and media gap even when individual ratios differ. Grid-based galleries (`.works-category-grid`, `.project-gallery-grid`) use `align-items: start` so a row with mixed ratios never stretches a shorter card and leaves dead space under its caption.
 - Responsive product screens are presented as a named Desktop–Mobile pair, with the desktop image as the base visual and the mobile image overlapping or following it.
 - Home uses one large lead work followed by a finite horizontal reel; the archive may use denser category compositions.
+- A mobile horizontal gallery card is sized `calc(100vw - 76px)` so the next card peeks by a constant ~20px regardless of viewport width, and the scroll container is edge-masked so a peeking card's title/description fades out instead of showing legible cut-off text.

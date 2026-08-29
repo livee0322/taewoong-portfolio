@@ -100,7 +100,7 @@ export function HomeSections() {
             <div className="featured-work-copy">
               <p className="eyebrow">{featuredWork.category}</p>
               <h3>{featuredWork.title}</h3>
-              <p>{featuredWork.description}</p>
+              {featuredWork.description ? <p>{featuredWork.description}</p> : null}
             </div>
           </article>
           <div className="work-reel" aria-label="추가 작업 가로 갤러리">

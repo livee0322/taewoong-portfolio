@@ -18,6 +18,7 @@ Prefer short verbs tied to evidence: `촬영했습니다`, `정리했습니다`,
 
 ## Content maintenance
 
+- A `VisualWork` entry does not need a description. Title and category are the default; add a one-sentence `description` only when it explains a decision the image itself cannot show. Do not give every card in an archive the same explanatory sentence pattern — it reads as generated copy.
 - Summaries answer what the work was and TaeWoong’s contribution in two to four short sentences.
 - Role fields use concrete nouns such as `Service planning`, `UX/UI`, `QA`, `Content direction`.
 - Process steps describe a visible decision or handoff, not a generic project phase.

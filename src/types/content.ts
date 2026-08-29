@@ -37,7 +37,7 @@ export type VisualWork = {
   id: string;
   category: string;
   title: string;
-  description: string;
+  description?: string;
   tone: MediaTone;
   ratio: "wide" | "portrait" | "square" | "detail";
   src: `/images/${string}`;

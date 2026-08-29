@@ -41,7 +41,13 @@ export default function WorksPage() {
                     />
                     <div className="work-card-copy">
                       <h3>{work.title}</h3>
-                      <p>{work.description}</p>
+                      <p className="work-card-category">{work.category}</p>
+                      {work.description ? <p className="work-card-description">{work.description}</p> : null}
+                      {work.ratio === "detail" ? (
+                        <a className="detail-view-link" href={work.src} target="_blank" rel="noreferrer">
+                          원본 전체 보기 ↗
+                        </a>
+                      ) : null}
                     </div>
                   </article>
                 ))}

@@ -20,7 +20,8 @@ Review the rendered site at 360×800, 375×812, 390×844, 768×1024, 1280×900, 
 - Header and all primary navigation destinations work.
 - A project link loads its corresponding `/projects/[slug]` route.
 - Korean words do not split mid-word, and intentional display breaks still read naturally on mobile.
-- Horizontal galleries show a clear next item, support touch scrolling, and do not create page-level overflow.
+- Horizontal galleries show a clear next item, support touch scrolling, and do not create page-level overflow. The peeking card's title/description fades at the edge rather than showing legible cut-off text, and every card snaps to the same page-edge baseline.
+- A grid row with mixed image ratios never leaves dead blank space under a shorter card's caption before the next section starts.
 - LIVBEE Main and Community each read as a Desktop–Mobile pair.
 - At mobile widths, verify `innerWidth` and `visualViewport.width`, confirm the 640px/900px media queries match, and ensure the desktop navigation is hidden.
 - Scroll `/`, `/works`, and `/projects/livbee` from top to bottom at 360px, 375px, and 390px. No in-viewport reveal target may remain transparent.
