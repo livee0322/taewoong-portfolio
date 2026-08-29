@@ -28,6 +28,10 @@ No accent colour is chosen at this stage. Do not add brand blue, purple, green, 
 
 Pretendard is the intended Korean typeface; use the system fallback stack until a licensed/local asset is supplied. Use weight and space sparingly: display hierarchy comes from scale and line length, not repeated heavy bold text.
 
+- Display and section titles use weight 500, balanced wrapping, and a controlled maximum line length.
+- Body large, body, caption, eyebrow, and CTA roles keep their shared size and line-height instead of receiving page-specific values.
+- Korean headings use `word-break: keep-all` and `text-wrap: balance`. Shorten the sentence or adjust its measure before adding an intentional `<br>`; a manual break is reserved for a stable semantic pause in a display sentence.
+
 ## Layout primitives
 
 - Global frame: maximum 1440px, responsive side padding.
@@ -36,8 +40,19 @@ Pretendard is the intended Korean typeface; use the system fallback stack until 
 - Mobile horizontal padding: 20px.
 - Desktop section rhythm: 120–160px; smaller internal spacing uses the shared token scale only.
 
+Semantic spacing variables in `globals.css` own page edge, major section, chapter, heading-to-body, body-to-media, media-to-media, media-to-caption, and CTA gaps. Related media stays within the media gap; a new chapter uses the larger chapter or section gap.
+
 Components use `.page-shell`, `.content-grid`, and responsive CSS grid rules rather than each route inventing its own width.
 
 ## Surface rules
 
 Borders organize secondary information. Shadows are near-absent. Radius signals media and controls, not every page section. A section should be a composition in space before it becomes a card.
+
+Use a major divider only for a chapter change and a minor divider for repeated records such as career rows. Do not add a divider when the section gap already makes the grouping clear.
+
+## Image grouping
+
+- Preserve the source ratio for thumbnails, posters, detail pages, desktop UI, and mobile UI.
+- A visual series shares its baseline, caption position, and media gap even when individual ratios differ.
+- Responsive product screens are presented as a named Desktop–Mobile pair, with the desktop image as the base visual and the mobile image overlapping or following it.
+- Home uses one large lead work followed by a finite horizontal reel; the archive may use denser category compositions.

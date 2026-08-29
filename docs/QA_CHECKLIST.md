@@ -19,6 +19,9 @@ Review at 375px, 768px, 1280px, and 1440px or wider.
 - Mobile uses one readable sequence rather than compressed desktop columns.
 - Header and all primary navigation destinations work.
 - A project link loads its corresponding `/projects/[slug]` route.
+- Korean words do not split mid-word, and intentional display breaks still read naturally on mobile.
+- Horizontal galleries show a clear next item, support touch scrolling, and do not create page-level overflow.
+- LIVBEE Main and Community each read as a Desktop–Mobile pair.
 
 ## Accessibility and performance
 
@@ -34,3 +37,5 @@ Review at 375px, 768px, 1280px, and 1440px or wider.
 - Role boundaries are accurate.
 - Every new project follows the shared data contract.
 - Canonical documents still match implementation behavior.
+
+Perform two visual passes: first after implementation, then again after correcting issues found in the first browser review.

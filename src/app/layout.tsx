@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { RevealObserver } from "@/components/ui/RevealObserver";
 
 export const metadata: Metadata = {
   title: {
     default: "TAEWOONG LEE — Planning, Design, Content, Commerce",
     template: "%s — TAEWOONG LEE",
   },
-  description: "디자인에서 시작해 기획, 콘텐츠, 커머스까지 업무 영역을 넓혀온 이태웅의 포트폴리오.",
+  description: "상세페이지와 배너부터 촬영, 영상, 쇼핑라이브, 서비스 기획과 QA까지 직접 해온 이태웅의 포트폴리오.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="ko">
       <body>
         <Header />
+        <RevealObserver />
         {children}
         <Footer />
       </body>

@@ -5,13 +5,13 @@ export const projects: Project[] = [
     slug: "livbee",
     number: "01",
     title: "LIVBEE",
-    subtitle: "쇼호스트·모델과 브랜드가 조건을 확인하고 일을 시작하도록 돕는 매칭 서비스.",
+    subtitle: "브랜드와 쇼호스트가 조건과 작업 이력을 확인하고 대화를 시작하는 매칭 서비스.",
     year: "Personal project · Ongoing",
     type: "Product / Service",
     roles: ["Product Planning", "UX/UI", "AI Workflow", "Browser QA", "Project Management"],
     tools: ["Figma", "Asana", "Obsidian", "ChatGPT", "Claude", "Codex", "GitHub", "Vercel"],
     summary:
-      "쇼핑라이브 현장에서 반복되는 불분명한 요청과 섭외 방식을, 조건을 확인할 수 있는 서비스 흐름으로 바꿔보는 개인 프로젝트입니다. 문제 정의부터 화면 기준, 구현 검토와 브라우저 QA까지 직접 연결했습니다.",
+      "쇼핑라이브 현장에서 겪은 섭외와 조건 협의의 불편을 서비스로 풀고 있습니다. 기능을 기획하고 화면을 설계한 뒤, 구현 결과를 브라우저에서 확인하며 계속 고쳤습니다.",
     hero: {
       src: "/images/livbee/main-desktop.png",
       alt: "LIVBEE 프리뷰의 데스크톱 메인 화면. 쇼호스트 매칭 배너와 쇼핑라이브 목록이 보인다.",
@@ -20,24 +20,24 @@ export const projects: Project[] = [
       caption: "LIVBEE preview · main",
     },
     intro:
-      "쇼핑라이브를 경험하며 무보수 출연, 합의되지 않은 요청, DM과 지인 소개에 의존하는 섭외, 브랜드가 출연자의 역량을 판단하기 어려운 상황을 보았습니다. 그 불편을 ‘서로의 조건과 포트폴리오를 확인하고 일을 시작하는 채널’로 바꾸기 위해 LIVBEE를 기획했습니다.",
+      "쇼핑라이브 현장에서는 출연 조건이 명확하지 않거나, DM과 지인 소개에 의존해 사람을 찾는 일이 반복됐습니다. 브랜드와 출연자가 서로의 조건과 작업 이력을 먼저 확인할 수 있도록 LIVBEE를 기획했습니다.",
     sections: [
       {
         label: "Problem / Purpose",
-        title: "현장의 애매한 요청을, 확인 가능한 매칭 흐름으로 바꿉니다.",
-        body: "처음에는 프로필과 메시지로 시작했습니다. 이후 매칭, 제안, 조건 협의, 계약, 커뮤니티까지 단계가 이어지도록 서비스의 목적과 현재 상태, 기대 결과를 문서와 화면에서 함께 정의했습니다.",
+        title: "DM으로 흩어지던 조건을 한 흐름에 모았습니다.",
+        body: "프로필과 메시지에서 시작해 매칭, 제안, 조건 협의, 계약으로 이어지는 순서를 정리했습니다. 각 단계에서 사용자가 확인할 정보와 다음 행동을 문서와 화면에 함께 정의했습니다.",
         items: ["PROFILE", "MESSAGE", "MATCHING", "OFFER", "CONTRACT", "COMMUNITY"],
       },
       {
         label: "Flow / Scope",
-        title: "화면보다 먼저, 사용 흐름과 예외를 맞춥니다.",
-        body: "각 기능에서 사용자가 무엇을 확인하고 다음에 무엇을 할 수 있어야 하는지 정리했습니다. 개발 협업에서는 문제, 목적, 현재 상태, 기대 결과, 사용자 흐름, 예외 상황, 범위를 한 단위로 확인했습니다.",
+        title: "화면을 그리기 전에 다음 행동과 예외를 적었습니다.",
+        body: "사용자가 무엇을 확인하고 어디로 이동해야 하는지, 권한이 다르거나 정보가 비어 있을 때는 어떻게 보일지 먼저 정리했습니다. 개발 작업에도 문제·목적·현재 상태·기대 결과·예외 범위를 함께 전달했습니다.",
         items: ["Problem", "Purpose", "User flow", "Exceptions", "Scope"],
       },
       {
         label: "Build / QA",
-        title: "AI 도구를 활용하되, 구현 결과는 직접 확인했습니다.",
-        body: "IDEA → PLAN → BUILD → REVIEW → QA의 흐름으로 ChatGPT, Claude, Codex를 활용했습니다. 요구사항을 정리하고 개발 작업을 나누며, 실제 브라우저 화면에서 구현 결과를 검토해 문제를 다시 수정했습니다.",
+        title: "개발 도구가 만든 결과를 브라우저에서 다시 확인했습니다.",
+        body: "ChatGPT, Claude, Codex로 요구사항을 정리하고 개발 작업을 나눴습니다. 구현 뒤에는 역할별 계정과 여러 화면 크기로 직접 확인하고, 어색한 흐름과 문구를 다시 수정했습니다.",
         items: ["ChatGPT · Claude · Codex", "GitHub · Vercel", "Responsive QA", "Iteration"],
       },
     ],
@@ -70,13 +70,13 @@ export const projects: Project[] = [
     slug: "shopping-live",
     number: "02",
     title: "쇼핑라이브 & 커머스 콘텐츠",
-    subtitle: "상품을 보여주는 장면부터 판매를 준비하는 과정까지 이어온 실무 경험.",
+    subtitle: "상품의 포인트를 찾고, 촬영과 콘텐츠를 거쳐 방송 현장까지 연결한 실무 작업.",
     year: "Commerce experience",
     type: "Shopping Live / Commerce Content",
     roles: ["Product Analysis", "Content Planning", "Promotion Design", "Live Operation"],
     tools: ["Photoshop", "Illustrator", "Premiere Pro", "Camera workflow"],
     summary:
-      "상품의 특성을 읽고 촬영, 상세페이지, 프로모션, 쇼핑라이브로 연결해 온 경험입니다. 실제 방송 현장과 제작 결과를 중심으로 작업을 선별했습니다.",
+      "상품 정보를 정리한 뒤 촬영, 상세페이지, 프로모션, 쇼핑라이브 순서로 준비했습니다. 실제 방송에 쓰인 이미지와 현장 작업을 중심으로 선별했습니다.",
     hero: {
       src: "/images/selected-works/tv-purchase-knowhow-thumbnail.jpg",
       alt: "TV 전시장과 진행자 두 명, TV 구매 관련 문구가 들어간 유튜브 썸네일",
