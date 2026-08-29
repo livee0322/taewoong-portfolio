@@ -7,7 +7,7 @@ export default function WorksPage() {
     <main className="works-page page-shell">
       <section className="works-page-hero">
         <SectionHeading
-          eyebrow="Selected visual works"
+          eyebrow="작업 모음"
           title="작업 모음"
           description="유튜브 썸네일과 타이틀, 이벤트 그래픽, 쇼핑라이브, 상세페이지. 이전 포트폴리오의 분류 기준에 맞춰 실제 제작 이미지를 다시 선별했습니다."
           as="h1"
@@ -24,6 +24,7 @@ export default function WorksPage() {
                 ratio: work.ratio,
                 caption: work.category,
               }}
+              priority={work.id === "traffic-safety-title"}
             />
             <div className="work-card-copy">
               <p className="eyebrow">{work.category}</p>

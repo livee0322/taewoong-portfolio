@@ -25,33 +25,13 @@ export function HomeSections() {
     <main>
       <section className="home-hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">Designer · Seoul</p>
+          <p className="eyebrow hero-eyebrow">디자이너 · 서울</p>
           <h1 id="hero-title">이태웅</h1>
           <p className="hero-statement">디자인에서 시작해 콘텐츠, 커머스, 서비스 화면까지 경험을 넓혀왔습니다.</p>
-        </div>
-        <div className="hero-composition">
-          <MediaPlaceholder
-            className="hero-media hero-media-main"
-            priority
-            media={{
-              src: "/images/selected-works/traffic-safety-motorcycle-thumbnail.jpg",
-              alt: "오토바이 옆 인물과 안전 관련 문구가 들어간 교통안전 콘텐츠 썸네일",
-              ratio: "wide",
-              tone: "sage",
-              caption: "유튜브 썸네일",
-            }}
-          />
-          <MediaPlaceholder
-            className="hero-media hero-media-detail"
-            media={{
-              src: "/images/selected-works/tv-purchase-knowhow-thumbnail.jpg",
-              alt: "TV 전시장과 진행자 두 명, TV 구매 관련 문구가 들어간 유튜브 썸네일",
-              ratio: "portrait",
-              tone: "stone",
-              caption: "커머스 콘텐츠",
-            }}
-          />
-          <p className="hero-domains">Design · Content · Commerce · Service QA</p>
+          <div className="hero-intro-note">
+            <p>2019 — 현재</p>
+            <p>Design · Content · Commerce · Service QA</p>
+          </div>
         </div>
       </section>
 
@@ -85,7 +65,7 @@ export function HomeSections() {
 
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
-          eyebrow="Selected projects"
+          eyebrow="대표 프로젝트"
           title="대표 작업"
           description="LIVBEE에서는 서비스의 흐름과 화면을, 쇼핑라이브 작업에서는 상품을 보여주고 판매를 준비하는 과정을 다룹니다."
         />
@@ -97,11 +77,11 @@ export function HomeSections() {
       <section id="works" className="selected-works section page-shell">
         <div className="works-heading-row">
           <SectionHeading
-            eyebrow="Selected visual works"
+            eyebrow="작업 모음"
             title="분류별 작업"
             description="유튜브 썸네일과 타이틀, 이벤트 그래픽, 쇼핑라이브, 상세페이지 작업을 실제 제작 이미지로 선별했습니다."
           />
-          <TextLink href="/works">All visual works</TextLink>
+          <TextLink href="/works">작업 전체 보기</TextLink>
         </div>
         <div className="works-masonry">
           {visualWorks.map((work) => (
@@ -127,7 +107,7 @@ export function HomeSections() {
 
       <section id="experience" className="career section page-shell">
         <SectionHeading
-          eyebrow="Career / Experience"
+          eyebrow="경력"
           title="디자인으로 시작해, 제품과 서비스의 흐름까지."
           description="제품 촬영과 상세페이지에서 시작해 콘텐츠·쇼핑라이브·서비스 출시와 QA까지 경험했습니다. 필요한 일이 생길 때마다 직접 익히고 다음 업무에 활용하며 범위를 넓혀왔습니다."
         />
@@ -160,7 +140,7 @@ export function HomeSections() {
 
       <section className="workflow section page-shell">
         <SectionHeading
-          eyebrow="Workflow"
+          eyebrow="작업 방식"
           title="결과물이 실제로 작동하는지까지 확인합니다."
           description="디자인을 만들고, 촬영·영상·상품·서비스 화면으로 이어진 결과를 확인합니다. 필요한 도구는 일의 목적에 맞춰 익히고 적용합니다."
         />
