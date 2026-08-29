@@ -20,6 +20,8 @@ Use a natural decelerating easing. Allowed properties are opacity, `translateY` 
 - Links and controls retain visible keyboard focus.
 - Hero copy reveals in reading order after hydration.
 - Project, work, and responsive-pair groups reveal once as they enter the viewport, with short stagger only inside a related series.
+- Reveal is progressive enhancement: content is visible by default, only a successfully observed target receives `reveal-pending`, and route changes, unsupported observers, cleanup, or a 2.4-second failsafe restore visibility.
+- At 640px and below, reveal pending is not applied. Mobile keeps the intended reading order and horizontal galleries while prioritizing permanent content visibility over entrance motion.
 - The home work reel and mobile archive rows use native horizontal scrolling and scroll snap; they never move without user input.
 - LIVBEE Desktop–Mobile pairs reveal as one comparison unit.
 
