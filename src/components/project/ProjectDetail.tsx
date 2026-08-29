@@ -62,9 +62,17 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         <div className="gallery-heading">
           <p className="eyebrow">Selected material</p>
           <h2 id="gallery-title">실제 화면과 선별한 작업 장면.</h2>
+          {project.slug === "livbee" ? (
+            <p className="gallery-note">데스크톱과 모바일 화면을 함께 확인하며, 같은 서비스 흐름이 각 화면에서 자연스럽게 이어지도록 반응형으로 구성했습니다.</p>
+          ) : null}
         </div>
         <div className="project-gallery-grid">
-          {project.gallery.map((media) => <MediaPlaceholder key={media.caption} media={media} />)}
+          {project.gallery.map((media) => (
+            <figure className="project-gallery-item" key={media.caption}>
+              <MediaPlaceholder media={media} />
+              <figcaption>{media.caption}</figcaption>
+            </figure>
+          ))}
         </div>
         {project.liveUrl ? (
           <TextLink className="project-live-link" href={project.liveUrl} target="_blank" rel="noreferrer">
