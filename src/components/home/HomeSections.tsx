@@ -5,6 +5,7 @@ import { ProjectCard } from "@/components/project/ProjectCard";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TextLink } from "@/components/ui/TextLink";
+import { WorkTitle } from "@/components/ui/WorkTitle";
 
 const capabilities = [
   ["01", "Design", "UI/UX · 그래픽 · 상세페이지"],
@@ -25,8 +26,8 @@ const reelWorkIds = [
   "traffic-safety-thumbnail",
   "safety-ga-sister-thumbnail",
   "editor-pick-dochi-caption",
-  "standards-event",
-  "shopping-live-highlight",
+  "pyojoon-gobaek-thumbnail",
+  "shopping-live-studio",
   "innos-monster-tv-banner",
   "sea-forest-invitation-thumbnail",
 ];
@@ -53,7 +54,7 @@ export function HomeSections() {
         <SectionHeading
           eyebrow="About"
           title="제품 촬영부터 상세페이지, 영상, 쇼핑라이브 현장까지 맡았습니다."
-          description="제품을 촬영하고 상세페이지를 만든 뒤, 같은 상품의 배너와 영상을 제작하고 쇼핑라이브 현장까지 맡았습니다. 최근에는 웹·앱 화면을 QA하고 Figma 컴포넌트를 정리하며, 개인 프로젝트 LIVBEE의 기획과 구현 검토를 이어가고 있습니다."
+          description="최근에는 웹·앱 화면을 QA하고 Figma 컴포넌트를 정리하며, 개인 프로젝트 LIVBEE의 기획과 구현 검토를 이어가고 있습니다."
         />
         <div className="identity-layout" data-reveal>
           <MediaPlaceholder
@@ -80,7 +81,7 @@ export function HomeSections() {
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
           eyebrow="대표 프로젝트"
-          title="LIVBEE는 서비스를 기획하고, 쇼핑라이브는 현장에서 직접 준비했습니다."
+          title="서비스와 커머스, 두 영역에서 맡은 일을 정리했습니다."
           description="LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다."
         />
         <div className="projects-list">
@@ -100,7 +101,7 @@ export function HomeSections() {
         <div className="works-heading-row">
           <SectionHeading
             eyebrow="작업 모음"
-            title="그동안 만든 작업 일부를 보여드립니다."
+            title="직접 만든 작업 일부를 소개합니다."
             description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다."
           />
           <TextLink href="/works">작업 전체 보기</TextLink>
@@ -110,7 +111,7 @@ export function HomeSections() {
             <MediaPlaceholder media={{ src: featuredWork.src, alt: featuredWork.alt, tone: featuredWork.tone, ratio: featuredWork.ratio, caption: featuredWork.category }} />
             <div className="featured-work-copy">
               <p className="eyebrow">{featuredWork.category}</p>
-              <h3>{featuredWork.title}</h3>
+              <h3><WorkTitle title={featuredWork.title} /></h3>
               {featuredWork.description ? <p>{featuredWork.description}</p> : null}
             </div>
           </article>
@@ -119,7 +120,7 @@ export function HomeSections() {
               <article className="reel-card" data-reveal key={work.id}>
                 <MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: work.ratio, caption: work.category }} />
                 <p className="eyebrow">{work.category}</p>
-                <h3>{work.title}</h3>
+                <h3><WorkTitle title={work.title} /></h3>
               </article>
             ))}
           </div>
@@ -129,7 +130,7 @@ export function HomeSections() {
       <section id="experience" className="career section page-shell">
         <SectionHeading
           eyebrow="경력"
-          title="맡은 일이 늘어난 순서대로 정리했습니다."
+          title="디자인에서 콘텐츠와 커머스, 서비스 기획으로 업무 범위를 넓혀왔습니다."
           description="제품 이미지 한 장을 만들던 일에서 출발해 영상과 판매 현장, 웹·앱 화면까지 확인하게 됐습니다. 아래는 그 범위가 넓어진 순서입니다."
         />
         <div className="career-route">

@@ -14,6 +14,8 @@ export type ProjectMedia = {
   ratio: "wide" | "portrait" | "square" | "detail";
   tone: MediaTone;
   caption: string;
+  /** object-position bias when the frame crops a taller/wider source than its target ratio. Defaults to center. */
+  focus?: "top" | "center" | "bottom";
 };
 
 export type Project = {
@@ -42,6 +44,8 @@ export type VisualWork = {
   ratio: "wide" | "portrait" | "square" | "detail";
   src: `/images/${string}`;
   alt: string;
+  /** object-position bias when the frame crops a taller/wider source than its target ratio. Defaults to center. */
+  focus?: "top" | "center" | "bottom";
 };
 
 export type CareerEntry = {

@@ -1,5 +1,6 @@
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { WorkTitle } from "@/components/ui/WorkTitle";
 import { visualWorks } from "@/data/works";
 
 const workCategories = ["유튜브 썸네일", "자막·타이틀 디자인", "이벤트 배너", "쇼핑라이브 콘텐츠", "상세페이지"];
@@ -10,8 +11,8 @@ export default function WorksPage() {
       <section className="works-page-hero">
         <SectionHeading
           eyebrow="작업 모음"
-          title="일하면서 만든 것들을 모았습니다."
-          description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 콘텐츠, 상세페이지 중 공개할 수 있는 작업을 추렸습니다."
+          title="실무에서 만든 작업을 모았습니다."
+          description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 콘텐츠, 상세페이지 중 공개 가능한 작업을 선별했습니다."
           as="h1"
         />
       </section>
@@ -39,8 +40,7 @@ export default function WorksPage() {
                       priority={work.id === "ocean-content-thumbnail" || work.id === "traffic-safety-thumbnail"}
                     />
                     <div className="work-card-copy">
-                      <h3>{work.title}</h3>
-                      <p className="work-card-category">{work.category}</p>
+                      <h3><WorkTitle title={work.title} /></h3>
                       {work.description ? <p className="work-card-description">{work.description}</p> : null}
                       {work.ratio === "detail" ? (
                         <a className="detail-view-link" href={work.src} target="_blank" rel="noreferrer">
