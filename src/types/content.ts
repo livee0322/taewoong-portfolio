@@ -11,7 +11,7 @@ export type ProjectMedia = {
   /** Local public path, added when the approved final asset is available. */
   src?: `/images/${string}`;
   alt: string;
-  ratio: "wide" | "portrait" | "square";
+  ratio: "wide" | "portrait" | "square" | "detail";
   tone: MediaTone;
   caption: string;
 };
@@ -30,6 +30,7 @@ export type Project = {
   intro: string;
   sections: ProjectSection[];
   gallery: ProjectMedia[];
+  liveUrl?: string;
 };
 
 export type VisualWork = {
@@ -38,7 +39,9 @@ export type VisualWork = {
   title: string;
   description: string;
   tone: MediaTone;
-  ratio: "wide" | "portrait" | "square";
+  ratio: "wide" | "portrait" | "square" | "detail";
+  src: `/images/${string}`;
+  alt: string;
 };
 
 export type CareerEntry = {

@@ -16,6 +16,7 @@ Use a natural decelerating easing. Allowed properties are opacity, `translateY` 
 
 - Header gains a faint surface and border after scrolling.
 - Project media scales slightly and the arrow shifts on hover/focus.
+- Selected visual-work images use a restrained scale reveal on hover/focus; touch layouts keep every image fully visible without a hover dependency.
 - Links and controls retain visible keyboard focus.
 
 ## Constraints

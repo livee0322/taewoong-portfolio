@@ -61,11 +61,16 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
       <section className="project-gallery page-shell section" aria-labelledby="gallery-title">
         <div className="gallery-heading">
           <p className="eyebrow">Selected material</p>
-          <h2 id="gallery-title">자료가 준비되면 이 자리에 실제 과정이 이어집니다.</h2>
+          <h2 id="gallery-title">실제 화면과 선별한 작업 장면.</h2>
         </div>
         <div className="project-gallery-grid">
           {project.gallery.map((media) => <MediaPlaceholder key={media.caption} media={media} />)}
         </div>
+        {project.liveUrl ? (
+          <TextLink className="project-live-link" href={project.liveUrl} target="_blank" rel="noreferrer">
+            LIVBEE 방문하기
+          </TextLink>
+        ) : null}
       </section>
 
       <section className="next-project page-shell section">

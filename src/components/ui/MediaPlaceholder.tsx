@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { MediaTone, ProjectMedia } from "@/types/content";
 
 type MediaPlaceholderProps = {
-  media: ProjectMedia | { tone: MediaTone; ratio: "wide" | "portrait" | "square"; title: string; description?: string };
+  media: ProjectMedia | { tone: MediaTone; ratio: "wide" | "portrait" | "square" | "detail"; title: string; description?: string };
   priority?: boolean;
   className?: string;
 };
@@ -12,7 +12,7 @@ export function MediaPlaceholder({ media, priority = false, className = "" }: Me
   const title = isProjectMedia ? media.caption : media.title;
   const description = isProjectMedia ? media.alt : media.description ?? "";
   const source = isProjectMedia ? media.src : undefined;
-  const sizes = media.ratio === "wide" ? "(max-width: 640px) 100vw, 58vw" : media.ratio === "portrait" ? "(max-width: 640px) 72vw, 34vw" : "(max-width: 640px) 72vw, 34vw";
+  const sizes = media.ratio === "wide" ? "(max-width: 640px) 100vw, 58vw" : media.ratio === "detail" ? "(max-width: 640px) 72vw, 28vw" : "(max-width: 640px) 72vw, 34vw";
 
   return (
     <div
@@ -20,7 +20,17 @@ export function MediaPlaceholder({ media, priority = false, className = "" }: Me
       {...(!source ? { role: "img", "aria-label": description } : {})}
       data-priority={priority ? "true" : undefined}
     >
-      {source ? <Image className="media-real-image" src={source} alt={description} fill priority={priority} sizes={sizes} /> : null}
+      {source ? (
+        <Image
+          className="media-real-image"
+          src={source}
+          alt={description}
+          fill
+          priority={priority}
+          loading={priority ? "eager" : "lazy"}
+          sizes={sizes}
+        />
+      ) : null}
       <div className="media-placeholder-grid" aria-hidden="true" />
       <div className="media-placeholder-mark" aria-hidden="true">
         <span>TL</span>

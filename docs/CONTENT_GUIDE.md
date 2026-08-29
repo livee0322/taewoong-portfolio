@@ -23,3 +23,10 @@ Avoid vague claims such as “혁신적인 솔루션”, “최적의 결과”,
 - Media alt text identifies the project, object, and relevant state; it is not filename text.
 
 Long narrative material can live under `content/projects/`; keep the route-facing summary and metadata in the typed project record.
+
+## Asset evidence
+
+- Use original production assets only after visually checking the file, its category, and whether it supports the adjacent claim.
+- Keep the source-to-site path explicit: original source → selected final asset → optimized local file in `public/images/...`.
+- Do not use source-only clip art as a final portfolio result. Exclude private captures, unapproved personal information, and unfinished product-model material.
+- A long detail page should appear as a readable crop or a substantial vertical preview, never a decorative thumbnail.

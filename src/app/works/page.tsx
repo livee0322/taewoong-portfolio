@@ -16,7 +16,15 @@ export default function WorksPage() {
       <section className="works-masonry works-masonry-full" aria-label="선별된 비주얼 작업">
         {visualWorks.map((work) => (
           <article className={`work-card work-${work.ratio}`} key={work.id}>
-            <MediaPlaceholder media={{ tone: work.tone, ratio: work.ratio, title: work.category, description: `${work.category}: ${work.title}` }} />
+            <MediaPlaceholder
+              media={{
+                src: work.src,
+                alt: work.alt,
+                tone: work.tone,
+                ratio: work.ratio,
+                caption: work.category,
+              }}
+            />
             <div className="work-card-copy">
               <p className="eyebrow">{work.category}</p>
               <h2>{work.title}</h2>
