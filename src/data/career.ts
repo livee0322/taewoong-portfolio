@@ -1,0 +1,58 @@
+import type { CareerEntry } from "@/types/content";
+
+export const careerEntries: CareerEntry[] = [
+  {
+    period: "2019.04 — 2020.04",
+    company: "온아이앤씨",
+    team: "Design",
+    position: "Design",
+    role: "제품 촬영 / 보정 / 상세페이지",
+    description: "제품을 촬영하고, 판매를 위한 상세페이지로 정리하는 일을 경험했습니다.",
+    highlights: ["Product photography", "Retouching", "Detail pages"],
+  },
+  {
+    period: "2020.05 — 2021.09",
+    company: "올인닷컴 (이노스TV)",
+    team: "Content & Commerce",
+    position: "Content / Commerce",
+    role: "사진·영상 / 상세페이지 / 배너 / 쇼핑라이브",
+    description: "사진과 영상, 프로모션, 쇼핑라이브까지 콘텐츠가 판매와 연결되는 흐름을 넓혔습니다.",
+    highlights: ["Photo & video", "Promotion", "Shopping Live"],
+  },
+  {
+    period: "2022.03 — 2022.10",
+    company: "다빈치커뮤니케이션",
+    team: "Digital Content",
+    position: "Visual Design",
+    role: "포스터 / 디지털 콘텐츠 / YouTube 영상 디자인",
+    description: "영상 채널과 디지털 매체에서 내용을 빠르게 전달하는 시각 언어를 만들었습니다.",
+    highlights: ["Posters", "Digital content", "YouTube design"],
+  },
+  {
+    period: "2022.11 — 2024.04",
+    company: "라원인터내셔날",
+    team: "Content & Marketing",
+    position: "Content / Marketing Design",
+    role: "제품 촬영 기획 / 상세페이지 / 콘텐츠 / 프로모션 / 마케팅 디자인",
+    description: "제품 콘텐츠를 기획하고 프로모션과 마케팅 디자인까지 한 흐름으로 운영했습니다.",
+    highlights: ["Content direction", "Detail pages", "Promotion"],
+  },
+  {
+    period: "2023.09",
+    company: "China sourcing visit",
+    team: "Commerce",
+    position: "Product Review",
+    role: "중국 현지 제품 소싱 및 샘플 검수",
+    description: "품질, 디자인, 상품성을 보고 판매 여부를 검토하는 과정에 참여했습니다.",
+    highlights: ["Sourcing", "Sample inspection", "Product review"],
+  },
+  {
+    period: "2024.06 — 2024.12",
+    company: "GPA Korea 개발팀",
+    team: "Product",
+    position: "Service Planning / UX/UI",
+    role: "서비스 기획 / UI/UX / Figma / 개발 협업 / QA",
+    description: "서비스 화면과 기능을 정리하고, 개발자와 구현을 조율하며 QA를 진행했습니다.",
+    highlights: ["Figma", "Developer collaboration", "QA"],
+  },
+];
