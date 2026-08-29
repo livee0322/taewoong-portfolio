@@ -414,7 +414,7 @@ ul, ol { margin: 0; padding: 0; }
   .featured-work { display: block; }
   .featured-work-copy { padding-top: var(--space-4); padding-bottom: 0; }
   .featured-work-copy h3 { font-size: 1.5rem; }
-  .work-reel { grid-auto-columns: calc(100vw - 76px); margin-right: calc(var(--space-page-edge) * -1); padding-right: var(--space-page-edge); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); }
+  .work-reel { grid-auto-columns: calc(100vw - 76px); margin-right: calc(var(--space-page-edge) * -1); padding-right: var(--space-page-edge); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 50px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 50px), transparent); }
   .works-masonry { display: block; margin-top: var(--space-8); }
   .work-card + .work-card { margin-top: var(--space-8); }
   .work-card .media-placeholder { width: 100%; }
@@ -426,7 +426,7 @@ ul, ol { margin: 0; padding: 0; }
   .representative-note h3 { font-size: 1.5rem; }
   .works-category-heading { display: block; }
   .works-category-heading h2 { margin-top: var(--space-2); }
-  .works-category-grid { display: flex; gap: 16px; overflow-x: auto; padding-right: var(--space-page-edge); padding-bottom: 8px; scroll-snap-type: inline mandatory; -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); }
+  .works-category-grid { display: flex; gap: 16px; overflow-x: auto; padding-right: var(--space-page-edge); padding-bottom: 8px; scroll-snap-type: inline mandatory; -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent); }
   .works-category-grid .work-card { flex: 0 0 calc(100vw - 76px); }
   .works-category-grid .work-card:only-child { width: auto; justify-self: auto; }
   .works-category-grid .work-card { scroll-snap-align: start; }

@@ -10,14 +10,14 @@ const capabilities = [
   ["01", "Design", "UI/UX · 그래픽 · 상세페이지"],
   ["02", "Content", "촬영 기획 · YouTube 썸네일 · 타이틀/자막"],
   ["03", "Commerce", "상품 정보 · 프로모션 · 쇼핑라이브"],
-  ["04", "Service QA", "웹·앱 QA · 디자인 수정 · Figma 컴포넌트"],
+  ["04", "Product", "서비스 기획 · UX 흐름 · QA · 개발 협업"],
 ];
 
 const workflow = [
   ["Design", "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리했습니다.", "Figma · Photoshop · Illustrator"],
   ["Content", "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만들었습니다.", "Camera workflow · Premiere Pro"],
   ["Commerce", "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비했습니다.", "Promotion · Detail page · Shopping Live"],
-  ["Service QA", "실제 웹과 앱 화면을 확인하고, 수정이 반복되는 요소는 컴포넌트 기준으로 정리했습니다.", "QA checklist · Figma components"],
+  ["Product", "서비스를 기획하고 UX 흐름을 설계한 뒤, 구현 화면을 QA하며 개발과 협업했습니다.", "Service planning · UX flow · QA · Dev collaboration"],
 ];
 
 const featuredWork = visualWorks.find((work) => work.id === "ocean-content-thumbnail") ?? visualWorks[0];
@@ -40,8 +40,8 @@ export function HomeSections() {
       <section className="home-hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow" data-reveal>이태웅 · 디자이너</p>
-          <h1 id="hero-title" data-reveal>디자인에서 시작해,<br />일의 다음 단계까지 왔습니다.</h1>
-          <p className="hero-statement" data-reveal>상세페이지와 배너를 만들던 디자이너로 시작해 촬영·영상·쇼핑라이브·서비스 기획과 QA까지 맡았습니다. 필요한 일이 생길 때마다 직접 해보며 범위를 넓혔습니다.</p>
+          <h1 id="hero-title" data-reveal>디자인으로 시작해<br />촬영·콘텐츠·커머스·서비스 기획까지 해왔습니다.</h1>
+          <p className="hero-statement" data-reveal>상세페이지와 배너를 만들던 디자이너로 시작해 촬영, 영상, 쇼핑라이브 현장, 서비스 기획까지 맡았습니다. 필요한 일이 생길 때마다 직접 해보며 범위를 넓혔습니다.</p>
           <div className="hero-intro-note">
             <p>2019 — NOW</p>
             <p>Design · Content · Commerce · Product</p>
@@ -52,7 +52,7 @@ export function HomeSections() {
       <section id="about" className="identity section page-shell">
         <SectionHeading
           eyebrow="About"
-          title="한 장의 디자인만 만들지 않았습니다."
+          title="제품 촬영부터 상세페이지, 영상, 쇼핑라이브 현장까지 맡았습니다."
           description="제품을 촬영하고 상세페이지를 만든 뒤, 같은 상품의 배너와 영상을 제작하고 쇼핑라이브 현장까지 맡았습니다. 최근에는 웹·앱 화면을 QA하고 Figma 컴포넌트를 정리하며, 개인 프로젝트 LIVBEE의 기획과 구현 검토를 이어가고 있습니다."
         />
         <div className="identity-layout" data-reveal>
@@ -80,7 +80,7 @@ export function HomeSections() {
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
           eyebrow="대표 프로젝트"
-          title="화면과 현장, 두 가지 방식으로 일했습니다."
+          title="LIVBEE는 서비스를 기획하고, 쇼핑라이브는 현장에서 직접 준비했습니다."
           description="LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다."
         />
         <div className="projects-list">
@@ -89,8 +89,8 @@ export function HomeSections() {
         <article className="representative-note">
           <p className="eyebrow">GPA KOREA / SellerChart</p>
           <div>
-            <h3>셀러차트 웹·앱의 어색한 화면을 찾고, 반복되는 UI를 정리했습니다.</h3>
-            <p>실제 화면을 QA하며 디자인 수정 사항을 반영했습니다. 자주 쓰이는 요소는 Figma Auto Layout과 컴포넌트로 묶었습니다.</p>
+            <h3>웹·앱을 QA하고 반복되는 UI를 컴포넌트로 정리했습니다.</h3>
+            <p>Figma Auto Layout으로 자주 쓰이는 요소를 컴포넌트로 묶고, 디자인 수정 사항을 실제 화면에 반영했습니다.</p>
             <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
           </div>
         </article>
@@ -100,7 +100,7 @@ export function HomeSections() {
         <div className="works-heading-row">
           <SectionHeading
             eyebrow="작업 모음"
-            title="설명보다 작업을 먼저 보여드립니다."
+            title="그동안 만든 작업 일부를 보여드립니다."
             description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다."
           />
           <TextLink href="/works">작업 전체 보기</TextLink>
@@ -129,7 +129,7 @@ export function HomeSections() {
       <section id="experience" className="career section page-shell">
         <SectionHeading
           eyebrow="경력"
-          title="만드는 범위가 넓어진 만큼, 보는 기준도 달라졌습니다."
+          title="맡은 일이 늘어난 순서대로 정리했습니다."
           description="제품 이미지 한 장을 만들던 일에서 출발해 영상과 판매 현장, 웹·앱 화면까지 확인하게 됐습니다. 아래는 그 범위가 넓어진 순서입니다."
         />
         <div className="career-route">

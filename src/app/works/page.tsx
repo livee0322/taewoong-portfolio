@@ -36,7 +36,7 @@ export default function WorksPage() {
                         ratio: work.ratio,
                         caption: work.category,
                       }}
-                      priority={work.id === "tv-purchase-thumbnail" || work.id === "traffic-safety-thumbnail"}
+                      priority={work.id === "ocean-content-thumbnail" || work.id === "traffic-safety-thumbnail"}
                     />
                     <div className="work-card-copy">
                       <h3>{work.title}</h3>

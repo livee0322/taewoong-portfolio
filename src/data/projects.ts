@@ -36,7 +36,7 @@ export const projects: Project[] = [
       },
       {
         label: "Build / QA",
-        title: "개발 도구가 만든 결과를 브라우저에서 다시 확인했습니다.",
+        title: "구현된 화면은 직접 브라우저에서 확인하고 다시 고쳤습니다.",
         body: "ChatGPT, Claude, Codex로 요구사항을 정리하고 개발 작업을 나눴습니다. 구현 뒤에는 역할별 계정과 여러 화면 크기로 직접 확인하고, 어색한 흐름과 문구를 다시 수정했습니다.",
         items: ["ChatGPT · Claude · Codex", "GitHub · Vercel", "Responsive QA", "Iteration"],
       },
