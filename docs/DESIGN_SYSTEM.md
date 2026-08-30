@@ -52,9 +52,14 @@ Use a major divider only for a chapter change and a minor divider for repeated r
 
 ## Image grouping
 
-- Preserve the source ratio for thumbnails, posters, desktop UI, and mobile UI.
-- A long vertical detail page is the one exception: it shows a fixed-height top crop (`aspect-ratio: 4 / 5`, `object-fit: cover`) inside the same card pattern as other work, with a text link to the original file so the full page is never lost, only summarized.
-- A visual series shares its baseline, caption position, and media gap even when individual ratios differ. Grid-based galleries (`.works-category-grid`, `.project-gallery-grid`) use `align-items: start` so a row with mixed ratios never stretches a shorter card and leaves dead space under its caption.
+- Project storytelling may preserve a source image's native character, but archive previews use a category frame so each series reads as one group: video thumbnails and title graphics use `16:9`, event graphics use `1:1`, and long detail pages use `4:5`.
+- Preview frames use `object-fit: cover`; set a work-specific focal position when a face, product, title, or other essential information would otherwise be cropped.
+- A long vertical detail page pairs its `4:5` preview with a text link to the original file, so the full page is never lost, only summarized.
+- A visual series shares its image top and bottom, title start, caption position, and media gap. The archive uses three equal columns on desktop, two on tablet, and a large single-card horizontal gallery on mobile.
 - Responsive product screens are presented as a named Desktop–Mobile pair, with the desktop image as the base visual and the mobile image overlapping or following it.
 - Home uses one large lead work followed by a finite horizontal reel; the archive may use denser category compositions.
 - A mobile horizontal gallery card is sized `calc(100vw - 76px)` so the next card peeks by a constant ~20px regardless of viewport width, and the scroll container is edge-masked so a peeking card's title/description fades out instead of showing legible cut-off text.
+
+## Reveal safety
+
+Reveal is progressive enhancement, never a visibility dependency. Viewports up to 1023px, coarse pointers, and reduced-motion environments render content immediately. Desktop observation keeps a short failsafe and must leave zero hidden targets after a full-page scroll.

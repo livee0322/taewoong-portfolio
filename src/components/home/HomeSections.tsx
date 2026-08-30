@@ -41,8 +41,8 @@ export function HomeSections() {
       <section className="home-hero page-shell" aria-labelledby="hero-title">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow" data-reveal>이태웅 · 디자이너</p>
-          <h1 id="hero-title" data-reveal>디자인으로 시작해<br />촬영·콘텐츠·커머스·서비스 기획까지 해왔습니다.</h1>
-          <p className="hero-statement" data-reveal>상세페이지와 배너를 만들던 디자이너로 시작해 촬영, 영상, 쇼핑라이브 현장, 서비스 기획까지 맡았습니다. 필요한 일이 생길 때마다 직접 해보며 범위를 넓혔습니다.</p>
+          <h1 id="hero-title" data-reveal>디자인과 콘텐츠를 만들고,<br />서비스 화면까지 직접 확인합니다.</h1>
+          <p className="hero-statement" data-reveal>상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 제품 촬영과 영상, 쇼핑라이브 현장을 거쳐 최근에는 서비스 기획과 UI/UX, QA, 개발 협업을 맡고 있습니다.</p>
           <div className="hero-intro-note">
             <p>2019 — NOW</p>
             <p>Design · Content · Commerce · Product</p>
@@ -53,8 +53,8 @@ export function HomeSections() {
       <section id="about" className="identity section page-shell">
         <SectionHeading
           eyebrow="About"
-          title="제품 촬영부터 상세페이지, 영상, 쇼핑라이브 현장까지 맡았습니다."
-          description="최근에는 웹·앱 화면을 QA하고 Figma 컴포넌트를 정리하며, 개인 프로젝트 LIVBEE의 기획과 구현 검토를 이어가고 있습니다."
+          title="화면 안의 디자인과 촬영 현장의 일을 함께 해봤습니다."
+          description="제품을 촬영하고 상세페이지와 배너를 만들었습니다. 영상에서는 썸네일·타이틀·자막을 제작했고, 쇼핑라이브에서는 방송 준비와 현장 운영을 맡았습니다."
         />
         <div className="identity-layout" data-reveal>
           <MediaPlaceholder
@@ -81,7 +81,7 @@ export function HomeSections() {
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
           eyebrow="대표 프로젝트"
-          title="서비스와 커머스, 두 영역에서 맡은 일을 정리했습니다."
+          title="서비스와 커머스에서 맡은 과정을 두 프로젝트로 정리했습니다."
           description="LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다."
         />
         <div className="projects-list">
@@ -101,7 +101,7 @@ export function HomeSections() {
         <div className="works-heading-row">
           <SectionHeading
             eyebrow="작업 모음"
-            title="직접 만든 작업 일부를 소개합니다."
+            title="공개 가능한 실무 작업을 골라 소개합니다."
             description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다."
           />
           <TextLink href="/works">작업 전체 보기</TextLink>
@@ -130,8 +130,8 @@ export function HomeSections() {
       <section id="experience" className="career section page-shell">
         <SectionHeading
           eyebrow="경력"
-          title="디자인에서 콘텐츠와 커머스, 서비스 기획으로 업무 범위를 넓혀왔습니다."
-          description="제품 이미지 한 장을 만들던 일에서 출발해 영상과 판매 현장, 웹·앱 화면까지 확인하게 됐습니다. 아래는 그 범위가 넓어진 순서입니다."
+          title="2019년 제품 디자인부터 지금의 서비스 기획까지."
+          description="회사와 팀이 바뀔 때마다 맡은 역할도 달라졌습니다. 아래에 실제 경력 순서와 각 시기에 담당한 일을 적었습니다."
         />
         <div className="career-route">
           {capabilities.map(([, title]) => <span key={title}>{title}</span>)}
@@ -155,8 +155,8 @@ export function HomeSections() {
       <section className="workflow section page-shell">
         <SectionHeading
           eyebrow="작업 방식"
-          title="필요한 일을 파악하고, 끝까지 확인합니다."
-          description="먼저 목적과 보여줄 정보를 정리합니다. 직접 만들거나 협업으로 구현한 뒤에는 실제 화면과 현장에서 빠진 부분이 없는지 다시 봅니다."
+          title="목적을 정리하고, 만든 뒤에는 실제 화면에서 확인합니다."
+          description="무엇을 보여줘야 하는지 먼저 정리합니다. 직접 제작하거나 협업으로 구현한 뒤에는 화면과 현장에서 빠진 부분을 다시 확인합니다."
         />
         <div className="workflow-list">
           {workflow.map(([area, work, tools]) => (
@@ -172,9 +172,9 @@ export function HomeSections() {
       <section id="contact" className="contact section page-shell">
         <p className="eyebrow">Contact</p>
         <div className="contact-layout">
-          <h2>제가 해온 일이<br />필요한 팀을 찾고 있습니다.</h2>
+          <h2>디자인부터 운영까지,<br />해온 일을 더 보여드리겠습니다.</h2>
           <div>
-            <p>디자인만 맡는 사람보다, 콘텐츠와 운영까지 함께 이해하는 사람이 필요하다면 포트폴리오의 작업과 경력을 더 살펴봐 주세요.</p>
+            <p>그래픽, 콘텐츠, 커머스, 서비스 화면을 함께 다뤄온 경험이 필요하다면 작업 모음과 경력을 살펴봐 주세요.</p>
             <TextLink href="/works">작업 모음 보기</TextLink>
           </div>
         </div>

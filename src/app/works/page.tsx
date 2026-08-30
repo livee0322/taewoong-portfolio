@@ -3,7 +3,13 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { WorkTitle } from "@/components/ui/WorkTitle";
 import { visualWorks } from "@/data/works";
 
-const workCategories = ["유튜브 썸네일", "자막·타이틀 디자인", "이벤트 배너", "쇼핑라이브 콘텐츠", "상세페이지"];
+const workCategories = [
+  { name: "유튜브 썸네일", frame: "video" },
+  { name: "자막·타이틀 디자인", frame: "video" },
+  { name: "이벤트 배너", frame: "square" },
+  { name: "쇼핑라이브 콘텐츠", frame: "video" },
+  { name: "상세페이지", frame: "detail" },
+] as const;
 
 export default function WorksPage() {
   return (
@@ -17,14 +23,14 @@ export default function WorksPage() {
         />
       </section>
       <section className="works-categories" aria-label="카테고리별 선별 작업">
-        {workCategories.map((category) => {
-          const categoryWorks = visualWorks.filter((work) => work.category === category);
+        {workCategories.map((category, categoryIndex) => {
+          const categoryWorks = visualWorks.filter((work) => work.category === category.name);
           if (categoryWorks.length === 0) return null;
           return (
-            <section className="works-category" key={category} aria-labelledby={`category-${category}`}>
+            <section className={`works-category works-category-${category.frame}`} key={category.name} aria-labelledby={`category-${categoryIndex}`}>
               <div className="works-category-heading">
-                <p className="eyebrow">{String(workCategories.indexOf(category) + 1).padStart(2, "0")}</p>
-                <h2 id={`category-${category}`}>{category}</h2>
+                <p className="eyebrow">{String(categoryIndex + 1).padStart(2, "0")}</p>
+                <h2 id={`category-${categoryIndex}`}>{category.name}</h2>
               </div>
               <div className="works-category-grid">
                 {categoryWorks.map((work) => (
