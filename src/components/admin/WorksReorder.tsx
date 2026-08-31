@@ -20,6 +20,15 @@ export function WorksReorder() {
   const [items, setItems] = useState(mockWorks);
   const [draggingId, setDraggingId] = useState<string | null>(null);
 
+  const moveBy = (id: string, offset: -1 | 1) => {
+    setItems((current) => {
+      const fromIndex = current.findIndex((item) => item.id === id);
+      const toIndex = fromIndex + offset;
+      if (fromIndex < 0 || toIndex < 0 || toIndex >= current.length) return current;
+      return moveItem(current, id, current[toIndex].id);
+    });
+  };
+
   return (
     <section className={styles.editorBlock} aria-labelledby="works-order-title">
       <div className={styles.blockHeading}>
@@ -53,7 +62,11 @@ export function WorksReorder() {
               <h4>{item.title}</h4>
               <span>{item.exposure === "home-featured" ? "홈 대표작" : item.exposure === "home" ? "홈 노출" : "Works only"}</span>
             </div>
-            <button className={styles.dragHandle} type="button" aria-label={`${item.title} 순서 이동`}>⠿</button>
+            <div className={styles.reorderActions}>
+              <button type="button" aria-label={`${item.title} 위로 이동`} disabled={index === 0} onClick={() => moveBy(item.id, -1)}>↑</button>
+              <button type="button" aria-label={`${item.title} 아래로 이동`} disabled={index === items.length - 1} onClick={() => moveBy(item.id, 1)}>↓</button>
+              <span className={styles.dragHandle} aria-hidden="true">⠿</span>
+            </div>
           </article>
         ))}
       </div>

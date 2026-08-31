@@ -256,7 +256,7 @@
   position: relative;
   display: grid;
   min-height: 82px;
-  grid-template-columns: 108px 1fr 24px;
+  grid-template-columns: 108px 1fr 32px;
   gap: 10px;
   padding: 7px;
   border: 1px solid var(--admin-line);
@@ -270,6 +270,11 @@
 .reorderCopy p { color: var(--admin-muted); font-size: 9px; }
 .reorderCopy h4 { overflow: hidden; margin-top: 4px; font-size: 11px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 .reorderCopy span { display: inline-block; margin-top: 7px; padding: 2px 5px; border: 1px solid var(--admin-line); border-radius: 3px; color: var(--admin-muted); font-size: 9px; }
+.reorderActions { display: grid; align-content: center; gap: 2px; }
+.reorderActions button { display: grid; width: 24px; height: 20px; place-items: center; color: var(--admin-muted); font-size: 10px; }
+.reorderActions button:hover:not(:disabled) { color: var(--admin-ink); background: var(--admin-bg); }
+.reorderActions button:disabled { opacity: 0.25; cursor: default; }
+.reorderActions .dragHandle { display: grid; width: 24px; height: 20px; place-items: center; font-size: 11px; }
 
 .validationNote { display: flex; gap: 8px; margin-top: 14px; padding: 10px; border-left: 2px solid var(--admin-line-strong); background: var(--admin-bg); color: var(--admin-muted); font-size: 10px; }
 .validationNote span { color: var(--admin-ink); font-size: 7px; }
@@ -304,9 +309,9 @@
 }
 .previewFrame { position: relative; height: 100%; min-height: 520px; margin: 0 auto; background: #fff; box-shadow: 0 12px 32px rgb(32 31 29 / 16%); transform-origin: top center; }
 .previewFrame iframe { width: 100%; height: 100%; min-height: 520px; border: 0; background: #f5f4f0; }
-.previewStage[data-viewport="desktop"] .previewFrame { max-width: 100%; }
-.previewStage[data-viewport="tablet"] .previewFrame { width: min(768px, 100%) !important; }
-.previewStage[data-viewport="mobile"] .previewFrame { width: min(390px, 100%) !important; }
+.previewStage[data-viewport="desktop"] .previewFrame { min-width: 1440px; }
+.previewStage[data-viewport="tablet"] .previewFrame { min-width: 768px; }
+.previewStage[data-viewport="mobile"] .previewFrame { min-width: 390px; }
 .sectionFocusLabel { position: absolute; z-index: 2; top: 8px; left: 8px; padding: 4px 6px; border: 1px solid rgb(255 255 255 / 40%); color: #fff; background: rgb(28 28 26 / 78%); font-size: 8px; letter-spacing: 0.08em; pointer-events: none; }
 .previewFootnote { padding: 9px 14px; border-top: 1px solid var(--admin-line-strong); color: var(--admin-muted); background: #efeeea; font-size: 9px; }
 
