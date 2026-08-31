@@ -3,6 +3,7 @@
 -- complete snapshot atomically, so readers never observe a partial publication.
 
 create extension if not exists pgcrypto;
+create schema if not exists private;
 
 create table public.portfolio_cms_state (
   id text primary key check (id = 'portfolio'),
@@ -115,7 +116,7 @@ alter table public.portfolio_cms_state add constraint valid_draft_snapshot check
 alter table public.draft_revisions add constraint valid_revision_snapshot check (public.portfolio_snapshot_is_valid(snapshot));
 alter table public.published_versions add constraint valid_published_snapshot check (public.portfolio_snapshot_is_valid(snapshot));
 
-create or replace function public.publish_portfolio()
+create or replace function private.publish_portfolio_impl()
 returns table (id uuid, version_number bigint, published_at timestamptz)
 language plpgsql
 security definer
@@ -138,6 +139,15 @@ begin
 end;
 $$;
 
+create or replace function public.publish_portfolio()
+returns table (id uuid, version_number bigint, published_at timestamptz)
+language sql
+security invoker
+set search_path = ''
+as $$
+  select * from private.publish_portfolio_impl();
+$$;
+
 alter table public.portfolio_cms_state enable row level security;
 alter table public.draft_revisions enable row level security;
 alter table public.published_versions enable row level security;
@@ -157,7 +167,10 @@ revoke all on public.portfolio_cms_state, public.draft_revisions, public.publish
 revoke all on function public.portfolio_snapshot_is_valid(jsonb) from public, anon, authenticated;
 revoke all on function public.save_portfolio_draft(jsonb, text) from public, anon, authenticated;
 revoke all on function public.publish_portfolio() from public, anon, authenticated;
+revoke all on schema private from public, anon, authenticated;
+revoke all on function private.publish_portfolio_impl() from public, anon, authenticated;
 grant usage on schema public to anon, authenticated;
+grant usage on schema private to anon;
 grant select, insert, update on public.portfolio_cms_state to anon, authenticated;
 grant select, insert on public.draft_revisions to anon, authenticated;
 grant select on public.published_versions to anon, authenticated;
@@ -165,6 +178,7 @@ grant select, insert, update on public.assets to anon, authenticated;
 grant execute on function public.portfolio_snapshot_is_valid(jsonb) to anon, authenticated;
 grant execute on function public.save_portfolio_draft(jsonb, text) to anon, authenticated;
 grant execute on function public.publish_portfolio() to anon;
+grant execute on function private.publish_portfolio_impl() to anon;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('portfolio-assets', 'portfolio-assets', true, 10485760, array['image/jpeg','image/png','image/webp','image/gif'])
