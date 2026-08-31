@@ -362,7 +362,9 @@
 .externalPreview { position: relative; min-height: 240px; overflow: hidden; border: 1px solid var(--admin-line); background: #fff; }
 .externalActions { display: flex; justify-content: flex-end; gap: 8px; }
 
-.workFilters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 0.6fr); gap: 10px; }
+.workFilters { display: grid; grid-template-columns: minmax(0, 1fr) repeat(2, minmax(105px, 0.55fr)); gap: 10px; }
+.toggleGroup { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 12px; border: 1px solid var(--admin-line); background: #fff; font-size: 11px; }
+.toggleGroup label { display: flex; align-items: center; gap: 5px; }
 .workResult {
   display: grid;
   width: 100%;

@@ -55,7 +55,7 @@ export function AdminStudio() {
     try {
       const revision = await publishDraft(content);
       setRevisions((current) => [revision, ...current.filter((item) => item.id !== revision.id)].slice(0, 20));
-      setSaveState("published"); setConnectionState(isSupabaseConfigured() ? "connected" : "local"); setMessage(`Version ${revision.versionNumber}을 공개했습니다.`);
+      setSaveState("published"); setConnectionState(isSupabaseConfigured() ? "connected" : "local"); setMessage(`Version ${revision.versionNumber}을 ${new Date(revision.publishedAt).toLocaleString("ko-KR")}에 공개했습니다.`);
     } catch (error) {
       if (error instanceof PublishError) {
         setSaveState("draft"); setConnectionState("error"); setMessage(`Draft saved · Publish failed: ${error.message}`);
