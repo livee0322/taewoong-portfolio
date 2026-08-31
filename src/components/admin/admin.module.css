@@ -50,6 +50,22 @@
   background: #f1f0ec;
 }
 
+.statusBanner {
+  position: fixed;
+  z-index: 20;
+  top: 64px;
+  left: 50%;
+  max-width: min(720px, calc(100vw - 32px));
+  transform: translateX(-50%);
+  border: 1px solid #cfcac0;
+  border-radius: 999px;
+  background: #fffdf8;
+  padding: 9px 16px;
+  color: #35322d;
+  font-size: 12px;
+  box-shadow: 0 8px 24px rgb(30 28 24 / 9%);
+}
+
 .brandBlock {
   display: flex;
   height: 100%;

@@ -1,99 +1,92 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { adminNavigation } from "@/admin/mock-data";
+import { useEffect, useMemo, useState } from "react";
+import { adminNavigation } from "@/admin/navigation";
 import type { AdminNavItem, AdminSectionId, AdminViewport, PreviewMode } from "@/admin/types";
+import { isSupabaseConfigured, loadDraft, loadRevisions, publishDraft, restoreRevision, saveDraft, setLivePreview } from "@/content/cms-store";
+import { seedSnapshot } from "@/content/seed";
+import type { PortfolioSnapshot, RevisionRecord } from "@/content/schema";
 import { AdminPreview } from "./AdminPreview";
 import { PropertyEditor } from "./PropertyEditor";
 import styles from "./admin.module.css";
 
-type SaveState = "saved" | "unsaved" | "draft" | "published";
+type SaveState = "loading" | "saved" | "unsaved" | "saving" | "draft" | "publishing" | "published" | "error";
 type TabletPane = "editor" | "preview";
 
 export function AdminStudio() {
   const [selectedId, setSelectedId] = useState<AdminSectionId>("home.hero");
   const [viewport, setViewport] = useState<AdminViewport>("desktop");
   const [previewMode, setPreviewMode] = useState<PreviewMode>("section");
-  const [saveState, setSaveState] = useState<SaveState>("saved");
+  const [saveState, setSaveState] = useState<SaveState>("loading");
   const [tabletPane, setTabletPane] = useState<TabletPane>("editor");
+  const [content, setContent] = useState<PortfolioSnapshot>(seedSnapshot);
+  const [revisions, setRevisions] = useState<RevisionRecord[]>([]);
+  const [message, setMessage] = useState("");
 
-  const selectedItem = useMemo<AdminNavItem>(
-    () => adminNavigation.flatMap((group) => group.items).find((item) => item.id === selectedId) ?? adminNavigation[0].items[0],
-    [selectedId],
-  );
+  useEffect(() => {
+    Promise.all([loadDraft(), loadRevisions()]).then(([draft, history]) => {
+      setContent(draft); setRevisions(history); setLivePreview(draft); setSaveState("saved");
+    }).catch((error: unknown) => { setMessage(error instanceof Error ? error.message : "CMS를 불러오지 못했습니다."); setSaveState("error"); });
+  }, []);
 
-  const selectSection = (item: AdminNavItem) => {
-    setSelectedId(item.id);
-    if (item.id === "works.archive") setPreviewMode("page");
+  useEffect(() => {
+    if (saveState === "unsaved") setLivePreview(content);
+  }, [content, saveState]);
+
+  useEffect(() => {
+    const warn = (event: BeforeUnloadEvent) => { if (saveState === "unsaved") event.preventDefault(); };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [saveState]);
+
+  const selectedItem = useMemo<AdminNavItem>(() => adminNavigation.flatMap((group) => group.items).find((item) => item.id === selectedId) ?? adminNavigation[0].items[0], [selectedId]);
+  const updateContent = (next: PortfolioSnapshot) => { setContent(next); setSaveState("unsaved"); setMessage(""); };
+
+  const handleSave = async () => {
+    setSaveState("saving");
+    try { await saveDraft(content); setSaveState("draft"); setMessage("Draft가 저장되었습니다. 공개 화면은 아직 변경되지 않았습니다."); }
+    catch (error) { setSaveState("error"); setMessage(error instanceof Error ? error.message : "Draft 저장에 실패했습니다."); }
   };
 
-  return (
-    <main className={`${styles.adminRoot} admin-route-marker`}>
-      <header className={styles.topbar}>
-        <div className={styles.brandBlock}>
-          <span className={styles.brandMark}>TL</span>
-          <div><strong>Portfolio Editor</strong><span>Foundation workspace</span></div>
-        </div>
-        <div className={styles.documentState} aria-live="polite">
-          <span className={`${styles.stateDot} ${saveState === "unsaved" ? styles.stateDirty : ""}`} />
-          {saveState === "unsaved" ? "Unsaved changes" : saveState === "published" ? "Published" : saveState === "draft" ? "Draft saved" : "Saved"}
-        </div>
-        <div className={styles.topActions}>
-          <button className={styles.secondaryButton} type="button" onClick={() => setSaveState("draft")}>Save Draft</button>
-          <button className={styles.secondaryButton} type="button" onClick={() => setTabletPane("preview")}>Preview</button>
-          <button className={styles.primaryButton} type="button" onClick={() => setSaveState("published")}>Publish</button>
-        </div>
-      </header>
+  const handlePublish = async () => {
+    setSaveState("publishing");
+    try {
+      const revision = await publishDraft(content);
+      setRevisions((current) => [revision, ...current.filter((item) => item.id !== revision.id)].slice(0, 20));
+      setSaveState("published"); setMessage(`Version ${revision.versionNumber}을 공개했습니다.`);
+    } catch (error) { setSaveState("error"); setMessage(error instanceof Error ? error.message : "Publish에 실패했습니다."); }
+  };
 
-      <div className={styles.tabletSwitch} role="tablist" aria-label="편집 화면 전환">
-        <button className={tabletPane === "editor" ? styles.tabActive : ""} type="button" role="tab" aria-selected={tabletPane === "editor"} onClick={() => setTabletPane("editor")}>Editor</button>
-        <button className={tabletPane === "preview" ? styles.tabActive : ""} type="button" role="tab" aria-selected={tabletPane === "preview"} onClick={() => setTabletPane("preview")}>Preview</button>
+  const handleRestore = async (revision: RevisionRecord) => {
+    const restored = await restoreRevision(revision);
+    setContent(structuredClone(restored)); setLivePreview(restored); setSaveState("draft");
+    setMessage(`Version ${revision.versionNumber}을 Draft로 복원했습니다. Publish 전까지 공개 화면은 유지됩니다.`);
+  };
+
+  const stateLabel: Record<SaveState, string> = {
+    loading: "Loading", saved: "Saved", unsaved: "Unsaved changes", saving: "Saving…", draft: "Draft saved", publishing: "Publishing…", published: "Published", error: "Action failed",
+  };
+
+  return <main className={`${styles.adminRoot} admin-route-marker`}>
+    <header className={styles.topbar}>
+      <div className={styles.brandBlock}><span className={styles.brandMark}>TL</span><div><strong>Portfolio Editor</strong><span>{isSupabaseConfigured() ? "Supabase workspace" : "Local fallback workspace"}</span></div></div>
+      <div className={styles.documentState} aria-live="polite"><span className={`${styles.stateDot} ${saveState === "unsaved" || saveState === "error" ? styles.stateDirty : ""}`} />{stateLabel[saveState]}</div>
+      <div className={styles.topActions}>
+        <button className={styles.secondaryButton} type="button" disabled={saveState === "saving" || saveState === "publishing"} onClick={handleSave}>Save Draft</button>
+        <button className={styles.secondaryButton} type="button" onClick={() => setTabletPane("preview")}>Preview</button>
+        <button className={styles.primaryButton} type="button" disabled={saveState === "loading" || saveState === "publishing"} onClick={handlePublish}>Publish</button>
       </div>
-
-      <div className={styles.studioGrid} data-tablet-pane={tabletPane}>
-        <aside className={styles.navigator} aria-label="Portfolio section navigator">
-          <div className={styles.navigatorTitle}><p className={styles.kicker}>Structure</p><h1>Portfolio</h1></div>
-          <nav>
-            {adminNavigation.map((group) => (
-              <section key={group.label} className={styles.navGroup}>
-                <h2>{group.label}</h2>
-                <div>
-                  {group.items.map((item) => (
-                    <button
-                      key={item.id}
-                      className={selectedId === item.id ? styles.navActive : ""}
-                      type="button"
-                      aria-current={selectedId === item.id ? "page" : undefined}
-                      onClick={() => selectSection(item)}
-                    >
-                      {item.number ? <span>{item.number}</span> : <span>—</span>}
-                      <strong>{item.label}</strong>
-                      {selectedId === item.id ? <i aria-hidden="true" /> : null}
-                    </button>
-                  ))}
-                </div>
-              </section>
-            ))}
-          </nav>
-          <div className={styles.navigatorFooter}>
-            <span>Draft workspace</span>
-            <p>Mock adapter · no production write</p>
-          </div>
-        </aside>
-
-        <div className={styles.editorColumn}>
-          <PropertyEditor selectedItem={selectedItem} onDirty={() => setSaveState("unsaved")} />
-        </div>
-        <div className={styles.previewColumn}>
-          <AdminPreview
-            selectedItem={selectedItem}
-            viewport={viewport}
-            mode={previewMode}
-            onViewportChange={setViewport}
-            onModeChange={setPreviewMode}
-          />
-        </div>
-      </div>
-    </main>
-  );
+    </header>
+    {message ? <div className={styles.statusBanner} role={saveState === "error" ? "alert" : "status"}>{message}</div> : null}
+    <div className={styles.tabletSwitch} role="tablist" aria-label="편집 화면 전환"><button className={tabletPane === "editor" ? styles.tabActive : ""} type="button" role="tab" aria-selected={tabletPane === "editor"} onClick={() => setTabletPane("editor")}>Editor</button><button className={tabletPane === "preview" ? styles.tabActive : ""} type="button" role="tab" aria-selected={tabletPane === "preview"} onClick={() => setTabletPane("preview")}>Preview</button></div>
+    <div className={styles.studioGrid} data-tablet-pane={tabletPane}>
+      <aside className={styles.navigator} aria-label="Portfolio section navigator">
+        <div className={styles.navigatorTitle}><p className={styles.kicker}>Structure</p><h1>Portfolio</h1></div>
+        <nav>{adminNavigation.map((group) => <section key={group.label} className={styles.navGroup}><h2>{group.label}</h2><div>{group.items.map((item) => <button key={item.id} className={selectedId === item.id ? styles.navActive : ""} type="button" aria-current={selectedId === item.id ? "page" : undefined} onClick={() => { setSelectedId(item.id); if (item.id === "works.archive" || item.id === "projects.index") setPreviewMode("page"); }}><span>{item.number ?? "—"}</span><strong>{item.label}</strong>{selectedId === item.id ? <i aria-hidden="true" /> : null}</button>)}</div></section>)}</nav>
+        <div className={styles.navigatorFooter}><span>Public write CMS</span><p>No login · Draft / Publish separated</p></div>
+      </aside>
+      <div className={styles.editorColumn}><PropertyEditor selectedItem={selectedItem} content={content} onChange={updateContent} revisions={revisions} onRestore={handleRestore} /></div>
+      <div className={styles.previewColumn}><AdminPreview selectedItem={selectedItem} viewport={viewport} mode={previewMode} onViewportChange={setViewport} onModeChange={setPreviewMode} onSelectSection={setSelectedId} /></div>
+    </div>
+  </main>;
 }

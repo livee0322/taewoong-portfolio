@@ -1,6 +1,7 @@
 "use client";
 
-import type { AdminNavItem, AdminViewport, PreviewMode } from "@/admin/types";
+import { useEffect, useRef } from "react";
+import type { AdminNavItem, AdminSectionId, AdminViewport, PreviewMode } from "@/admin/types";
 import { viewportWidths } from "@/admin/types";
 import styles from "./admin.module.css";
 
@@ -10,13 +11,29 @@ type AdminPreviewProps = {
   mode: PreviewMode;
   onViewportChange: (viewport: AdminViewport) => void;
   onModeChange: (mode: PreviewMode) => void;
+  onSelectSection: (section: AdminSectionId) => void;
 };
 
-export function AdminPreview({ selectedItem, viewport, mode, onViewportChange, onModeChange }: AdminPreviewProps) {
+export function AdminPreview({ selectedItem, viewport, mode, onViewportChange, onModeChange, onSelectSection }: AdminPreviewProps) {
+  const frameRef = useRef<HTMLIFrameElement>(null);
   const anchor = selectedItem.previewAnchor ? `#${selectedItem.previewAnchor}` : "";
   const isHomeSection = selectedItem.id.startsWith("home.");
-  const source = selectedItem.id === "works.archive" ? "/works" : selectedItem.id === "projects.index" ? "/projects/livbee" : `/${anchor}`;
+  const path = selectedItem.id === "works.archive" ? "/works" : selectedItem.id === "projects.index" ? "/projects/livbee" : "/";
+  const source = `${path}?cmsPreview=draft${anchor}`;
   const frameWidth = viewportWidths[viewport];
+
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin || event.data?.type !== "cms:select") return;
+      onSelectSection(event.data.sectionId as AdminSectionId);
+    };
+    window.addEventListener("message", receive);
+    return () => window.removeEventListener("message", receive);
+  }, [onSelectSection]);
+
+  useEffect(() => {
+    frameRef.current?.contentWindow?.postMessage({ type: "cms:focus", sectionId: selectedItem.id }, window.location.origin);
+  }, [selectedItem.id]);
 
   return (
     <section className={styles.previewPane} aria-labelledby="preview-heading">
@@ -48,15 +65,15 @@ export function AdminPreview({ selectedItem, viewport, mode, onViewportChange, o
       <div className={styles.previewMeta}>
         <span>{frameWidth}px</span>
         <span>{isHomeSection ? selectedItem.id.replace("home.", "Home / ") : selectedItem.label}</span>
-        {mode === "section" && !selectedItem.previewAnchor ? <span className={styles.previewWarning}>anchor contract pending</span> : null}
+        {mode === "section" ? <span>linked selection</span> : null}
       </div>
       <div className={styles.previewStage} data-viewport={viewport}>
         <div className={styles.previewFrame} style={{ width: `${frameWidth}px` }}>
-          <iframe key={`${source}-${mode}`} src={source} title={`${selectedItem.label} portfolio preview`} />
+          <iframe ref={frameRef} key={`${path}-${mode}`} src={source} title={`${selectedItem.label} portfolio preview`} onLoad={() => frameRef.current?.contentWindow?.postMessage({ type: "cms:focus", sectionId: selectedItem.id }, window.location.origin)} />
           {mode === "section" ? <div className={styles.sectionFocusLabel}>SECTION FOCUS · {selectedItem.label}</div> : null}
         </div>
       </div>
-      <p className={styles.previewFootnote}>현재 iframe은 published Portfolio를 그대로 읽습니다. 편집값 반영과 Preview 클릭 선택은 integration contract의 section identifier 연결 후 활성화됩니다.</p>
+      <p className={styles.previewFootnote}>편집값은 Draft Preview에 즉시 반영됩니다. Preview의 section을 클릭하면 왼쪽 편집 선택도 함께 이동합니다.</p>
     </section>
   );
 }

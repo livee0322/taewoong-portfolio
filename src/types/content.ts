@@ -1,5 +1,10 @@
 export type MediaTone = "ink" | "paper" | "sage" | "stone" | "rose" | "sand";
 
+export type ObjectPosition =
+  | "top-left" | "top" | "top-right"
+  | "left" | "center" | "right"
+  | "bottom-left" | "bottom" | "bottom-right";
+
 export type ProjectSection = {
   label: string;
   title: string;
@@ -9,13 +14,13 @@ export type ProjectSection = {
 
 export type ProjectMedia = {
   /** Local public path, added when the approved final asset is available. */
-  src?: `/images/${string}`;
+  src?: string;
   alt: string;
   ratio: "wide" | "portrait" | "square" | "detail";
   tone: MediaTone;
   caption: string;
   /** object-position bias when the frame crops a taller/wider source than its target ratio. Defaults to center. */
-  focus?: "top" | "center" | "bottom";
+  focus?: ObjectPosition;
 };
 
 export type Project = {
@@ -42,10 +47,10 @@ export type VisualWork = {
   description?: string;
   tone: MediaTone;
   ratio: "wide" | "portrait" | "square" | "detail";
-  src: `/images/${string}`;
+  src: string;
   alt: string;
   /** object-position bias when the frame crops a taller/wider source than its target ratio. Defaults to center. */
-  focus?: "top" | "center" | "bottom";
+  focus?: ObjectPosition;
 };
 
 export type CareerEntry = {

@@ -2,190 +2,111 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { mockAssets } from "@/admin/mock-data";
-import type { AdminNavItem, AssetRecord } from "@/admin/types";
+import type { AdminNavItem } from "@/admin/types";
+import { uploadAsset } from "@/content/cms-store";
+import type { AssetRecord, PortfolioSnapshot, RevisionRecord } from "@/content/schema";
+import type { ObjectPosition } from "@/types/content";
 import { AssetPicker } from "./AssetPicker";
 import { WorksReorder } from "./WorksReorder";
 import styles from "./admin.module.css";
 
-type PropertyEditorProps = {
-  selectedItem: AdminNavItem;
-  onDirty: () => void;
-};
-
-const sectionCopy: Record<string, { eyebrow: string; title: string; description: string }> = {
-  "home.projects": {
-    eyebrow: "대표 프로젝트",
-    title: "서비스와 커머스에서 맡은 과정을 두 프로젝트로 정리했습니다.",
-    description: "프로젝트 노출, 카드 순서와 별도 GPA KOREA 보조 사례를 관리합니다.",
-  },
-  "home.career": {
-    eyebrow: "경력",
-    title: "2019년 제품 디자인부터 지금의 서비스 기획까지.",
-    description: "회사 경력과 Personal project를 같은 timeline entry로 관리합니다.",
-  },
-  "home.workflow": {
-    eyebrow: "작업 방식",
-    title: "목적을 정리하고, 만든 뒤에는 실제 화면에서 확인합니다.",
-    description: "Design, Content, Commerce, Product 항목과 도구 태그를 편집합니다.",
-  },
-  "home.contact": {
-    eyebrow: "Contact",
-    title: "디자인부터 운영까지, 해온 일을 더 보여드리겠습니다.",
-    description: "공개 승인된 연락처와 외부 링크만 게시합니다.",
-  },
-};
+type Props = { selectedItem: AdminNavItem; content: PortfolioSnapshot; onChange: (content: PortfolioSnapshot) => void; revisions: RevisionRecord[]; onRestore: (revision: RevisionRecord) => void };
+type SectionKey = "projects" | "works" | "career" | "workflow" | "contact";
+const positions: ObjectPosition[] = ["top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"];
 
 function Field({ label, help, children }: { label: string; help?: string; children: React.ReactNode }) {
-  return (
-    <label className={styles.field}>
-      <span>{label}</span>
-      {children}
-      {help ? <small>{help}</small> : null}
-    </label>
-  );
+  return <label className={styles.field}><span>{label}</span>{children}{help ? <small>{help}</small> : null}</label>;
+}
+function move<T>(items: T[], index: number, offset: -1 | 1) { const next = [...items]; const target = index + offset; if (target < 0 || target >= next.length) return next; [next[index], next[target]] = [next[target], next[index]]; return next; }
+
+function SectionCopyEditor({ section, onPatch }: { section: { eyebrow: string; title: string; description: string }; onPatch: (patch: Partial<typeof section>) => void }) {
+  return <><Field label="Eyebrow"><input required value={section.eyebrow} onChange={(event) => onPatch({ eyebrow: event.target.value })} /></Field><Field label="Title"><textarea required rows={3} value={section.title} onChange={(event) => onPatch({ title: event.target.value })} /></Field><Field label="Description"><textarea required rows={5} value={section.description} onChange={(event) => onPatch({ description: event.target.value })} /></Field></>;
 }
 
-function HeroEditor({ onDirty }: { onDirty: () => void }) {
-  const [title, setTitle] = useState("디자인과 콘텐츠를 만들고,\n서비스 화면까지 직접 확인합니다.");
-  const [breakMode, setBreakMode] = useState("manual");
-
-  return (
-    <div className={styles.editorForm}>
-      <Field label="Eyebrow"><input defaultValue="이태웅 · 디자이너" onChange={onDirty} /></Field>
-      <Field label="Main title" help="Desktop 2줄 이하, Mobile 3줄 이하를 권장합니다.">
-        <textarea rows={4} value={title} onChange={(event) => { setTitle(event.target.value); onDirty(); }} />
-      </Field>
-      <fieldset className={styles.fieldset}>
-        <legend>Line break policy</legend>
-        <div className={styles.radioGroup}>
-          <label><input type="radio" name="line-break" checked={breakMode === "auto"} onChange={() => { setBreakMode("auto"); onDirty(); }} /> 자동 줄바꿈</label>
-          <label><input type="radio" name="line-break" checked={breakMode === "manual"} onChange={() => { setBreakMode("manual"); onDirty(); }} /> 줄바꿈 위치 유지</label>
-        </div>
-        <small>HTML은 입력하지 않습니다. 제목 입력창의 줄바꿈을 안전한 text segment로 저장합니다.</small>
-      </fieldset>
-      <Field label="Description" help="2~4문장, 180자 이내를 권장합니다.">
-        <textarea rows={5} defaultValue="상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 제품 촬영과 영상, 쇼핑라이브 현장을 거쳐 최근에는 서비스 기획과 UI/UX, QA, 개발 협업을 맡고 있습니다." onChange={onDirty} />
-      </Field>
-      <div className={styles.twoFields}>
-        <Field label="Period"><input defaultValue="2019 — NOW" onChange={onDirty} /></Field>
-        <Field label="Disciplines"><input defaultValue="Design · Content · Commerce · Product" onChange={onDirty} /></Field>
-      </div>
-    </div>
-  );
+function OrderedRows({ items, label, onMove, onSelect }: { items: { id: string; title?: string; company?: string; visible: boolean }[]; label: string; onMove: (index: number, offset: -1 | 1) => void; onSelect: (index: number) => void }) {
+  return <section className={styles.editorBlock}><div className={styles.blockHeading}><div><p className={styles.kicker}>Ordered entries</p><h3>{label}</h3></div><span className={styles.count}>{items.length}</span></div>{items.map((item, index) => <div className={styles.compactRow} key={item.id}><span className={styles.dragHandle}>⠿</span><span>{String(index + 1).padStart(2, "0")}</span><strong>{item.title ?? item.company}</strong><button type="button" onClick={() => onMove(index, -1)} disabled={!index}>↑</button><button type="button" onClick={() => onMove(index, 1)} disabled={index === items.length - 1}>↓</button><button type="button" onClick={() => onSelect(index)}>Edit</button></div>)}</section>;
 }
 
-function AboutEditor({ onDirty }: { onDirty: () => void }) {
+export function PropertyEditor({ selectedItem, content, onChange, revisions, onRestore }: Props) {
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [asset, setAsset] = useState<AssetRecord>(mockAssets[0]);
-  const [position, setPosition] = useState("center");
-  const positions = ["top-left", "top", "top-right", "left", "center", "right", "bottom-left", "bottom", "bottom-right"];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [assetTarget, setAssetTarget] = useState<"about" | "work" | "project-hero" | "library">("library");
+  const updateHome = <K extends keyof PortfolioSnapshot["home"]>(key: K, value: PortfolioSnapshot["home"][K]) => onChange({ ...content, home: { ...content.home, [key]: value } });
+  const patchSection = (key: SectionKey, patch: Partial<PortfolioSnapshot["home"][SectionKey]>) => updateHome(key, { ...content.home[key], ...patch });
+  const hero = content.home.hero;
+  const about = content.home.about;
+  const selectedWork = content.works[Math.min(selectedIndex, content.works.length - 1)];
+  const selectedProject = content.projects[Math.min(selectedIndex, content.projects.length - 1)];
 
-  return (
-    <div className={styles.editorForm}>
-      <Field label="Eyebrow"><input defaultValue="About" onChange={onDirty} /></Field>
-      <Field label="Title" help="Desktop 2줄 이하를 권장합니다."><textarea rows={3} defaultValue="화면 안의 디자인과 촬영 현장의 일을 함께 해봤습니다." onChange={onDirty} /></Field>
-      <Field label="Description"><textarea rows={5} defaultValue="제품을 촬영하고 상세페이지와 배너를 만들었습니다. 영상에서는 썸네일·타이틀·자막을 제작했고, 쇼핑라이브에서는 방송 준비와 현장 운영을 맡았습니다." onChange={onDirty} /></Field>
-
-      <section className={styles.imageProperty}>
-        <div className={styles.blockHeading}>
-          <div><p className={styles.kicker}>Representative image</p><h3>이미지 속성</h3></div>
-          <button className={styles.textButton} type="button" onClick={() => setPickerOpen(true)}>Replace</button>
-        </div>
-        <div className={styles.imagePreview}><Image src={asset.src} alt="" fill sizes="300px" /></div>
-        <dl className={styles.assetDetails}>
-          <div><dt>File</dt><dd>{asset.filename}</dd></div>
-          <div><dt>Size</dt><dd>{asset.width} × {asset.height}</dd></div>
-          <div><dt>Usage</dt><dd>{asset.usageCount} section</dd></div>
-        </dl>
-        <Field label="Alt text"><textarea rows={3} value={asset.alt} onChange={(event) => { setAsset((current) => ({ ...current, alt: event.target.value })); onDirty(); }} /></Field>
-        <Field label="Caption"><input defaultValue="Design · Photo · Video" onChange={onDirty} /></Field>
-        <fieldset className={styles.fieldset}>
-          <legend>Object position</legend>
-          <div className={styles.positionPicker}>
-            {positions.map((item) => <button key={item} className={position === item ? styles.positionActive : ""} type="button" aria-label={item} onClick={() => { setPosition(item); onDirty(); }} />)}
-          </div>
-          <small>숫자 대신 이미지의 기준점을 선택합니다.</small>
-        </fieldset>
-      </section>
-
-      <section className={styles.editorBlock}>
-        <div className={styles.blockHeading}><div><p className={styles.kicker}>Repeater</p><h3>Capability items</h3></div><button className={styles.textButton} type="button">＋ Add</button></div>
-        {["Design", "Content", "Commerce", "Product"].map((item, index) => (
-          <div className={styles.compactRow} key={item}>
-            <span className={styles.dragHandle}>⠿</span><span>{String(index + 1).padStart(2, "0")}</span><strong>{item}</strong><button type="button" aria-label={`${item} 편집`}>Edit</button>
-          </div>
-        ))}
-      </section>
-
-      <AssetPicker open={pickerOpen} onClose={() => setPickerOpen(false)} onSelect={(nextAsset) => { setAsset(nextAsset); setPickerOpen(false); onDirty(); }} />
-    </div>
-  );
-}
-
-function AssetLibraryEditor() {
-  return (
-    <section className={styles.editorBlock}>
-      <div className={styles.blockHeading}><div><p className={styles.kicker}>4 files</p><h3>Asset Library</h3></div><button className={styles.secondaryButton} type="button">Upload</button></div>
-      <div className={styles.libraryList}>
-        {mockAssets.map((asset) => (
-          <article key={asset.id}>
-            <div className={styles.libraryThumb}><Image src={asset.src} alt="" fill sizes="72px" /></div>
-            <div><h4>{asset.filename}</h4><p>{asset.category} · {asset.width} × {asset.height}</p><span>{asset.fileSize} · {asset.usageCount}곳 사용</span></div>
-            <button className={styles.iconButton} type="button" aria-label={`${asset.filename} 메뉴`}>•••</button>
-          </article>
-        ))}
-      </div>
-      <div className={styles.validationNote}><span aria-hidden="true">◆</span><p>사용 중인 asset은 바로 삭제하지 않고 참조 위치를 먼저 보여준 뒤 교체 또는 보관 처리합니다.</p></div>
-    </section>
-  );
-}
-
-function GenericSectionEditor({ selectedItem, onDirty }: PropertyEditorProps) {
-  const copy = sectionCopy[selectedItem.id] ?? {
-    eyebrow: selectedItem.label,
-    title: selectedItem.id === "works.archive" ? "실무에서 만든 작업을 모았습니다." : "기존 프로젝트를 편집합니다.",
-    description: selectedItem.id === "works.archive" ? "카테고리, 공개 상태와 카드 순서를 관리합니다." : "상세 콘텐츠와 노출 상태를 프로젝트 단위로 관리합니다.",
+  const addAsset = (asset: AssetRecord) => onChange({ ...content, assets: [...content.assets.filter((item) => item.id !== asset.id), asset] });
+  const chooseAboutAsset = (asset: AssetRecord) => { addAsset(asset); updateHome("about", { ...about, image: asset }); setPickerOpen(false); };
+  const updateSelectedProject = (patch: Partial<NonNullable<typeof selectedProject>>) => {
+    if (!selectedProject) return;
+    onChange({ ...content, projects: content.projects.map((item) => item.slug === selectedProject.slug ? { ...item, ...patch } : item) });
+  };
+  const chooseAsset = (asset: AssetRecord) => {
+    addAsset(asset);
+    if (assetTarget === "about") chooseAboutAsset(asset);
+    if (assetTarget === "work" && selectedWork) onChange({ ...content, assets: [...content.assets.filter((item) => item.id !== asset.id), asset], works: content.works.map((item) => item.id === selectedWork.id ? { ...item, src: asset.src, alt: asset.alt || item.alt, focus: asset.objectPosition } : item) });
+    if (assetTarget === "project-hero" && selectedProject) updateSelectedProject({ hero: { ...selectedProject.hero, src: asset.src, alt: asset.alt || selectedProject.hero.alt, focus: asset.objectPosition } });
+    setPickerOpen(false);
   };
 
-  return (
-    <div className={styles.editorForm}>
-      <Field label="Eyebrow"><input defaultValue={copy.eyebrow} onChange={onDirty} /></Field>
-      <Field label="Title"><textarea rows={3} defaultValue={copy.title} onChange={onDirty} /></Field>
-      <Field label="Description"><textarea rows={4} defaultValue={copy.description} onChange={onDirty} /></Field>
-      {selectedItem.id === "home.contact" ? (
-        <>
-          <Field label="Public email"><input type="email" placeholder="공개 승인 후 입력" onChange={onDirty} /></Field>
-          <Field label="Resume URL"><input type="url" placeholder="https://" onChange={onDirty} /></Field>
-          <Field label="CTA label"><input defaultValue="작업 모음 보기" onChange={onDirty} /></Field>
-        </>
-      ) : null}
-      {selectedItem.id === "home.career" || selectedItem.id === "home.workflow" || selectedItem.id === "home.projects" || selectedItem.id === "projects.index" ? (
-        <section className={styles.editorBlock}>
-          <div className={styles.blockHeading}><div><p className={styles.kicker}>Ordered entries</p><h3>{selectedItem.label}</h3></div><button className={styles.textButton} type="button">＋ Add</button></div>
-          {["01", "02", "03"].map((number) => <div className={styles.compactRow} key={number}><span className={styles.dragHandle}>⠿</span><span>{number}</span><strong>{selectedItem.id === "home.workflow" ? ["Design", "Content", "Commerce"][Number(number) - 1] : `${selectedItem.label} item`}</strong><button type="button">Edit</button></div>)}
-        </section>
-      ) : null}
-      <div className={styles.validationNote}><span aria-hidden="true">◆</span><p>실제 entity editor는 data adapter 연결 단계에서 이 field contract를 그대로 사용합니다.</p></div>
-    </div>
-  );
-}
+  return <section className={styles.propertyPane} aria-labelledby="property-heading">
+    <header className={styles.propertyHeader}><p className={styles.breadcrumb}>Portfolio / {selectedItem.id.startsWith("home.") ? "Home / " : ""}{selectedItem.label}</p><h2 id="property-heading">{selectedItem.label}</h2><p>입력값은 오른쪽 실제 Portfolio Preview에 즉시 반영됩니다.</p></header>
+    <div className={styles.propertyScroll}><div className={styles.editorForm}>
+      {selectedItem.id === "home.hero" ? <>
+        <SectionCopyEditor section={hero} onPatch={(patch) => updateHome("hero", { ...hero, ...patch })} />
+        <fieldset className={styles.fieldset}><legend>Line break policy</legend><div className={styles.radioGroup}><label><input type="radio" checked={hero.lineBreaks === "auto"} onChange={() => updateHome("hero", { ...hero, lineBreaks: "auto" })} /> 자동</label><label><input type="radio" checked={hero.lineBreaks === "manual"} onChange={() => updateHome("hero", { ...hero, lineBreaks: "manual" })} /> 입력 줄바꿈 유지</label></div></fieldset>
+        <div className={styles.twoFields}><Field label="Period"><input required value={hero.period} onChange={(event) => updateHome("hero", { ...hero, period: event.target.value })} /></Field><Field label="Disciplines"><input required value={hero.disciplines} onChange={(event) => updateHome("hero", { ...hero, disciplines: event.target.value })} /></Field></div>
+      </> : null}
 
-export function PropertyEditor({ selectedItem, onDirty }: PropertyEditorProps) {
-  return (
-    <section className={styles.propertyPane} aria-labelledby="property-heading">
-      <header className={styles.propertyHeader}>
-        <p className={styles.breadcrumb}>Portfolio / {selectedItem.id.startsWith("home.") ? "Home / " : ""}{selectedItem.label}</p>
-        <h2 id="property-heading">{selectedItem.label}</h2>
-        <p>이 영역에 실제로 노출되는 콘텐츠만 편집합니다.</p>
-      </header>
-      <div className={styles.propertyScroll}>
-        {selectedItem.id === "home.hero" ? <HeroEditor onDirty={onDirty} /> : null}
-        {selectedItem.id === "home.about" ? <AboutEditor onDirty={onDirty} /> : null}
-        {selectedItem.id === "home.works" ? <WorksReorder /> : null}
-        {selectedItem.id === "assets.library" ? <AssetLibraryEditor /> : null}
-        {!(["home.hero", "home.about", "home.works", "assets.library"] as string[]).includes(selectedItem.id) ? <GenericSectionEditor selectedItem={selectedItem} onDirty={onDirty} /> : null}
-      </div>
-    </section>
-  );
+      {selectedItem.id === "home.about" ? <>
+        <SectionCopyEditor section={about} onPatch={(patch) => updateHome("about", { ...about, ...patch })} />
+        <section className={styles.imageProperty}><div className={styles.blockHeading}><div><p className={styles.kicker}>Representative image</p><h3>이미지 속성</h3></div><button className={styles.textButton} type="button" onClick={() => { setAssetTarget("about"); setPickerOpen(true); }}>Replace</button></div><div className={styles.imagePreview}><Image src={about.image.src} alt="" fill sizes="300px" unoptimized={about.image.src.startsWith("data:")} /></div><Field label="Alt text"><textarea required rows={3} value={about.image.alt} onChange={(event) => updateHome("about", { ...about, image: { ...about.image, alt: event.target.value } })} /></Field><Field label="Caption"><input value={about.image.caption} onChange={(event) => updateHome("about", { ...about, image: { ...about.image, caption: event.target.value } })} /></Field><fieldset className={styles.fieldset}><legend>Object position</legend><div className={styles.positionPicker}>{positions.map((position) => <button key={position} className={about.image.objectPosition === position ? styles.positionActive : ""} type="button" aria-label={position} onClick={() => updateHome("about", { ...about, image: { ...about.image, objectPosition: position } })} />)}</div></fieldset></section>
+        <OrderedRows items={about.capabilities} label="Capabilities" onMove={(index, offset) => updateHome("about", { ...about, capabilities: move(about.capabilities, index, offset) })} onSelect={setSelectedIndex} />
+        {about.capabilities[selectedIndex] ? <><Field label="Capability title"><input value={about.capabilities[selectedIndex].title} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, title: event.target.value } : item) })} /></Field><Field label="Capability description"><input value={about.capabilities[selectedIndex].description} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, description: event.target.value } : item) })} /></Field><label><input type="checkbox" checked={about.capabilities[selectedIndex].visible} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, visible: event.target.checked } : item) })} /> Visible</label></> : null}
+      </> : null}
+
+      {(["home.projects", "home.works", "home.career", "home.workflow", "home.contact"] as string[]).includes(selectedItem.id) ? <SectionCopyEditor section={content.home[selectedItem.id.split(".")[1] as SectionKey]} onPatch={(patch) => patchSection(selectedItem.id.split(".")[1] as SectionKey, patch)} /> : null}
+
+      {selectedItem.id === "home.projects" ? <OrderedRows items={content.projects.map((item) => ({ id: item.slug, title: item.title, visible: item.visible }))} label="Projects" onMove={(index, offset) => onChange({ ...content, projects: move(content.projects, index, offset) })} onSelect={setSelectedIndex} /> : null}
+      {selectedItem.id === "home.works" ? <WorksReorder items={content.works} onChange={(works) => onChange({ ...content, works })} /> : null}
+      {selectedItem.id === "home.career" ? <><OrderedRows items={content.career} label="Career" onMove={(index, offset) => onChange({ ...content, career: move(content.career, index, offset) })} onSelect={setSelectedIndex} />{content.career[selectedIndex] ? <><Field label="Period"><input value={content.career[selectedIndex].period} onChange={(event) => onChange({ ...content, career: content.career.map((item, index) => index === selectedIndex ? { ...item, period: event.target.value } : item) })} /></Field><Field label="Company"><input value={content.career[selectedIndex].company} onChange={(event) => onChange({ ...content, career: content.career.map((item, index) => index === selectedIndex ? { ...item, company: event.target.value } : item) })} /></Field><Field label="Team"><input value={content.career[selectedIndex].team} onChange={(event) => onChange({ ...content, career: content.career.map((item, index) => index === selectedIndex ? { ...item, team: event.target.value } : item) })} /></Field><Field label="Role"><input value={content.career[selectedIndex].role} onChange={(event) => onChange({ ...content, career: content.career.map((item, index) => index === selectedIndex ? { ...item, role: event.target.value } : item) })} /></Field><Field label="Description"><textarea rows={4} value={content.career[selectedIndex].description} onChange={(event) => onChange({ ...content, career: content.career.map((item, index) => index === selectedIndex ? { ...item, description: event.target.value } : item) })} /></Field></> : null}</> : null}
+      {selectedItem.id === "home.workflow" ? <><OrderedRows items={content.workflow} label="Workflow" onMove={(index, offset) => onChange({ ...content, workflow: move(content.workflow, index, offset) })} onSelect={setSelectedIndex} />{content.workflow[selectedIndex] ? <><Field label="Title"><input value={content.workflow[selectedIndex].title} onChange={(event) => onChange({ ...content, workflow: content.workflow.map((item, index) => index === selectedIndex ? { ...item, title: event.target.value } : item) })} /></Field><Field label="Description"><textarea rows={4} value={content.workflow[selectedIndex].description} onChange={(event) => onChange({ ...content, workflow: content.workflow.map((item, index) => index === selectedIndex ? { ...item, description: event.target.value } : item) })} /></Field><Field label="Tools (comma separated)"><input value={content.workflow[selectedIndex].tools.join(", ")} onChange={(event) => onChange({ ...content, workflow: content.workflow.map((item, index) => index === selectedIndex ? { ...item, tools: event.target.value.split(",").map((value) => value.trim()).filter(Boolean) } : item) })} /></Field></> : null}</> : null}
+      {selectedItem.id === "home.contact" ? <><Field label="CTA label"><input value={content.home.contact.ctaLabel} onChange={(event) => updateHome("contact", { ...content.home.contact, ctaLabel: event.target.value })} /></Field><Field label="CTA URL"><input required value={content.home.contact.ctaUrl} onChange={(event) => updateHome("contact", { ...content.home.contact, ctaUrl: event.target.value })} /></Field><Field label="Public email"><input type="email" value={content.home.contact.email} onChange={(event) => updateHome("contact", { ...content.home.contact, email: event.target.value })} /></Field><Field label="Resume URL"><input type="url" value={content.home.contact.resumeUrl} onChange={(event) => updateHome("contact", { ...content.home.contact, resumeUrl: event.target.value })} /></Field></> : null}
+
+      {selectedItem.id === "works.archive" ? <>
+        <section className={styles.editorBlock}><div className={styles.blockHeading}><div><p className={styles.kicker}>Fixed taxonomy</p><h3>Categories</h3></div></div>{content.categories.map((category, index) => <div className={styles.compactRow} key={category.id}><span>{String(index + 1).padStart(2, "0")}</span><input value={category.label} onChange={(event) => onChange({ ...content, categories: content.categories.map((item) => item.id === category.id ? { ...item, label: event.target.value } : item) })} /><label><input type="checkbox" checked={category.visible} onChange={(event) => onChange({ ...content, categories: content.categories.map((item) => item.id === category.id ? { ...item, visible: event.target.checked } : item) })} /> visible</label></div>)}</section>
+        <OrderedRows items={content.works.map((item) => ({ id: item.id, title: item.title, visible: item.published }))} label="Works" onMove={(index, offset) => onChange({ ...content, works: move(content.works, index, offset) })} onSelect={setSelectedIndex} />
+        {selectedWork ? <><Field label="Title"><textarea rows={2} required value={selectedWork.title} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, title: event.target.value } : item) })} /></Field><Field label="Category"><select value={selectedWork.category} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, category: event.target.value } : item) })}>{content.categories.map((category) => <option key={category.id}>{category.label}</option>)}</select></Field><Field label="Image URL"><input required value={selectedWork.src} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, src: event.target.value } : item) })} /></Field><Field label="Alt"><textarea required rows={3} value={selectedWork.alt} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, alt: event.target.value } : item) })} /></Field><Field label="Description"><textarea rows={3} value={selectedWork.description ?? ""} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, description: event.target.value } : item) })} /></Field><label><input type="checkbox" checked={selectedWork.published} onChange={(event) => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, published: event.target.checked } : item) })} /> Published</label></> : null}
+        {selectedWork ? <section className={styles.imageProperty}><div className={styles.blockHeading}><div><p className={styles.kicker}>Image</p><h3>Replace & focal point</h3></div><button className={styles.textButton} type="button" onClick={() => { setAssetTarget("work"); setPickerOpen(true); }}>Replace</button></div><fieldset className={styles.fieldset}><legend>Object position</legend><div className={styles.positionPicker}>{positions.map((position) => <button key={position} className={(selectedWork.focus ?? "center") === position ? styles.positionActive : ""} type="button" aria-label={position} onClick={() => onChange({ ...content, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, focus: position } : item) })} />)}</div></fieldset></section> : null}
+      </> : null}
+
+      {selectedItem.id === "projects.index" ? <>
+        <OrderedRows items={content.projects.map((item) => ({ id: item.slug, title: item.title, visible: item.visible }))} label="Projects" onMove={(index, offset) => onChange({ ...content, projects: move(content.projects, index, offset) })} onSelect={(index) => { setSelectedIndex(index); setSubIndex(0); setGalleryIndex(0); }} />
+        {selectedProject ? <>
+          <Field label="Title"><input required value={selectedProject.title} onChange={(event) => updateSelectedProject({ title: event.target.value })} /></Field>
+          <Field label="Subtitle"><textarea rows={3} value={selectedProject.subtitle} onChange={(event) => updateSelectedProject({ subtitle: event.target.value })} /></Field>
+          <Field label="Summary"><textarea rows={4} value={selectedProject.summary} onChange={(event) => updateSelectedProject({ summary: event.target.value })} /></Field>
+          <Field label="Intro"><textarea rows={4} value={selectedProject.intro} onChange={(event) => updateSelectedProject({ intro: event.target.value })} /></Field>
+          <Field label="Roles (comma separated)"><input value={selectedProject.roles.join(", ")} onChange={(event) => updateSelectedProject({ roles: event.target.value.split(",").map((value) => value.trim()).filter(Boolean) })} /></Field>
+          <Field label="Tools (comma separated)"><input value={selectedProject.tools.join(", ")} onChange={(event) => updateSelectedProject({ tools: event.target.value.split(",").map((value) => value.trim()).filter(Boolean) })} /></Field>
+          <section className={styles.imageProperty}><div className={styles.blockHeading}><div><p className={styles.kicker}>Project hero</p><h3>{selectedProject.hero.caption}</h3></div><button className={styles.textButton} type="button" onClick={() => { setAssetTarget("project-hero"); setPickerOpen(true); }}>Replace</button></div><div className={styles.imagePreview}><Image src={selectedProject.hero.src ?? ""} alt="" fill sizes="300px" /></div><Field label="Hero alt"><textarea required rows={3} value={selectedProject.hero.alt} onChange={(event) => updateSelectedProject({ hero: { ...selectedProject.hero, alt: event.target.value } })} /></Field></section>
+          <OrderedRows items={selectedProject.sections.map((section, index) => ({ id: `${selectedProject.slug}-section-${index}`, title: section.title, visible: true }))} label="Detail sections" onMove={(index, offset) => updateSelectedProject({ sections: move(selectedProject.sections, index, offset) })} onSelect={setSubIndex} />
+          {selectedProject.sections[subIndex] ? <><Field label="Section label"><input value={selectedProject.sections[subIndex].label} onChange={(event) => updateSelectedProject({ sections: selectedProject.sections.map((section, index) => index === subIndex ? { ...section, label: event.target.value } : section) })} /></Field><Field label="Section title"><textarea rows={2} value={selectedProject.sections[subIndex].title} onChange={(event) => updateSelectedProject({ sections: selectedProject.sections.map((section, index) => index === subIndex ? { ...section, title: event.target.value } : section) })} /></Field><Field label="Section body"><textarea rows={4} value={selectedProject.sections[subIndex].body} onChange={(event) => updateSelectedProject({ sections: selectedProject.sections.map((section, index) => index === subIndex ? { ...section, body: event.target.value } : section) })} /></Field><Field label="Section items (comma separated)"><input value={(selectedProject.sections[subIndex].items ?? []).join(", ")} onChange={(event) => updateSelectedProject({ sections: selectedProject.sections.map((section, index) => index === subIndex ? { ...section, items: event.target.value.split(",").map((value) => value.trim()).filter(Boolean) } : section) })} /></Field></> : null}
+          <OrderedRows items={selectedProject.gallery.map((media, index) => ({ id: `${selectedProject.slug}-gallery-${index}`, title: media.caption, visible: true }))} label="Gallery" onMove={(index, offset) => updateSelectedProject({ gallery: move(selectedProject.gallery, index, offset) })} onSelect={setGalleryIndex} />
+          {selectedProject.gallery[galleryIndex] ? <><Field label="Gallery image URL"><input value={selectedProject.gallery[galleryIndex].src ?? ""} onChange={(event) => updateSelectedProject({ gallery: selectedProject.gallery.map((media, index) => index === galleryIndex ? { ...media, src: event.target.value } : media) })} /></Field><Field label="Gallery alt"><textarea required rows={3} value={selectedProject.gallery[galleryIndex].alt} onChange={(event) => updateSelectedProject({ gallery: selectedProject.gallery.map((media, index) => index === galleryIndex ? { ...media, alt: event.target.value } : media) })} /></Field><Field label="Gallery caption"><input value={selectedProject.gallery[galleryIndex].caption} onChange={(event) => updateSelectedProject({ gallery: selectedProject.gallery.map((media, index) => index === galleryIndex ? { ...media, caption: event.target.value } : media) })} /></Field></> : null}
+          <Field label="External URL"><input type="url" value={selectedProject.liveUrl ?? ""} onChange={(event) => updateSelectedProject({ liveUrl: event.target.value })} /></Field>
+          <label><input type="checkbox" checked={selectedProject.showOnHome} onChange={(event) => updateSelectedProject({ showOnHome: event.target.checked })} /> Show on Home</label>
+          <label><input type="checkbox" checked={selectedProject.visible} onChange={(event) => updateSelectedProject({ visible: event.target.checked })} /> Visible</label>
+        </> : null}
+      </> : null}
+
+      {selectedItem.id === "assets.library" ? <><section className={styles.editorBlock}><div className={styles.blockHeading}><div><p className={styles.kicker}>{content.assets.length} files</p><h3>Asset Library</h3></div><button className={styles.secondaryButton} type="button" onClick={() => { setAssetTarget("library"); setPickerOpen(true); }}>Add image</button></div><div className={styles.libraryList}>{content.assets.map((asset) => <article key={asset.id}><div className={styles.libraryThumb}><Image src={asset.src} alt="" fill sizes="72px" unoptimized={asset.src.startsWith("data:")} /></div><div><h4>{asset.filename}</h4><p>{asset.category} · {asset.source}</p><span>{asset.alt || "Alt text 필요"}</span></div></article>)}</div></section><section className={styles.editorBlock}><div className={styles.blockHeading}><div><p className={styles.kicker}>Recovery</p><h3>Published revisions</h3></div></div>{revisions.map((revision) => <div className={styles.compactRow} key={revision.id}><span>v{revision.versionNumber}</span><strong>{new Date(revision.publishedAt).toLocaleString("ko-KR")}</strong><button type="button" onClick={() => onRestore(revision)}>Draft로 복원</button></div>)}</section></> : null}
+    </div></div>
+    <AssetPicker open={pickerOpen} assets={content.assets} onClose={() => setPickerOpen(false)} onSelect={chooseAsset} onUpload={async (file) => { const asset = await uploadAsset(file); addAsset(asset); return asset; }} />
+  </section>;
 }

@@ -1,209 +1,44 @@
 # Admin ↔ Portfolio frontend contract
 
-## Boundary
+## Canonical mapping
 
-This PR adds Admin-only code and contracts. It does not modify public rendering, props, copy, images or `src/app/globals.css`. The mappings below describe a later integration PR.
+| CMS selection | Renderer | Public identifier |
+| --- | --- | --- |
+| `home.hero` | `HomeSections` Hero | `data-cms-section="home.hero"` |
+| `home.about` | About + capabilities | `home.about` |
+| `home.projects` | project cards + supporting note | `home.projects` |
+| `home.works` | single featured + ordered reel | `home.works` |
+| `home.career` | career/personal records | `home.career` |
+| `home.workflow` | workflow records | `home.workflow` |
+| `home.contact` | Contact copy/links | `home.contact` |
+| `works.archive` | category/order filtered Works | `works.archive` |
+| `projects.index` | existing project detail renderer | `projects.index` |
 
-Source baseline: PR #2 head `a6b7dba82f9ed0b30be454f64c6b2e892207a014`.
+`ContentProvider` starts with the V1 seed for SSR/hydration parity, then loads current Published or Draft Preview. Public routes never read Draft. `?cmsPreview=draft` reads the live Draft channel and is used only inside Admin Preview.
 
-## Snapshot root
+## Media
 
-The public renderer will receive one validated immutable shape.
+`MediaPlaceholder` remains the only public image frame. CMS image data maps to the existing ratio/tone contract and expands focal position from vertical bias to the 3×3 values. Local `/images/**`, Supabase public URLs, HTTPS external URLs and local data URL fallback all use the same component. Public spacing, typography, frame CSS and responsive breakpoints are unchanged.
 
-```ts
-type PortfolioSnapshot = {
-  schemaVersion: 1;
-  publishedVersion: number;
-  home: HomeSnapshot;
-  works: WorksSnapshot;
-  projects: ProjectSnapshot[];
-  assets: Record<string, PublishedAsset>;
-};
-```
+## Works rules
 
-Draft rows are never passed to public pages. Preview receives the same shape from a draft snapshot adapter so preview and published rendering share one renderer.
+- `/works` filters `published=true`, category visible, and preserves snapshot order.
+- Home filters `published && showOnHome`.
+- `homeFeatured=true` selects one feature; it is removed from the reel list.
+- Drag/drop and keyboard arrows write the same array order used by Preview/Public.
+- Category deletion is not exposed; the fixed V1 taxonomy can be renamed, hidden and reordered.
 
-## Home mapping
+## Projects
 
-### Hero
+The two existing slugs remain statically routable. The client detail renderer resolves the current snapshot by slug, so title, subtitle, summary, intro, roles, tools, external URL and visibility can change without code edits. The original specialized LIVBEE responsive comparison layout is retained.
 
-Current source: `src/components/home/HomeSections.tsx` first `<section className="home-hero">`.
+## Failure behavior
 
-Future source: `cms.home.hero`.
+- Supabase absent/unreachable with no returned data: seed/local fallback keeps the portfolio renderable.
+- Draft save validation failure: no persistence and no Publish.
+- Publish failure: previous `is_current` remains public because the RPC is transactional.
+- Restore: copies a historical Published snapshot into Draft; a separate Publish is required.
 
-| CMS field | Current target |
-| --- | --- |
-| `eyebrow` | `.hero-eyebrow` text |
-| `title.policy/text/segments` | `#hero-title`; segments become text + controlled `<br>` only |
-| `description` | `.hero-statement` |
-| `period` | `.hero-intro-note` first paragraph |
-| `disciplines[]` | `.hero-intro-note` second paragraph joined with ` · ` |
+## Known deployment requirement
 
-Do not store HTML. Manual line breaks are semantic text segments.
-
-### About
-
-Current source: `HomeSections.tsx`, `#about`, local `capabilities`, `MediaPlaceholder` props.
-
-Future source: `cms.home.about`.
-
-| CMS field | Current target |
-| --- | --- |
-| heading `eyebrow/title/description` | `SectionHeading` props |
-| representative asset + alt/caption | `MediaPlaceholder.media` |
-| object position | future expanded media focus adapter |
-| `capabilities[]` | `.capability-list` ordered articles |
-
-### Featured Projects
-
-Current source: `HomeSections.tsx` `#projects`, `projects.map`, and hardcoded `representative-note`.
-
-Future source: `cms.home.projectsHeading`, `cms.projects.filter(showOnHome)`, `cms.home.projectsSupportingNote`.
-
-| CMS field | Current target |
-| --- | --- |
-| heading fields | `SectionHeading` |
-| project order | `.projects-list` order |
-| project card fields | existing `ProjectCard` data contract |
-| supporting note | `.representative-note` |
-
-### Selected Works
-
-Current source: `HomeSections.tsx` `#works`; `featuredWork` lookup and `reelWorkIds` array.
-
-Future source: `cms.home.worksHeading`, `cms.visualWorks.find(homeFeatured)`, `cms.visualWorks.filter(showOnHome).sort(homeSortOrder)`.
-
-| CMS field | Current target |
-| --- | --- |
-| `homeFeatured` | `.featured-work` single item |
-| `showOnHome`, `homeSortOrder` | `.work-reel` items/order |
-| title/category/description/asset/alt/ratio | existing card/media rendering |
-
-The initial migration maps `ocean-content-thumbnail` to featured and preserves the seven current reel ids in their current order.
-
-### Career
-
-Current source: `src/data/career.ts` plus a separate hardcoded Personal project `<li>` in `HomeSections.tsx`.
-
-Future source: `cms.home.careerHeading`, `cms.careerEntries.filter(visible).sort(sortOrder)`.
-
-`entryType=personal_project` selects the existing personal-row presentation. It does not require a second query or table.
-
-### Workflow
-
-Current source: `HomeSections.tsx` local `workflow` array and section without id.
-
-Future source: `cms.home.workflowHeading`, `cms.workflowEntries`.
-
-Tools are stored as an array and joined for the current `.workflow-tools` string. Public integration adds `data-cms-section="home.workflow"` but does not change layout or copy.
-
-### Contact
-
-Current source: `HomeSections.tsx` `#contact`.
-
-Future source: `cms.home.contact`.
-
-| CMS field | Current target |
-| --- | --- |
-| eyebrow/title/description | existing contact copy nodes |
-| CTA label/URL | existing `TextLink` |
-| public email/resume/external links | render only when approved and non-empty |
-
-## Works mapping
-
-Current source: `src/app/works/page.tsx`, local `workCategories`, and `src/data/works.ts`.
-
-Future source: `cms.works.heading`, `cms.workCategories`, `cms.visualWorks`.
-
-| CMS field | Current target |
-| --- | --- |
-| category name/order/visible/preview type | category sections and grid class |
-| work category relation | current category filter |
-| work sort order | cards within category |
-| ratio/preview type | `work-${ratio}` and `MediaPlaceholder` ratio |
-| object position | `MediaPlaceholder` style through expanded media contract |
-| published | public filter |
-
-Current category names are migrated exactly. Changing a category name must not silently change its preview frame.
-
-## Project mapping
-
-Current source: `src/data/projects.ts`, `src/types/content.ts`, `ProjectCard.tsx`, `ProjectDetail.tsx`.
-
-Future source: `cms.projects` and `cms.projectSections`.
-
-| CMS field | Existing `Project` target |
-| --- | --- |
-| slug, number, title, subtitle, year label, type | same overview fields |
-| roles, tools, summary, intro | same arrays/copy |
-| hero asset metadata | `hero` media object |
-| ordered project sections | `sections[]` |
-| gallery snapshot | `gallery[]` until a real normalized gallery editor is needed |
-| external URL | `liveUrl` |
-
-Project-specific LIVBEE responsive-pair rendering currently branches on `project.slug === "livbee"`. V1 integration preserves this renderer/template key. Arbitrary project creation stays disabled until template selection replaces slug-based branching.
-
-## Image adapter
-
-Current public components expect `/images/...` paths and three vertical focal values. CMS assets may be Storage or imported external URLs and use a 3×3 position.
-
-The integration adapter must:
-
-1. resolve asset UUID to a published immutable URL,
-2. require alt text at publish time,
-3. map `top-left ... bottom-right` to CSS percentages,
-4. pass `sizes` and priority using the existing LCP rules,
-5. configure approved Supabase Storage host in `next.config.ts` only when remote images are introduced.
-
-Do not widen `src` to any arbitrary URL without host validation.
-
-## Section selection protocol
-
-Later public changes add only stable attributes to existing section roots:
-
-```tsx
-<section data-cms-section="home.about" ... />
-```
-
-Admin Navigator sends `cms:focus`; preview reports `cms:select`. Message payload:
-
-```ts
-type CmsPreviewMessage =
-  | { type: "cms:focus"; sectionId: AdminSectionId }
-  | { type: "cms:select"; sectionId: AdminSectionId };
-```
-
-Both sides validate origin and known section ids. Cross-origin preview can scroll/select only when the deployed preview bridge is intentionally enabled; otherwise iframe remains read-only and Navigator uses URLs/anchors.
-
-## Files that will change later
-
-These files are explicitly deferred and unchanged in this PR:
-
-| Integration phase | Expected file |
-| --- | --- |
-| provider/snapshot boundary | new `src/cms/**` adapter and validators |
-| Home snapshot renderer | `src/components/home/HomeSections.tsx` |
-| Works snapshot renderer | `src/app/works/page.tsx` |
-| Project snapshot renderer | `src/app/projects/[slug]/page.tsx`, `ProjectDetail.tsx`, `ProjectCard.tsx` |
-| compatibility types | `src/types/content.ts` or a snapshot adapter beside it |
-| remote Storage images | `next.config.ts` |
-| section click bridge | existing section roots + a small preview-only client bridge |
-
-`src/app/globals.css` should not change merely to connect CMS data. Any visual diff is a regression unless separately approved.
-
-## Migration order
-
-1. Apply database/RLS and import assets/current TypeScript data.
-2. Build server-side `PortfolioCmsAdapter` and runtime validators.
-3. Connect Admin initial reads; compare every value with the hardcoded source.
-4. Connect Save Draft and revision creation.
-5. Generate draft `PortfolioSnapshot`; render it in Preview with the existing public components.
-6. Add section identifiers/message bridge and complete bidirectional selection.
-7. Enable validated Publish and immutable current version.
-8. Switch Home Hero/About first, compare screenshots, then Projects, Works, Career, Workflow, Contact.
-9. Switch `/works`, then project detail pages.
-10. Remove hardcoded data only after all route/viewports match and rollback snapshot is verified.
-
-## Visual parity gate
-
-For every public integration step, compare the previous hardcoded renderer and CMS snapshot at 390×844, 768×1024, 1280×900 and 1440×900. Copy, order, image crop, line breaks, page height and overflow must match before removing the previous source.
+Repository code cannot discover or create a user's Supabase project. Before shared production operation, apply the migration and set the two public environment values. Until then, edits are intentionally limited to the browser that owns the local fallback data.
