@@ -133,7 +133,10 @@ export async function loadDraft(): Promise<PortfolioSnapshot> {
     ]);
     if (error) throw error;
     const snapshot = data?.draft_snapshot ? structuredClone(data.draft_snapshot as PortfolioSnapshot) : cloneSeed();
-    if (assets.length) snapshot.assets = assets;
+    if (assets.length) {
+      const seedAssets = data?.draft_snapshot ? [] : snapshot.assets;
+      snapshot.assets = [...seedAssets, ...assets].filter((asset, index, all) => all.findIndex((item) => item.id === asset.id) === index);
+    }
     return snapshot;
   }
   return readLocal(STORAGE_KEYS.draft, cloneSeed());
