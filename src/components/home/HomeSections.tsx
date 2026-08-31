@@ -59,11 +59,11 @@ export function HomeSections() {
         <div className="identity-layout" data-reveal>
           <MediaPlaceholder
             media={{
-              src: "/images/selected-works/traffic-safety-title.jpg",
-              alt: "도로 위 차량 장면과 생활권 안심도로 문구가 있는 영상 타이틀 그래픽",
+              src: "/images/about/creative-workflow-studio.jpg",
+              alt: "촬영 스튜디오에서 제품을 촬영하며 그래픽과 영상 편집 화면을 함께 확인하는 작업 장면",
               ratio: "wide",
               tone: "sand",
-              caption: "영상 타이틀",
+              caption: "Design · Photo · Video",
             }}
           />
           <div className="capability-list">
