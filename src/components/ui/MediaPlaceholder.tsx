@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SafeImage } from "./SafeImage";
 import type { MediaTone, ObjectPosition, ProjectMedia } from "@/types/content";
 
 type MediaPlaceholderProps = {
@@ -36,15 +36,13 @@ export function MediaPlaceholder({ media, priority = false, className = "" }: Me
       data-priority={priority ? "true" : undefined}
     >
       {source ? (
-        <Image
+        <SafeImage
           className="media-real-image"
           src={source}
           alt={description}
           fill
           priority={priority}
-          loading={priority ? "eager" : "lazy"}
           sizes={sizes}
-          unoptimized={source.startsWith("data:")}
           style={objectPosition ? { objectFit: "cover", objectPosition } : undefined}
         />
       ) : null}

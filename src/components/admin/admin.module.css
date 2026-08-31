@@ -198,7 +198,9 @@
 .fieldset legend { font-size: 11px; font-weight: 600; }
 
 .field input,
-.field textarea {
+.field textarea,
+.field select {
+  min-width: 0;
   width: 100%;
   border: 1px solid var(--admin-line-strong);
   border-radius: 4px;
@@ -208,6 +210,7 @@
 }
 
 .field input { height: 36px; padding: 0 10px; }
+.field select { height: 36px; padding: 0 10px; }
 .field textarea { min-height: 72px; padding: 9px 10px; line-height: 1.55; resize: vertical; }
 .field small,
 .fieldset small { color: var(--admin-muted); font-size: 10px; line-height: 1.45; }
@@ -255,13 +258,15 @@
 .compactRow {
   display: grid;
   min-height: 42px;
-  grid-template-columns: 24px 28px 1fr auto;
+  grid-template-columns: 24px 28px minmax(0, 1fr) repeat(3, auto);
   align-items: center;
   margin-top: 8px;
   padding: 0 8px;
   border: 1px solid var(--admin-line);
   background: #fff;
 }
+.compactRowSelected { border-color: var(--admin-ink); background: var(--admin-selected); }
+.compactRow input { min-width: 0; width: 100%; }
 .compactRow span { color: var(--admin-muted); font-size: 10px; }
 .compactRow strong { font-size: 11px; font-weight: 500; }
 .compactRow button { color: var(--admin-muted); font-size: 10px; }
@@ -354,8 +359,43 @@
 .dropzone p { color: var(--admin-muted); font-size: 10px; }
 .dropzone .secondaryButton { margin-top: 8px; }
 .externalPanel { display: grid; gap: 12px; padding: 24px 20px 32px; }
+.externalPreview { position: relative; min-height: 240px; overflow: hidden; border: 1px solid var(--admin-line); background: #fff; }
+.externalActions { display: flex; justify-content: flex-end; gap: 8px; }
+
+.workFilters { display: grid; grid-template-columns: minmax(0, 1fr) minmax(120px, 0.6fr); gap: 10px; }
+.workResult {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 3px 10px;
+  padding: 10px;
+  border: 1px solid var(--admin-line) !important;
+  border-top: 0 !important;
+  background: #fff !important;
+  text-align: left;
+}
+.workResult:first-of-type { margin-top: 10px; border-top: 1px solid var(--admin-line) !important; }
+.workResult span { grid-column: 1; color: var(--admin-muted); font-size: 9px; }
+.workResult strong { grid-column: 1; overflow: hidden; font-size: 11px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.workResult small { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--admin-muted); font-size: 9px; }
+.workResultSelected { border-color: var(--admin-ink) !important; background: var(--admin-selected) !important; }
+
+.revisionRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid var(--admin-line);
+  background: #fff;
+}
+.revisionRow span { color: var(--admin-muted); font-size: 10px; }
+.revisionRow strong { font-size: 10px; font-weight: 500; }
+.revisionRow p { grid-column: 1 / 3; overflow: hidden; color: var(--admin-muted); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.revisionRow button { grid-column: 3; grid-row: 1 / 3; color: var(--admin-muted); font-size: 10px; }
 
 .tabletSwitch { display: none; }
+.mobileSectionPicker { display: none; }
 
 @media (max-width: 1279px) {
   .studioGrid { grid-template-columns: 190px 330px minmax(0, 1fr); }
@@ -384,13 +424,34 @@
 }
 
 @media (max-width: 700px) {
+  .adminRoot { grid-template-rows: 60px 42px 48px minmax(0, 1fr); }
   .topbar { grid-template-columns: 1fr auto; }
   .brandBlock { border-right: 0; }
   .documentState { display: none; }
   .topActions .secondaryButton { display: none; }
-  .studioGrid { grid-template-columns: 1fr; }
+  .mobileSectionPicker {
+    display: grid;
+    grid-row: 3;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--admin-line-strong);
+    background: var(--admin-panel);
+  }
+  .mobileSectionPicker span { color: var(--admin-muted); font-size: 10px; font-weight: 600; text-transform: uppercase; }
+  .mobileSectionPicker select { min-width: 0; width: 100%; height: 32px; border: 1px solid var(--admin-line-strong); background: #fff; padding: 0 8px; }
+  .studioGrid { grid-row: 4; grid-template-columns: 1fr; }
   .navigator { display: none; }
   .editorColumn,
   .previewColumn { grid-column: 1; }
   .assetGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .propertyHeader { padding: 14px 12px; }
+  .propertyScroll { padding: 14px 12px; }
+  .twoFields,
+  .workFilters { grid-template-columns: 1fr; }
+  .compactRow { grid-template-columns: 20px 24px minmax(0, 1fr) repeat(3, 26px); padding-inline: 5px; }
+  .compactRow button { min-width: 24px; }
+  .modalBackdrop { padding: 8px; }
+  .assetModal { max-height: calc(100vh - 16px); }
 }

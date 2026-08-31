@@ -7,8 +7,8 @@ import type { PortfolioSnapshot } from "./schema";
 
 const ContentContext = createContext<PortfolioSnapshot>(seedSnapshot);
 
-export function ContentProvider({ children }: { children: React.ReactNode }) {
-  const [content, setContent] = useState(seedSnapshot);
+export function ContentProvider({ children, initialContent = seedSnapshot }: { children: React.ReactNode; initialContent?: PortfolioSnapshot }) {
+  const [content, setContent] = useState(initialContent);
 
   useEffect(() => {
     const preview = new URLSearchParams(window.location.search).get("cmsPreview") === "draft";

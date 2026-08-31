@@ -51,6 +51,71 @@ function getSupabase(): SupabaseClient | null {
   return url && key ? createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } }) : null;
 }
 
+type AssetRow = {
+  id: string;
+  storage_path: string | null;
+  external_url: string | null;
+  public_path: string | null;
+  filename: string;
+  mime_type: string;
+  byte_size: number;
+  alt_text: string;
+  caption: string;
+  category: string;
+  source: AssetRecord["source"];
+  object_position: AssetRecord["objectPosition"];
+};
+
+function assetFromRow(client: SupabaseClient, row: AssetRow): AssetRecord {
+  const src = row.storage_path
+    ? client.storage.from("portfolio-assets").getPublicUrl(row.storage_path).data.publicUrl
+    : row.external_url ?? row.public_path ?? "";
+  return {
+    id: row.id,
+    filename: row.filename,
+    src,
+    alt: row.alt_text,
+    caption: row.caption,
+    category: row.category,
+    source: row.source,
+    objectPosition: row.object_position,
+    mimeType: row.mime_type,
+    byteSize: Number(row.byte_size),
+    storagePath: row.storage_path ?? undefined,
+  };
+}
+
+function assetToRow(asset: AssetRecord): AssetRow {
+  const isLocal = asset.src.startsWith("/");
+  const isExternal = asset.source === "external";
+  return {
+    id: asset.id,
+    storage_path: asset.storagePath ?? null,
+    external_url: isExternal ? asset.src : null,
+    public_path: isLocal ? asset.src : null,
+    filename: asset.filename,
+    mime_type: asset.mimeType ?? (isExternal ? "image/external" : "image/local"),
+    byte_size: asset.byteSize ?? 0,
+    alt_text: asset.alt,
+    caption: asset.caption,
+    category: asset.category,
+    source: asset.source,
+    object_position: asset.objectPosition,
+  };
+}
+
+async function loadAssets(client: SupabaseClient) {
+  const { data, error } = await client.from("assets").select("id,storage_path,external_url,public_path,filename,mime_type,byte_size,alt_text,caption,category,source,object_position").order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((row) => assetFromRow(client, row as AssetRow));
+}
+
+async function persistAssets(client: SupabaseClient, assets: AssetRecord[]) {
+  if (!assets.length) return;
+  const { error } = await client.from("assets").upsert(assets.map(assetToRow), { onConflict: "id" });
+  if (error) throw error;
+}
+
 export function isSupabaseConfigured() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && (process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY));
 }
@@ -62,8 +127,14 @@ export function setLivePreview(snapshot: PortfolioSnapshot) {
 export async function loadDraft(): Promise<PortfolioSnapshot> {
   const client = getSupabase();
   if (client) {
-    const { data } = await client.from("portfolio_cms_state").select("draft_snapshot").eq("id", "portfolio").maybeSingle();
-    if (data?.draft_snapshot) return data.draft_snapshot as PortfolioSnapshot;
+    const [{ data, error }, assets] = await Promise.all([
+      client.from("portfolio_cms_state").select("draft_snapshot").eq("id", "portfolio").maybeSingle(),
+      loadAssets(client),
+    ]);
+    if (error) throw error;
+    const snapshot = data?.draft_snapshot ? structuredClone(data.draft_snapshot as PortfolioSnapshot) : cloneSeed();
+    if (assets.length) snapshot.assets = assets;
+    return snapshot;
   }
   return readLocal(STORAGE_KEYS.draft, cloneSeed());
 }
@@ -72,8 +143,10 @@ export async function loadPublished(preview = false): Promise<PortfolioSnapshot>
   if (preview) return readLocal(STORAGE_KEYS.preview, await loadDraft());
   const client = getSupabase();
   if (client) {
-    const { data } = await client.from("published_versions").select("snapshot").eq("is_current", true).maybeSingle();
+    const { data, error } = await client.from("published_versions").select("snapshot").eq("is_current", true).maybeSingle();
+    if (error) throw error;
     if (data?.snapshot) return data.snapshot as PortfolioSnapshot;
+    return cloneSeed();
   }
   return readLocal(STORAGE_KEYS.published, cloneSeed());
 }
@@ -82,11 +155,9 @@ export async function saveDraft(snapshot: PortfolioSnapshot, note = "Draft saved
   validateSnapshot(snapshot);
   const client = getSupabase();
   if (client) {
-    const { data: state } = await client.from("portfolio_cms_state").select("draft_revision").eq("id", "portfolio").maybeSingle();
-    const nextRevision = Number(state?.draft_revision ?? 0) + 1;
-    const { error } = await client.from("portfolio_cms_state").upsert({ id: "portfolio", draft_snapshot: snapshot, draft_revision: nextRevision, updated_at: new Date().toISOString() });
+    await persistAssets(client, snapshot.assets);
+    const { error } = await client.rpc("save_portfolio_draft", { candidate: snapshot, note });
     if (error) throw error;
-    await client.from("draft_revisions").insert({ draft_revision: nextRevision, snapshot, change_note: note });
   } else {
     writeLocal(STORAGE_KEYS.draft, snapshot);
   }
@@ -98,7 +169,7 @@ export async function publishDraft(snapshot: PortfolioSnapshot): Promise<Revisio
   const client = getSupabase();
   if (client) {
     const { data, error } = await client.rpc("publish_portfolio");
-    if (error) throw error;
+    if (error) throw new PublishError(error.message);
     const row = Array.isArray(data) ? data[0] : data;
     return { id: String(row.id), versionNumber: Number(row.version_number), snapshot, publishedAt: String(row.published_at) };
   }
@@ -112,6 +183,14 @@ export async function publishDraft(snapshot: PortfolioSnapshot): Promise<Revisio
   writeLocal(STORAGE_KEYS.published, snapshot);
   writeLocal(STORAGE_KEYS.revisions, [revision, ...revisions].slice(0, 20));
   return revision;
+}
+
+export class PublishError extends Error {
+  readonly draftSaved = true;
+  constructor(message: string) {
+    super(message);
+    this.name = "PublishError";
+  }
 }
 
 export async function loadRevisions(): Promise<RevisionRecord[]> {
@@ -140,6 +219,13 @@ export async function uploadAsset(file: File): Promise<AssetRecord> {
     const { error } = await client.storage.from("portfolio-assets").upload(path, file, { upsert: false, contentType: file.type });
     if (error) throw error;
     src = client.storage.from("portfolio-assets").getPublicUrl(path).data.publicUrl;
+    const asset: AssetRecord = { id: crypto.randomUUID(), filename: file.name, src, alt: "", caption: "", category: "Uploads", source, objectPosition: "center", mimeType: file.type, byteSize: file.size, storagePath: path };
+    const { error: metadataError } = await client.from("assets").insert(assetToRow(asset));
+    if (metadataError) {
+      const { error: cleanupError } = await client.storage.from("portfolio-assets").remove([path]);
+      throw new Error(cleanupError ? `${metadataError.message} (orphan cleanup failed: ${cleanupError.message})` : metadataError.message);
+    }
+    return asset;
   } else {
     src = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -150,4 +236,35 @@ export async function uploadAsset(file: File): Promise<AssetRecord> {
     source = "upload";
   }
   return { id: crypto.randomUUID(), filename: file.name, src, alt: "", caption: "", category: "Uploads", source, objectPosition: "center" };
+}
+
+export async function validateExternalImage(url: string): Promise<string> {
+  const parsed = new URL(url);
+  if (parsed.protocol !== "https:") throw new Error("HTTPS 이미지 URL만 사용할 수 있습니다.");
+  await new Promise<void>((resolve, reject) => {
+    const image = new Image();
+    const timer = window.setTimeout(() => reject(new Error("이미지 확인 시간이 초과되었습니다.")), 10000);
+    image.onload = () => {
+      window.clearTimeout(timer);
+      if (image.src && image.naturalWidth > 0) resolve();
+      else reject(new Error("유효한 이미지가 아닙니다."));
+    };
+    image.onerror = () => { window.clearTimeout(timer); reject(new Error("URL에서 이미지를 불러올 수 없습니다.")); };
+    image.src = parsed.toString();
+  });
+  return parsed.toString();
+}
+
+export async function registerExternalAsset(url: string, alt: string): Promise<AssetRecord> {
+  if (!alt.trim()) throw new Error("외부 이미지 alt text를 입력하세요.");
+  const validatedUrl = await validateExternalImage(url);
+  const parsed = new URL(validatedUrl);
+  const filename = parsed.pathname.split("/").pop() || "external-image";
+  const asset: AssetRecord = { id: crypto.randomUUID(), filename, src: validatedUrl, alt: alt.trim(), caption: "", category: "External", source: "external", objectPosition: "center", mimeType: "image/external", byteSize: 0 };
+  const client = getSupabase();
+  if (client) {
+    const { error } = await client.from("assets").insert(assetToRow(asset));
+    if (error) throw error;
+  }
+  return asset;
 }

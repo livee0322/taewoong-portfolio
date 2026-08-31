@@ -55,6 +55,9 @@ export type AssetRecord = {
   category: string;
   source: "library" | "upload" | "external";
   objectPosition: ObjectPosition;
+  mimeType?: string;
+  byteSize?: number;
+  storagePath?: string;
 };
 
 export type PortfolioSnapshot = {
