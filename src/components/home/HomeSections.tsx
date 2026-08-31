@@ -5,44 +5,67 @@ import { ProjectCard } from "@/components/project/ProjectCard";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TextLink } from "@/components/ui/TextLink";
+import { WorkTitle } from "@/components/ui/WorkTitle";
 
 const capabilities = [
-  ["01", "Planning", "서비스 / 제품 / 콘텐츠 기획"],
-  ["02", "Design", "UI/UX / Graphic / Artwork"],
-  ["03", "Content", "촬영 / 영상 / YouTube"],
-  ["04", "Commerce", "상품 / Promotion / Shopping Live"],
+  ["01", "Design", "UI/UX · 그래픽 · 상세페이지"],
+  ["02", "Content", "촬영 기획 · YouTube 썸네일 · 타이틀/자막"],
+  ["03", "Commerce", "상품 정보 · 프로모션 · 쇼핑라이브"],
+  ["04", "Product", "서비스 기획 · UX 흐름 · QA · 개발 협업"],
 ];
 
 const workflow = [
-  ["Planning / Product", "서비스 기획 · 기능 정의 · UX Flow · QA", "Figma · Asana · Obsidian"],
-  ["Design", "UI/UX · Graphic · Artwork", "Figma · Photoshop · Illustrator"],
-  ["Content", "촬영 기획 · 영상 편집 · YouTube Content", "Premiere Pro · Camera workflow"],
-  ["AI", "Research · Requirement · Development Collaboration · QA", "ChatGPT · Claude · Codex"],
+  ["Design", "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리했습니다.", "Figma · Photoshop · Illustrator"],
+  ["Content", "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만들었습니다.", "Camera workflow · Premiere Pro"],
+  ["Commerce", "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비했습니다.", "Promotion · Detail page · Shopping Live"],
+  ["Product", "서비스를 기획하고 UX 흐름을 설계한 뒤, 구현 화면을 QA하며 개발과 협업했습니다.", "Service planning · UX flow · QA · Dev collaboration"],
 ];
+
+const featuredWork = visualWorks.find((work) => work.id === "ocean-content-thumbnail") ?? visualWorks[0];
+const reelWorkIds = [
+  "traffic-safety-thumbnail",
+  "safety-ga-sister-thumbnail",
+  "editor-pick-dochi-caption",
+  "pyojoon-gobaek-thumbnail",
+  "shopping-live-studio",
+  "innos-monster-tv-banner",
+  "sea-forest-invitation-thumbnail",
+];
+const reelWorks = reelWorkIds
+  .map((id) => visualWorks.find((work) => work.id === id))
+  .filter((work): work is (typeof visualWorks)[number] => Boolean(work));
 
 export function HomeSections() {
   return (
     <main>
       <section className="home-hero page-shell" aria-labelledby="hero-title">
-        <p className="eyebrow hero-eyebrow">Independent practitioner based in Seoul</p>
-        <h1 id="hero-title">
-          <span>디자인에서 시작해</span>
-          <span>기획, 콘텐츠, 커머스까지.</span>
-        </h1>
-        <div className="hero-bottom">
-          <p>필요한 일을 배우고, 실제 결과로 만드는 일을 좋아합니다.</p>
-          <p className="hero-domains">Planning · Design · Content · Commerce</p>
+        <div className="hero-copy">
+          <p className="eyebrow hero-eyebrow" data-reveal>이태웅 · 디자이너</p>
+          <h1 id="hero-title" data-reveal>디자인과 콘텐츠를 만들고,<br />서비스 화면까지 직접 확인합니다.</h1>
+          <p className="hero-statement" data-reveal>상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 제품 촬영과 영상, 쇼핑라이브 현장을 거쳐 최근에는 서비스 기획과 UI/UX, QA, 개발 협업을 맡고 있습니다.</p>
+          <div className="hero-intro-note">
+            <p>2019 — NOW</p>
+            <p>Design · Content · Commerce · Product</p>
+          </div>
         </div>
       </section>
 
       <section id="about" className="identity section page-shell">
         <SectionHeading
-          eyebrow="About / Identity"
-          title="저는 디자인만 하는 사람이 아닙니다."
-          description="디자인으로 커리어를 시작했지만 제품, 촬영, 영상, 콘텐츠, 쇼핑라이브, 서비스 기획과 개발 협업까지 필요한 역할을 직접 경험하며 업무의 범위를 넓혀왔습니다."
+          eyebrow="About"
+          title="화면 안의 디자인과 촬영 현장의 일을 함께 해봤습니다."
+          description="제품을 촬영하고 상세페이지와 배너를 만들었습니다. 영상에서는 썸네일·타이틀·자막을 제작했고, 쇼핑라이브에서는 방송 준비와 현장 운영을 맡았습니다."
         />
-        <div className="identity-layout">
-          <MediaPlaceholder media={{ tone: "stone", ratio: "portrait", title: "TAEWOONG LEE", description: "이태웅 프로필 이미지 자리" }} />
+        <div className="identity-layout" data-reveal>
+          <MediaPlaceholder
+            media={{
+              src: "/images/about/creative-workflow-studio.jpg",
+              alt: "촬영 스튜디오에서 제품을 촬영하며 그래픽과 영상 편집 화면을 함께 확인하는 작업 장면",
+              ratio: "wide",
+              tone: "sand",
+              caption: "Design · Photo · Video",
+            }}
+          />
           <div className="capability-list">
             {capabilities.map(([number, title, description]) => (
               <article key={title} className="capability-item">
@@ -57,44 +80,62 @@ export function HomeSections() {
 
       <section id="projects" className="selected-projects section page-shell">
         <SectionHeading
-          eyebrow="Selected projects"
-          title="한 가지 결과물을 넘어, 일이 굴러가는 과정을 다룹니다."
-          description="기획, 디자인, 콘텐츠, 커머스가 만나는 대표 사례를 먼저 정리합니다. 실제 기록과 화면은 프로젝트별로 차례로 추가됩니다."
+          eyebrow="대표 프로젝트"
+          title="서비스와 커머스에서 맡은 과정을 두 프로젝트로 정리했습니다."
+          description="LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다."
         />
         <div className="projects-list">
-          {projects.map((project) => <ProjectCard key={project.slug} project={project} />)}
+          {projects.map((project) => <div data-reveal key={project.slug}><ProjectCard project={project} /></div>)}
         </div>
+        <article className="representative-note">
+          <p className="eyebrow">GPA KOREA / SellerChart</p>
+          <div>
+            <h3>웹·앱을 QA하고 반복되는 UI를 컴포넌트로 정리했습니다.</h3>
+            <p>Figma Auto Layout으로 자주 쓰이는 요소를 컴포넌트로 묶고, 디자인 수정 사항을 실제 화면에 반영했습니다.</p>
+            <TextLink href="https://msellerchart.com/" target="_blank" rel="noreferrer">셀러차트 보기</TextLink>
+          </div>
+        </article>
       </section>
 
       <section id="works" className="selected-works section page-shell">
         <div className="works-heading-row">
           <SectionHeading
-            eyebrow="Selected visual works"
-            title="기억에 남는 장면을 만드는 디자인."
-            description="YouTube, 프로모션, 상세페이지, 촬영과 영상 작업 중 일부를 선별해 보여줍니다."
+            eyebrow="작업 모음"
+            title="공개 가능한 실무 작업을 골라 소개합니다."
+            description="유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다."
           />
-          <TextLink href="/works">All visual works</TextLink>
+          <TextLink href="/works">작업 전체 보기</TextLink>
         </div>
-        <div className="works-masonry">
-          {visualWorks.slice(0, 5).map((work) => (
-            <article className={`work-card work-${work.ratio}`} key={work.id}>
-              <MediaPlaceholder media={{ tone: work.tone, ratio: work.ratio, title: work.category, description: `${work.category}: ${work.title}` }} />
-              <div className="work-card-copy">
+        <div className="work-showcase">
+          <article className="featured-work" data-reveal>
+            <MediaPlaceholder media={{ src: featuredWork.src, alt: featuredWork.alt, tone: featuredWork.tone, ratio: featuredWork.ratio, caption: featuredWork.category }} />
+            <div className="featured-work-copy">
+              <p className="eyebrow">{featuredWork.category}</p>
+              <h3><WorkTitle title={featuredWork.title} /></h3>
+              {featuredWork.description ? <p>{featuredWork.description}</p> : null}
+            </div>
+          </article>
+          <div className="work-reel" aria-label="추가 작업 가로 갤러리">
+            {reelWorks.map((work) => (
+              <article className="reel-card" data-reveal key={work.id}>
+                <MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: work.ratio, caption: work.category }} />
                 <p className="eyebrow">{work.category}</p>
-                <h3>{work.title}</h3>
-                <p>{work.description}</p>
-              </div>
-            </article>
-          ))}
+                <h3><WorkTitle title={work.title} /></h3>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
       <section id="experience" className="career section page-shell">
         <SectionHeading
-          eyebrow="Career / Experience"
-          title="Design → Content → Commerce → Planning → Product"
-          description="회사 이름을 나열하기보다, 업무의 범위가 어떻게 넓어졌는지 보이도록 정리합니다."
+          eyebrow="경력"
+          title="2019년 제품 디자인부터 지금의 서비스 기획까지."
+          description="회사와 팀이 바뀔 때마다 맡은 역할도 달라졌습니다. 아래에 실제 경력 순서와 각 시기에 담당한 일을 적었습니다."
         />
+        <div className="career-route">
+          {capabilities.map(([, title]) => <span key={title}>{title}</span>)}
+        </div>
         <ol className="career-list">
           {careerEntries.map((entry) => (
             <li className="career-item" key={`${entry.period}-${entry.company}`}>
@@ -106,16 +147,16 @@ export function HomeSections() {
           <li className="career-item career-item-personal">
             <p className="career-period">Personal project</p>
             <div className="career-company"><h3>LIVBEE</h3><p>Product</p></div>
-            <div className="career-detail"><p className="career-role">서비스 기획 / UX UI / AI Workflow / QA / Project Management</p><p>서비스를 기획하고 구현 결과를 검토하는 개인 프로젝트입니다.</p></div>
+            <div className="career-detail"><p className="career-role">서비스 기획 / UX UI / AI Workflow / Browser QA / Project Management</p><p>쇼핑라이브 매칭의 문제를 서비스 흐름으로 바꾸고, 실제 화면의 구현 결과를 검토하는 개인 프로젝트입니다.</p></div>
           </li>
         </ol>
       </section>
 
       <section className="workflow section page-shell">
         <SectionHeading
-          eyebrow="Tools / Workflow"
-          title="도구보다 먼저, 어떤 일을 해결해야 하는지 봅니다."
-          description="툴은 결과를 위한 수단입니다. 업무마다 필요한 기준과 협업 방식을 먼저 정리합니다."
+          eyebrow="작업 방식"
+          title="목적을 정리하고, 만든 뒤에는 실제 화면에서 확인합니다."
+          description="무엇을 보여줘야 하는지 먼저 정리합니다. 직접 제작하거나 협업으로 구현한 뒤에는 화면과 현장에서 빠진 부분을 다시 확인합니다."
         />
         <div className="workflow-list">
           {workflow.map(([area, work, tools]) => (
@@ -131,10 +172,10 @@ export function HomeSections() {
       <section id="contact" className="contact section page-shell">
         <p className="eyebrow">Contact</p>
         <div className="contact-layout">
-          <h2>함께 풀어야 할 일이 있다면, 이야기해 주세요.</h2>
+          <h2>디자인부터 운영까지,<br />해온 일을 더 보여드리겠습니다.</h2>
           <div>
-            <p>연락처와 이력서 파일은 실제 정보를 확인한 뒤 추가합니다. 현재는 포트폴리오 구조와 사례를 정리하는 단계입니다.</p>
-            <TextLink href="#projects" arrow="↑">Selected projects 보기</TextLink>
+            <p>그래픽, 콘텐츠, 커머스, 서비스 화면을 함께 다뤄온 경험이 필요하다면 작업 모음과 경력을 살펴봐 주세요.</p>
+            <TextLink href="/works">작업 모음 보기</TextLink>
           </div>
         </div>
       </section>

@@ -44,6 +44,7 @@ npm run build
 - [Content guide](docs/CONTENT_GUIDE.md) — writing rules and content maintenance
 - [Interaction spec](docs/INTERACTION_SPEC.md) — motion and interaction constraints
 - [Project schema](docs/PROJECT_SCHEMA.md) — shared case-study data contract
+- [Asset workflow](docs/ASSET_WORKFLOW.md) — source selection, privacy review, and local asset rules
 - [QA checklist](docs/QA_CHECKLIST.md) — release verification criteria
 
 Before making a visual or structural change, read the brief and the document that owns the relevant rule. The documents intentionally do not repeat each other.
@@ -57,6 +58,6 @@ Before making a visual or structural change, read the brief and the document tha
 
 ## Adding a visual work
 
-1. Put an optimized preview asset in `public/images/selected-works/`.
+1. Follow [the asset workflow](docs/ASSET_WORKFLOW.md), then put an approved optimized preview in `public/images/selected-works/`.
 2. Add a `VisualWork` entry in `src/data/works.ts` with meaningful alt text.
 3. Assign one of the existing editorial sizes. Do not create a new visual category page for an individual work.

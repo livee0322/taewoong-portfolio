@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const navigation = [
-  { href: "/#projects", label: "Projects" },
-  { href: "/#about", label: "About" },
-  { href: "/works", label: "Works" },
-  { href: "/#contact", label: "Resume" },
+  { href: "/#projects", label: "대표 작업" },
+  { href: "/works", label: "작업 모음" },
+  { href: "/#about", label: "소개" },
+  { href: "/#experience", label: "경력" },
+  { href: "/#contact", label: "연락" },
 ];
 
 export function Header() {

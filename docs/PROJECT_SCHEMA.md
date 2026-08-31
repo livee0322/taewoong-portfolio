@@ -24,4 +24,4 @@ The type represents these with `intro`, `sections`, and `gallery`. A section has
 
 ## Extension slots
 
-LIVBEE uses the same section type for Why, Service Structure, UX Flow, UI, Build, QA, Iteration, and Result. Product to Market can use process steps to grow into a sticky narrative later without changing the core route. Hero and gallery media may first use neutral placeholders, then gain a local `/images/...` path at the same semantic location. The shared media component uses `next/image` for supplied local paths, including responsive `sizes`, lazy loading, and an explicit priority only for LCP media.
+LIVBEE uses the same section type for Why, Service Structure, UX Flow, UI, Build, QA, Iteration, and Result. A compact career item can remain outside the route list until it has a reviewable story and real final material. Hero and gallery media use a local `/images/...` path only after approval through the asset workflow. The shared media component uses `next/image` for supplied local paths, including responsive `sizes`, lazy loading, and an explicit priority only for LCP media. Use the `detail` media ratio for substantial vertical detail-page previews.
