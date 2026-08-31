@@ -16,17 +16,21 @@ Canonical frontend contract는 `src/content/schema.ts`의 `PortfolioSnapshot`이
 
 ## PostgreSQL
 
-Migration: `supabase/migrations/20260831000000_portfolio_cms_foundation.sql`
+Migrations:
+
+- `supabase/migrations/20260831105927_production_reconciliation.sql`
+- `supabase/migrations/20260831110257_publish_rpc_least_privilege.sql`
+- `supabase/migrations/20260831112754_harden_publish_rpc.sql`
 
 | Object | Operation |
 | --- | --- |
 | `portfolio_cms_state` | singleton Draft read/insert/update |
 | `draft_revisions` | append/read only |
-| `published_versions` | immutable snapshot insert/read; `is_current` marker만 publish transaction에서 변경 |
-| `assets` | metadata read/insert/update; delete 미허용 |
-| `portfolio-assets` bucket | public image read/upload/replace; delete 미허용 |
+| `published_versions` | public read only; insert/current marker 변경은 Publish RPC 내부에서만 수행 |
+| `assets` | cross-device canonical metadata read/insert/update |
+| `portfolio-assets` bucket | public image read/upload/replace; metadata 실패 orphan에 한해 cleanup delete |
 
-`publish_portfolio()`는 Draft row를 잠그고 기존 current marker를 내린 뒤 새 Published snapshot을 한 transaction에서 insert한다. 완료 전에는 이전 current snapshot이 계속 유효하다.
+`public.publish_portfolio()`는 SECURITY INVOKER wrapper다. Data API에 노출되지 않는 `private.publish_portfolio_impl()`이 Draft row를 잠그고 기존 current marker를 내린 뒤 새 Published snapshot을 한 transaction에서 insert한다. 완료 전에는 이전 current snapshot이 계속 유효하다.
 
 ## Public write policy
 
@@ -37,12 +41,12 @@ Public write는 의도된 제품 요구사항이지만 보안 경계가 아니�
 - JSON object/schema version checks
 - non-empty Hero/Work fields
 - Work image alt requirement
-- featured 최대 1개 및 Home exposure dependency
-- HTTPS-only external URL at client boundary
+- featured 정확히 1개 및 Home exposure dependency
+- HTTPS + actual image load + alt external URL validation
 - 10MB image limit and image MIME allowlist
 - append-only revision history
 - atomic current publication pointer
 
 ## Environment
 
-`NEXT_PUBLIC_SUPABASE_URL`과 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`를 권장한다. legacy project는 `NEXT_PUBLIC_SUPABASE_ANON_KEY`도 지원한다. 값이 없으면 localStorage fallback을 사용하며 임의 project/key를 생성하지 않는다.
+`NEXT_PUBLIC_SUPABASE_URL`과 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`를 사용한다. legacy project는 `NEXT_PUBLIC_SUPABASE_ANON_KEY`도 지원한다. 값이 없을 때만 localStorage fallback을 사용하며, 값이 있으면 Supabase 오류를 그대로 실패로 처리한다.

@@ -14,11 +14,11 @@
 | `works.archive` | category/order filtered Works | `works.archive` |
 | `projects.index` | existing project detail renderer | `projects.index` |
 
-`ContentProvider` starts with the V1 seed for SSR/hydration parity, then loads current Published or Draft Preview. Public routes never read Draft. `?cmsPreview=draft` reads the live Draft channel and is used only inside Admin Preview.
+Public route server components read the current Published snapshot before rendering and pass it to `ContentProvider`, so initial HTML/SEO and hydration use the same canonical content. Published가 없을 때만 V1 Seed를 사용한다. Public routes never read Draft. `?cmsPreview=draft` reads the live Draft channel and is used only inside Admin Preview.
 
 ## Media
 
-`MediaPlaceholder` remains the only public image frame. CMS image data maps to the existing ratio/tone contract and expands focal position from vertical bias to the 3×3 values. Local `/images/**`, Supabase public URLs, HTTPS external URLs and local data URL fallback all use the same component. Public spacing, typography, frame CSS and responsive breakpoints are unchanged.
+`MediaPlaceholder` remains the only public image frame. Local `/images/**`만 Next Image로 최적화하고, 검증된 Supabase/HTTPS URL은 wildcard optimizer allowlist 없이 safe native renderer를 사용한다. CMS image data maps to the existing ratio/tone contract and 3×3 focal position. Public spacing, typography, frame CSS and responsive breakpoints are unchanged.
 
 ## Works rules
 
@@ -34,11 +34,12 @@ The two existing slugs remain statically routable. The client detail renderer re
 
 ## Failure behavior
 
-- Supabase absent/unreachable with no returned data: seed/local fallback keeps the portfolio renderable.
+- Supabase env absent: seed/local fallback keeps local development renderable.
+- Supabase env present but query/RLS/network/Storage fails: surface an Error; never fall back to local persistence.
 - Draft save validation failure: no persistence and no Publish.
 - Publish failure: previous `is_current` remains public because the RPC is transactional.
 - Restore: copies a historical Published snapshot into Draft; a separate Publish is required.
 
-## Known deployment requirement
+## Production deployment
 
-Repository code cannot discover or create a user's Supabase project. Before shared production operation, apply the migration and set the two public environment values. Until then, edits are intentionally limited to the browser that owns the local fallback data.
+Production Supabase migration과 Vercel Preview 환경값이 적용되어 있다. Empty database는 Seed를 표시하지만 Save 전에는 row를 만들지 않고, Save Draft와 Publish가 명시적으로 실행될 때만 persistent state를 변경한다.

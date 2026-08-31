@@ -11,7 +11,8 @@
 - Preview: Published와 같은 renderer에 Draft snapshot을 주입
 - Desktop: Navigator / Property / Preview 3-pane
 - Tablet: Navigator + Editor/Preview tab
-- 상태: Unsaved changes → Save Draft → Preview → Publish
+- Mobile: Section selector + Editor/Preview tab
+- 상태: Connected / Saving / Error + Unsaved changes → Save Draft → Preview → Publish
 
 입력 중 local state는 Preview에 즉시 반영된다. Save Draft는 작업본만 보존하고 공개 화면은 바꾸지 않는다. Publish가 완료되어야 일반 `/`, `/works`, project detail이 새 snapshot을 읽는다. 페이지 이탈 시 unsaved warning을 표시한다.
 
@@ -20,7 +21,7 @@
 - Hero: eyebrow, title, line breaks, description, period, disciplines
 - About: heading, image, alt, caption, 3×3 object position, capability order/copy
 - Featured Projects: existing LIVBEE/Shopping Live visibility/order and project copy
-- Selected Works: title, category, description, image URL, alt, published, Home reel, single featured, drag/keyboard order
+- Selected Works: search/filter, title, category, description, Asset Replace, alt, published, Home reel, single featured, drag/keyboard order
 - Category: fixed five labels, visibility, order
 - Career: company/personal project copy, visibility, order
 - Workflow: copy, tools, visibility, order
@@ -40,7 +41,7 @@
 
 ## Runtime modes
 
-1. Supabase configured: `portfolio_cms_state`, `draft_revisions`, `published_versions`, public Storage bucket 사용
+1. Supabase configured: `portfolio_cms_state`, `draft_revisions`, `published_versions`, `assets`, public Storage bucket를 유일한 persistence source로 사용
 2. Supabase not configured: 같은 브라우저의 localStorage fallback 사용
 
-Fallback은 기능 검증과 개인 로컬 운영용이다. 브라우저/기기 간 공유, 백업, 배포 사이트 전체 반영은 Supabase 환경값과 migration 적용이 필요하다.
+Supabase 환경값이 존재하면 query/RLS/network/Storage 오류를 localStorage fallback으로 숨기지 않고 CMS Error로 표시한다. Fallback은 환경값 자체가 없는 로컬 개발에만 사용한다.
