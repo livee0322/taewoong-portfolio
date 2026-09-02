@@ -3,6 +3,8 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { RevealObserver } from "@/components/ui/RevealObserver";
+import { ContentProvider } from "@/content/ContentProvider";
+import { CmsPreviewBridge } from "@/content/CmsPreviewBridge";
 
 export const metadata: Metadata = {
   title: {
@@ -22,10 +24,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="ko">
       <body>
-        <Header />
-        <RevealObserver />
-        {children}
-        <Footer />
+        <ContentProvider>
+          <Header />
+          <RevealObserver />
+          <CmsPreviewBridge />
+          {children}
+          <Footer />
+        </ContentProvider>
       </body>
     </html>
   );

@@ -1,18 +1,24 @@
-import Image from "next/image";
-import type { MediaTone, ProjectMedia } from "@/types/content";
+import { SafeImage } from "./SafeImage";
+import type { MediaTone, ObjectPosition, ProjectMedia } from "@/types/content";
 
 type MediaPlaceholderProps = {
   media:
     | ProjectMedia
-    | { tone: MediaTone; ratio: "wide" | "portrait" | "square" | "detail"; title: string; description?: string; focus?: "top" | "center" | "bottom" };
+    | { tone: MediaTone; ratio: "wide" | "portrait" | "square" | "detail"; title: string; description?: string; focus?: ObjectPosition };
   priority?: boolean;
   className?: string;
 };
 
-const FOCUS_POSITION: Record<"top" | "center" | "bottom", string> = {
+const FOCUS_POSITION: Record<ObjectPosition, string> = {
+  "top-left": "left 20%",
   top: "center 20%",
+  "top-right": "right 20%",
+  left: "left center",
   center: "center",
+  right: "right center",
+  "bottom-left": "left 80%",
   bottom: "center 80%",
+  "bottom-right": "right 80%",
 };
 
 export function MediaPlaceholder({ media, priority = false, className = "" }: MediaPlaceholderProps) {
@@ -30,13 +36,12 @@ export function MediaPlaceholder({ media, priority = false, className = "" }: Me
       data-priority={priority ? "true" : undefined}
     >
       {source ? (
-        <Image
+        <SafeImage
           className="media-real-image"
           src={source}
           alt={description}
           fill
           priority={priority}
-          loading={priority ? "eager" : "lazy"}
           sizes={sizes}
           style={objectPosition ? { objectFit: "cover", objectPosition } : undefined}
         />

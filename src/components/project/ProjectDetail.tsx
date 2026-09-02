@@ -1,4 +1,6 @@
-import { projectBySlug, projects } from "@/data/projects";
+"use client";
+
+import { usePortfolioContent } from "@/content/ContentProvider";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 import { TextLink } from "@/components/ui/TextLink";
 import { notFound } from "next/navigation";
@@ -8,7 +10,8 @@ type ProjectDetailProps = {
 };
 
 export function ProjectDetail({ slug }: ProjectDetailProps) {
-  const project = projectBySlug(slug);
+  const { projects } = usePortfolioContent();
+  const project = projects.find((item) => item.slug === slug && item.visible);
 
   if (!project) notFound();
 
@@ -16,7 +19,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
   const nextProject = projects[(currentIndex + 1) % projects.length];
 
   return (
-    <main>
+    <main data-cms-section="projects.index">
       <section className="project-hero page-shell">
         <div className="project-hero-intro">
           <p className="eyebrow">{project.number} / {project.type} / {project.year}</p>
