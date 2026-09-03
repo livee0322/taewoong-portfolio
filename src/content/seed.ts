@@ -52,16 +52,16 @@ export const seedSnapshot: PortfolioSnapshot = {
   home: {
     hero: {
       eyebrow: "이태웅 · 디자이너",
-      title: "디자인과 콘텐츠를 만들고,\n서비스 화면까지 직접 확인합니다.",
-      description: "상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 제품 촬영과 영상, 쇼핑라이브 현장을 거쳐 최근에는 서비스 기획과 UI/UX, QA, 개발 협업을 맡고 있습니다.",
+      title: "디자인에서 시작해, 기획과 서비스까지",
+      description: "상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 촬영과 쇼핑라이브 현장을 거쳐 지금은 서비스 기획, UI/UX, QA까지 함께 다루고 있습니다.",
       period: "2019 — NOW",
       disciplines: "Design · Content · Commerce · Product",
-      lineBreaks: "manual",
+      lineBreaks: "auto",
     },
     about: {
       eyebrow: "About",
-      title: "화면 안의 디자인과 촬영 현장의 일을 함께 해봤습니다.",
-      description: "제품을 촬영하고 상세페이지와 배너를 만들었습니다. 영상에서는 썸네일·타이틀·자막을 제작했고, 쇼핑라이브에서는 방송 준비와 현장 운영을 맡았습니다.",
+      title: "화면을 만들고, 그 앞뒤의 과정까지 함께 봅니다.",
+      description: "상세페이지, 배너, 썸네일과 영상 그래픽을 만들고 제품 촬영과 쇼핑라이브 현장을 경험했습니다. 최근에는 서비스 기획과 UI/UX, QA까지 맡고 있습니다.",
       image: aboutImage,
       capabilities: [
         { id: "design", title: "Design", description: "UI/UX · 그래픽 · 상세페이지", visible: true },
@@ -72,28 +72,28 @@ export const seedSnapshot: PortfolioSnapshot = {
     },
     projects: {
       eyebrow: "대표 프로젝트",
-      title: "대표적인 네 가지 프로젝트를 정리했습니다.",
-      description: "개인 프로젝트 LIVBEE부터 쇼핑라이브, 디자인 실무, 앱 출시 QA까지 실제로 맡은 일을 중심으로 소개합니다.",
+      title: "지금의 업무 범위를 만든 네 가지 프로젝트입니다.",
+      description: "개인 프로젝트 LIVBEE부터 쇼핑라이브, 디자인 실무, 앱 출시 QA까지 실제로 맡은 역할을 중심으로 정리했습니다.",
     },
     works: {
       eyebrow: "작업 모음",
-      title: "공개 가능한 실무 작업을 골라 소개합니다.",
-      description: "유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다.",
+      title: "실무에서 만든 작업 중 공개 가능한 결과물을 골랐습니다.",
+      description: "유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 콘텐츠, 상세페이지 작업을 모았습니다.",
     },
     career: {
       eyebrow: "경력",
       title: "2019년 제품 디자인부터 지금의 서비스 기획까지.",
-      description: "회사와 팀이 바뀔 때마다 맡은 역할도 달라졌습니다. 아래에 실제 경력 순서와 각 시기에 담당한 일을 적었습니다.",
+      description: "회사와 역할이 바뀌면서 맡는 일도 넓어졌습니다. 실제 경력 순서와 각 시기의 주요 업무를 정리했습니다.",
     },
     workflow: {
       eyebrow: "작업 방식",
       title: "목적을 정리하고, 만든 뒤에는 실제 화면에서 확인합니다.",
-      description: "무엇을 보여줘야 하는지 먼저 정리합니다. 직접 제작하거나 협업으로 구현한 뒤에는 화면과 현장에서 빠진 부분을 다시 확인합니다.",
+      description: "무엇을 보여줘야 하는지 먼저 정리하고, 제작이나 협업 이후에는 실제 화면과 현장에서 빠진 부분을 다시 확인합니다.",
     },
     contact: {
       eyebrow: "Contact",
-      title: "디자인부터 운영까지,\n해온 일을 더 보여드리겠습니다.",
-      description: "그래픽, 콘텐츠, 커머스, 서비스 화면을 함께 다뤄온 경험이 필요하다면 작업 모음과 경력을 살펴봐 주세요.",
+      title: "디자인부터 운영까지, 더 이야기할 수 있습니다.",
+      description: "그래픽, 콘텐츠, 커머스, 서비스 화면까지 함께 다뤄온 경험을 작업과 경력으로 정리했습니다.",
       ctaLabel: "작업 모음 보기",
       ctaUrl: "/works",
       email: "",
