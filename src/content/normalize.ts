@@ -30,13 +30,20 @@ const obsoleteHomeCopy = {
   contact: { titles: ["디자인부터 운영까지,\n해온 일을 더 보여드리겠습니다."], descriptions: ["그래픽, 콘텐츠, 커머스, 서비스 화면을 함께 다뤄온 경험이 필요하다면 작업 모음과 경력을 살펴봐 주세요."] },
 } as const;
 
+const normalizeCopyWhitespace = (value: string) => value.replace(/\s+/g, " ").trim();
+
+function includesCopy(values: readonly string[], candidate: string) {
+  const normalizedCandidate = normalizeCopyWhitespace(candidate);
+  return values.some((value) => normalizeCopyWhitespace(value) === normalizedCandidate);
+}
+
 function migrateSectionCopy<T extends { title: string; description: string }>(incoming: T | undefined, fallback: T, obsolete: { readonly titles: readonly string[]; readonly descriptions: readonly string[] }): T {
   if (!incoming) return structuredClone(fallback);
   return {
     ...fallback,
     ...incoming,
-    title: obsolete.titles.includes(incoming.title) ? fallback.title : incoming.title,
-    description: obsolete.descriptions.includes(incoming.description) ? fallback.description : incoming.description,
+    title: includesCopy(obsolete.titles, incoming.title) ? fallback.title : incoming.title,
+    description: includesCopy(obsolete.descriptions, incoming.description) ? fallback.description : incoming.description,
   };
 }
 
