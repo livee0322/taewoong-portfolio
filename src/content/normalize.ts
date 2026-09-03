@@ -113,11 +113,14 @@ function normalizeCapabilities(incoming: PortfolioSnapshot["home"]["about"]["cap
 
 function normalizeCategories(incoming: PortfolioSnapshot["categories"] | undefined, fallback: PortfolioSnapshot["categories"]) {
   if (!incoming?.length) return structuredClone(fallback);
-  return incoming.map((category) => {
+  const renamed = incoming.map((category) => {
     if (category.id === "event-banner" && category.label === "이벤트 배너") return { ...category, label: "카드뉴스 및 배너" };
     if (category.id === "caption-title" && category.label === "자막·타이틀 디자인") return { ...category, label: "타이틀 및 자막 스타일 제작" };
     return category;
   });
+  const knownIds = new Set(renamed.map((category) => category.id));
+  const missingFromFallback = fallback.filter((category) => !knownIds.has(category.id)).map((category) => structuredClone(category));
+  return [...renamed, ...missingFromFallback];
 }
 
 function normalizeWorks(incoming: PortfolioSnapshot["works"] | undefined, fallback: PortfolioSnapshot["works"]) {
@@ -125,7 +128,7 @@ function normalizeWorks(incoming: PortfolioSnapshot["works"] | undefined, fallba
   const currentHomeIds = incoming.filter((work) => work.showOnHome).map((work) => work.id);
   const usesPreviousHomeSelection = currentHomeIds.length === previousHomeWorkIds.size && currentHomeIds.every((id) => previousHomeWorkIds.has(id));
   const fallbackById = new Map(fallback.map((work) => [work.id, work]));
-  return incoming.map((work) => {
+  const mapped = incoming.map((work) => {
     const category = work.category === "이벤트 배너"
       ? "카드뉴스 및 배너"
       : work.category === "자막·타이틀 디자인"
@@ -135,6 +138,9 @@ function normalizeWorks(incoming: PortfolioSnapshot["works"] | undefined, fallba
     const canonical = fallbackById.get(work.id);
     return { ...work, category, showOnHome: canonical?.showOnHome ?? false, homeFeatured: canonical?.homeFeatured ?? false };
   });
+  const knownIds = new Set(mapped.map((work) => work.id));
+  const missingFromFallback = fallback.filter((work) => !knownIds.has(work.id)).map((work) => structuredClone(work));
+  return [...mapped, ...missingFromFallback];
 }
 
 export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): PortfolioSnapshot {

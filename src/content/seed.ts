@@ -114,6 +114,7 @@ export const seedSnapshot: PortfolioSnapshot = {
     { id: "event-banner", label: "카드뉴스 및 배너", frame: "square", visible: true },
     { id: "shopping-live", label: "쇼핑라이브 콘텐츠", frame: "video", visible: true },
     { id: "detail-page", label: "상세페이지", frame: "detail", visible: true },
+    { id: "graphic-editorial", label: "그래픽·편집 디자인", frame: "video", visible: true },
   ],
   works: visualWorks.map((work) => ({
     ...work,
