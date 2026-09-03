@@ -38,7 +38,7 @@ export function PropertyEditor({ selectedItem, content, onChange, revisions, onR
   const [workQuery, setWorkQuery] = useState("");
   const [workCategory, setWorkCategory] = useState("All");
   const [workVisibility, setWorkVisibility] = useState<"all" | "published" | "hidden" | "home" | "featured">("all");
-  const [assetTarget, setAssetTarget] = useState<"about" | "work" | "project-thumbnail" | "project-gallery" | "library">("library");
+  const [assetTarget, setAssetTarget] = useState<"work" | "project-thumbnail" | "project-gallery" | "library">("library");
   const updateHome = <K extends keyof PortfolioSnapshot["home"]>(key: K, value: PortfolioSnapshot["home"][K]) => onChange({ ...content, home: { ...content.home, [key]: value } });
   const patchSection = (key: SectionKey, patch: Partial<PortfolioSnapshot["home"][SectionKey]>) => updateHome(key, { ...content.home[key], ...patch });
   const hero = content.home.hero;
@@ -67,8 +67,7 @@ export function PropertyEditor({ selectedItem, content, onChange, revisions, onR
   };
   const chooseAsset = (asset: AssetRecord) => {
     const assets = mergedAssets(asset);
-    if (assetTarget === "about") onChange({ ...content, assets, home: { ...content.home, about: { ...about, image: asset } } });
-    else if (assetTarget === "work" && selectedWork) onChange({ ...content, assets, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, src: asset.src, alt: asset.alt || item.alt, focus: asset.objectPosition } : item) });
+    if (assetTarget === "work" && selectedWork) onChange({ ...content, assets, works: content.works.map((item) => item.id === selectedWork.id ? { ...item, src: asset.src, alt: asset.alt || item.alt, focus: asset.objectPosition } : item) });
     else if (assetTarget === "project-thumbnail" && selectedProject) onChange({ ...content, assets, projects: content.projects.map((item) => item.id === selectedProject.id ? { ...item, thumbnail: { ...item.thumbnail, src: asset.src, alt: asset.alt || item.thumbnail.alt, focus: asset.objectPosition } } : item) });
     else if (assetTarget === "project-gallery" && selectedProject) onChange({ ...content, assets, projects: content.projects.map((item) => item.slug === selectedProject.slug ? { ...item, gallery: item.gallery.map((media, index) => index === galleryIndex ? { ...media, src: asset.src, alt: asset.alt || media.alt, focus: asset.objectPosition } : media) } : item) });
     else onChange({ ...content, assets });
@@ -86,8 +85,7 @@ export function PropertyEditor({ selectedItem, content, onChange, revisions, onR
 
       {selectedItem.id === "home.about" ? <>
         <SectionCopyEditor section={about} onPatch={(patch) => updateHome("about", { ...about, ...patch })} />
-        <section className={styles.imageProperty}><div className={styles.blockHeading}><div><p className={styles.kicker}>Representative image</p><h3>이미지 속성</h3></div><button className={styles.textButton} type="button" onClick={() => { setAssetTarget("about"); setPickerOpen(true); }}>Replace</button></div><div className={styles.imagePreview}><SafeImage src={about.image.src} alt="" fill sizes="300px" style={{ objectFit: "cover" }} /></div><Field label="Alt text"><textarea required rows={3} value={about.image.alt} onChange={(event) => updateHome("about", { ...about, image: { ...about.image, alt: event.target.value } })} /></Field><Field label="Caption"><input value={about.image.caption} onChange={(event) => updateHome("about", { ...about, image: { ...about.image, caption: event.target.value } })} /></Field><fieldset className={styles.fieldset}><legend>Object position</legend><div className={styles.positionPicker}>{positions.map((position) => <button key={position} className={about.image.objectPosition === position ? styles.positionActive : ""} type="button" aria-label={position} onClick={() => updateHome("about", { ...about, image: { ...about.image, objectPosition: position } })} />)}</div></fieldset></section>
-        <OrderedRows items={about.capabilities} label="Capabilities" onMove={(index, offset) => updateHome("about", { ...about, capabilities: move(about.capabilities, index, offset) })} onSelect={setSelectedIndex} selectedIndex={selectedIndex} />
+        <OrderedRows items={about.capabilities} label="Experience areas" onMove={(index, offset) => updateHome("about", { ...about, capabilities: move(about.capabilities, index, offset) })} onSelect={setSelectedIndex} selectedIndex={selectedIndex} />
         {about.capabilities[selectedIndex] ? <><Field label="Capability title"><input value={about.capabilities[selectedIndex].title} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, title: event.target.value } : item) })} /></Field><Field label="Capability description"><input value={about.capabilities[selectedIndex].description} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, description: event.target.value } : item) })} /></Field><label><input type="checkbox" checked={about.capabilities[selectedIndex].visible} onChange={(event) => updateHome("about", { ...about, capabilities: about.capabilities.map((item, index) => index === selectedIndex ? { ...item, visible: event.target.checked } : item) })} /> Visible</label></> : null}
       </> : null}
 

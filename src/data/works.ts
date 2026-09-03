@@ -84,7 +84,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "traffic-safety-title",
-    category: "자막·타이틀 디자인",
+    category: "타이틀 및 자막 스타일 제작",
     title: "교통안전TV - 생활권 안심도로라고 들어봤니?",
     tone: "sand",
     ratio: "wide",
@@ -93,7 +93,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "editor-pick-dochi-caption",
-    category: "자막·타이틀 디자인",
+    category: "타이틀 및 자막 스타일 제작",
     title: "편집자픽 - 강원도 도치잡이",
     tone: "stone",
     ratio: "wide",
@@ -102,7 +102,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "ocean-content-title",
-    category: "자막·타이틀 디자인",
+    category: "타이틀 및 자막 스타일 제작",
     title: "조승환 장관의 뛰어서 현장속으로",
     tone: "sand",
     ratio: "wide",
@@ -111,7 +111,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "golf-swing-caption",
-    category: "자막·타이틀 디자인",
+    category: "타이틀 및 자막 스타일 제작",
     title: "골프 스윙 강습 자막",
     tone: "sage",
     ratio: "wide",
@@ -120,7 +120,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "gomindeulgo-caption",
-    category: "자막·타이틀 디자인",
+    category: "타이틀 및 자막 스타일 제작",
     title: "고민들고 어서오션 - 화자 자막",
     tone: "paper",
     ratio: "wide",
@@ -129,7 +129,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "safe-tv-event",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "나만의 안전사고 사례 공모 이벤트 - 결과 발표",
     tone: "rose",
     ratio: "square",
@@ -138,7 +138,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "standards-event",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "양자기술 4행시 이벤트",
     tone: "paper",
     ratio: "square",
@@ -147,7 +147,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "safe-tv-event-open",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "나만의 안전사고 사례 공모 이벤트",
     tone: "rose",
     ratio: "square",
@@ -156,7 +156,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "standards-event-winner",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "양자기술 4행시 당첨자 발표",
     tone: "paper",
     ratio: "square",
@@ -165,7 +165,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "mobis-umbrella-event",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "투명우산 이벤트 당첨자 발표",
     tone: "ink",
     ratio: "square",
@@ -174,7 +174,7 @@ export const visualWorks: VisualWork[] = [
   },
   {
     id: "energy-agency-event",
-    category: "이벤트 배너",
+    category: "카드뉴스 및 배너",
     title: "영상 시청 인증 이벤트",
     tone: "sand",
     ratio: "square",

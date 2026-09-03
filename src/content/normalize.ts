@@ -86,6 +86,53 @@ function normalizeWorkflowEntries(incoming: PortfolioSnapshot["workflow"] | unde
   return isKnownLegacyWorkflow ? structuredClone(fallback) : incoming;
 }
 
+const previousHomeWorkIds = new Set([
+  "ocean-content-thumbnail",
+  "traffic-safety-thumbnail",
+  "safety-ga-sister-thumbnail",
+  "editor-pick-dochi-caption",
+  "pyojoon-gobaek-thumbnail",
+  "shopping-live-studio",
+]);
+
+function normalizeCapabilities(incoming: PortfolioSnapshot["home"]["about"]["capabilities"] | undefined, fallback: PortfolioSnapshot["home"]["about"]["capabilities"]) {
+  if (!incoming?.length) return structuredClone(fallback);
+  const genericDescriptions = new Set([
+    "UI/UX · 그래픽 · 상세페이지",
+    "촬영 기획 · YouTube 썸네일 · 타이틀/자막",
+    "상품 정보 · 프로모션 · 쇼핑라이브",
+    "서비스 기획 · UX 흐름 · QA · 개발 협업",
+  ]);
+  const isGenericSet = incoming.length === fallback.length && incoming.every((item) => genericDescriptions.has(item.description));
+  return isGenericSet ? structuredClone(fallback) : incoming;
+}
+
+function normalizeCategories(incoming: PortfolioSnapshot["categories"] | undefined, fallback: PortfolioSnapshot["categories"]) {
+  if (!incoming?.length) return structuredClone(fallback);
+  return incoming.map((category) => {
+    if (category.id === "event-banner" && category.label === "이벤트 배너") return { ...category, label: "카드뉴스 및 배너" };
+    if (category.id === "caption-title" && category.label === "자막·타이틀 디자인") return { ...category, label: "타이틀 및 자막 스타일 제작" };
+    return category;
+  });
+}
+
+function normalizeWorks(incoming: PortfolioSnapshot["works"] | undefined, fallback: PortfolioSnapshot["works"]) {
+  if (!incoming?.length) return structuredClone(fallback);
+  const currentHomeIds = incoming.filter((work) => work.showOnHome).map((work) => work.id);
+  const usesPreviousHomeSelection = currentHomeIds.length === previousHomeWorkIds.size && currentHomeIds.every((id) => previousHomeWorkIds.has(id));
+  const fallbackById = new Map(fallback.map((work) => [work.id, work]));
+  return incoming.map((work) => {
+    const category = work.category === "이벤트 배너"
+      ? "카드뉴스 및 배너"
+      : work.category === "자막·타이틀 디자인"
+        ? "타이틀 및 자막 스타일 제작"
+        : work.category;
+    if (!usesPreviousHomeSelection) return { ...work, category };
+    const canonical = fallbackById.get(work.id);
+    return { ...work, category, showOnHome: canonical?.showOnHome ?? false, homeFeatured: canonical?.homeFeatured ?? false };
+  });
+}
+
 export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): PortfolioSnapshot {
   if (!value || typeof value !== "object") return structuredClone(fallback);
   const legacy = value as LegacySnapshot;
@@ -109,7 +156,10 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
       ...structuredClone(fallback.home),
       ...legacyHome,
       hero: migrateSectionCopy(legacyHome?.hero, fallback.home.hero, obsoleteHomeCopy.hero),
-      about: migrateSectionCopy(legacyHome?.about, fallback.home.about, obsoleteHomeCopy.about),
+      about: {
+        ...migrateSectionCopy(legacyHome?.about, fallback.home.about, obsoleteHomeCopy.about),
+        capabilities: normalizeCapabilities(legacyHome?.about?.capabilities, fallback.home.about.capabilities),
+      },
       projects: isLegacy ? structuredClone(fallback.home.projects) : migrateSectionCopy(legacyHome?.projects, fallback.home.projects, obsoleteHomeCopy.projects),
       works: migrateSectionCopy(legacyHome?.works, fallback.home.works, obsoleteHomeCopy.works),
       career: migrateSectionCopy(legacyHome?.career, fallback.home.career, obsoleteHomeCopy.career),
@@ -117,6 +167,8 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
       contact: migrateSectionCopy(legacyHome?.contact, fallback.home.contact, obsoleteHomeCopy.contact),
     },
     projects: normalizedProjects,
+    categories: normalizeCategories(legacy.categories, fallback.categories),
+    works: normalizeWorks(legacy.works, fallback.works),
     workflow: normalizeWorkflowEntries(legacy.workflow, fallback.workflow),
   } as PortfolioSnapshot;
 }

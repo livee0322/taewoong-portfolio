@@ -20,7 +20,13 @@ export function HomeSections() {
   const featuredWork = content.works.find((work) => work.published && work.showOnHome && work.homeFeatured)
     ?? content.works.find((work) => work.published && work.showOnHome)
     ?? content.works[0];
-  const reelWorks = content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id).slice(0, 5);
+  const homeWorkGroups = content.categories
+    .filter((category) => category.visible)
+    .map((category) => ({
+      category,
+      works: content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id && work.category === category.label),
+    }))
+    .filter((group) => group.works.length > 0);
   const homeProjects = content.projects
     .filter((project) => project.visible && project.showOnHome)
     .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -39,7 +45,6 @@ export function HomeSections() {
       <section id="about" className="identity section page-shell" data-cms-section="home.about">
         <SectionHeading eyebrow={home.about.eyebrow} title={home.about.title} description={home.about.description} />
         <div className="identity-layout" data-reveal>
-          <MediaPlaceholder media={{ src: home.about.image.src, alt: home.about.image.alt, ratio: "wide", tone: "sand", caption: home.about.image.caption, focus: home.about.image.objectPosition }} />
           <div className="capability-list">
             {capabilities.map((item, index) => <article key={item.id} className="capability-item"><p className="eyebrow">{String(index + 1).padStart(2, "0")}</p><h3>{item.title}</h3><p>{item.description}</p></article>)}
           </div>
@@ -63,14 +68,18 @@ export function HomeSections() {
       </section>
 
       <section id="works" className="selected-works section page-shell" data-cms-section="home.works">
-        <div className="works-heading-row"><SectionHeading eyebrow={home.works.eyebrow} title={home.works.title} description={home.works.description} /><TextLink href="/works">작업 전체 보기</TextLink></div>
+        <div className="works-heading-row"><SectionHeading eyebrow={home.works.eyebrow} title={home.works.title} description={home.works.description} /></div>
         {featuredWork ? <div className="work-showcase">
           <article className="featured-work" data-reveal>
             <MediaPlaceholder media={{ src: featuredWork.src, alt: featuredWork.alt, tone: featuredWork.tone, ratio: featuredWork.ratio, caption: featuredWork.caption ?? featuredWork.category, focus: featuredWork.focus }} />
             <div className="featured-work-copy"><p className="eyebrow">{featuredWork.category}</p><h3><WorkTitle title={featuredWork.title} /></h3>{featuredWork.description ? <p>{featuredWork.description}</p> : null}</div>
           </article>
-          <div className="work-reel" aria-label="추가 작업 가로 갤러리">{reelWorks.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: work.ratio, caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h3><WorkTitle title={work.title} /></h3></article>)}</div>
+          <div className="home-work-groups">{homeWorkGroups.map(({ category, works }) => <section className="home-work-group" key={category.id} aria-labelledby={`home-work-${category.id}`}>
+            <div className="home-work-group-heading"><h3 id={`home-work-${category.id}`}>{category.label}</h3><p>{String(works.length).padStart(2, "0")} selected works</p></div>
+            <div className={`work-reel work-reel-${category.frame}`} aria-label={`${category.label} 가로 갤러리`}>{works.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: category.frame === "square" ? "square" : "wide", caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h4><WorkTitle title={work.title} /></h4></article>)}</div>
+          </section>)}</div>
         </div> : null}
+        <div className="works-footer-link"><TextLink href="/works">작업 전체 보기</TextLink></div>
       </section>
 
       <section id="contact" className="contact section page-shell" data-cms-section="home.contact">

@@ -6,10 +6,20 @@ import type { AssetRecord, PortfolioSnapshot } from "./schema";
 const featuredId = "ocean-content-thumbnail";
 const reelIds = [
   "traffic-safety-thumbnail",
+  "innos-tv-showroom-thumbnail",
+  "tv-purchase-thumbnail",
   "safety-ga-sister-thumbnail",
-  "editor-pick-dochi-caption",
   "pyojoon-gobaek-thumbnail",
-  "shopping-live-studio",
+  "seobu-hope-concert-thumbnail",
+  "traffic-safety-title",
+  "editor-pick-dochi-caption",
+  "ocean-content-title",
+  "golf-swing-caption",
+  "gomindeulgo-caption",
+  "safe-tv-event-open",
+  "standards-event",
+  "mobis-umbrella-event",
+  "energy-agency-event",
 ];
 
 const aboutImage: AssetRecord = {
@@ -62,10 +72,10 @@ export const seedSnapshot: PortfolioSnapshot = {
       description: "상세페이지와 배너, 썸네일 제작부터 제품 촬영, 영상 편집, 쇼핑라이브 기획과 운영까지 진행했습니다. 이후에는 서비스 기획, UI/UX, QA 업무도 경험했습니다.",
       image: aboutImage,
       capabilities: [
-        { id: "design", title: "Design", description: "UI/UX · 그래픽 · 상세페이지", visible: true },
-        { id: "content", title: "Content", description: "촬영 기획 · YouTube 썸네일 · 타이틀/자막", visible: true },
-        { id: "commerce", title: "Commerce", description: "상품 정보 · 프로모션 · 쇼핑라이브", visible: true },
-        { id: "product", title: "Product", description: "서비스 기획 · UX 흐름 · QA · 개발 협업", visible: true },
+        { id: "design", title: "Design", description: "매뉴얼 · DVD 커버 · 제안서 포스터 · 이벤트/대판 배너 · 카드뉴스", visible: true },
+        { id: "content", title: "Content", description: "유튜브 썸네일 · 영상 타이틀/자막 · 보도자료 이미지 · 일러스트 캐릭터", visible: true },
+        { id: "commerce", title: "Commerce", description: "상세페이지 · 프로모션 배너 · 쇼핑라이브 이미지 · 제품 촬영", visible: true },
+        { id: "product", title: "Product", description: "UI/UX · 화면 QA · Figma 컴포넌트 · 서비스 기획 · 개발 협업", visible: true },
       ],
     },
     projects: {
@@ -100,8 +110,8 @@ export const seedSnapshot: PortfolioSnapshot = {
   },
   categories: [
     { id: "youtube-thumbnail", label: "유튜브 썸네일", frame: "video", visible: true },
-    { id: "caption-title", label: "자막·타이틀 디자인", frame: "video", visible: true },
-    { id: "event-banner", label: "이벤트 배너", frame: "square", visible: true },
+    { id: "caption-title", label: "타이틀 및 자막 스타일 제작", frame: "video", visible: true },
+    { id: "event-banner", label: "카드뉴스 및 배너", frame: "square", visible: true },
     { id: "shopping-live", label: "쇼핑라이브 콘텐츠", frame: "video", visible: true },
     { id: "detail-page", label: "상세페이지", frame: "detail", visible: true },
   ],
