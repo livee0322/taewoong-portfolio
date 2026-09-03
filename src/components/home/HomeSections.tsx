@@ -20,7 +20,7 @@ export function HomeSections() {
   const featuredWork = content.works.find((work) => work.published && work.showOnHome && work.homeFeatured)
     ?? content.works.find((work) => work.published && work.showOnHome)
     ?? content.works[0];
-  const reelWorks = content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id);
+  const reelWorks = content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id).slice(0, 5);
   const homeProjects = content.projects
     .filter((project) => project.visible && project.showOnHome)
     .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -51,6 +51,17 @@ export function HomeSections() {
         <div className="projects-list">{homeProjects.map((project) => <div data-reveal key={project.id}><ProjectCard project={project} /></div>)}</div>
       </section>
 
+      <section id="experience" className="career section page-shell" data-cms-section="home.career">
+        <SectionHeading eyebrow={home.career.eyebrow} title={home.career.title} description={home.career.description} />
+        <div className="career-route">{capabilities.map((item) => <span key={item.id}>{item.title}</span>)}</div>
+        <ol className="career-list">{content.career.filter((entry) => entry.visible).map((entry) => <li className={`career-item${entry.entryType === "personal-project" ? " career-item-personal" : ""}`} key={entry.id}><p className="career-period">{entry.period}</p><div className="career-company"><h3>{entry.company}</h3><p>{entry.team}</p></div><div className="career-detail"><p className="career-role">{entry.role}</p><p>{entry.description}</p></div></li>)}</ol>
+      </section>
+
+      <section id="workflow" className="workflow section page-shell" data-cms-section="home.workflow">
+        <SectionHeading eyebrow={home.workflow.eyebrow} title={home.workflow.title} description={home.workflow.description} />
+        <div className="workflow-list">{content.workflow.filter((item) => item.visible).map((item) => <article className="workflow-item" key={item.id}><h3>{item.title}</h3><p>{item.description}</p><p className="workflow-tools">{item.tools.join(" · ")}</p></article>)}</div>
+      </section>
+
       <section id="works" className="selected-works section page-shell" data-cms-section="home.works">
         <div className="works-heading-row"><SectionHeading eyebrow={home.works.eyebrow} title={home.works.title} description={home.works.description} /><TextLink href="/works">작업 전체 보기</TextLink></div>
         {featuredWork ? <div className="work-showcase">
@@ -60,17 +71,6 @@ export function HomeSections() {
           </article>
           <div className="work-reel" aria-label="추가 작업 가로 갤러리">{reelWorks.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: work.ratio, caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h3><WorkTitle title={work.title} /></h3></article>)}</div>
         </div> : null}
-      </section>
-
-      <section id="experience" className="career section page-shell" data-cms-section="home.career">
-        <SectionHeading eyebrow={home.career.eyebrow} title={home.career.title} description={home.career.description} />
-        <div className="career-route">{capabilities.map((item) => <span key={item.id}>{item.title}</span>)}</div>
-        <ol className="career-list">{content.career.filter((entry) => entry.visible).map((entry) => <li className={`career-item${entry.entryType === "personal-project" ? " career-item-personal" : ""}`} key={entry.id}><p className="career-period">{entry.period}</p><div className="career-company"><h3>{entry.company}</h3><p>{entry.team}</p></div><div className="career-detail"><p className="career-role">{entry.role}</p><p>{entry.description}</p></div></li>)}</ol>
-      </section>
-
-      <section className="workflow section page-shell" data-cms-section="home.workflow">
-        <SectionHeading eyebrow={home.workflow.eyebrow} title={home.workflow.title} description={home.workflow.description} />
-        <div className="workflow-list">{content.workflow.filter((item) => item.visible).map((item) => <article className="workflow-item" key={item.id}><h3>{item.title}</h3><p>{item.description}</p><p className="workflow-tools">{item.tools.join(" · ")}</p></article>)}</div>
       </section>
 
       <section id="contact" className="contact section page-shell" data-cms-section="home.contact">

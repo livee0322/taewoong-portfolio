@@ -7,6 +7,12 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project }: ProjectCardProps) {
+  const ctaLabel = project.slug === "livbee"
+    ? "LIVBEE 자세히 보기"
+    : project.slug === "sellernote"
+      ? "QA·UI 개선 자세히 보기"
+      : null;
+
   return (
     <article className="project-card">
       <Link className="project-card-media" href={project.detailPageUrl} aria-label={`${project.title} 프로젝트 보기`}>
@@ -19,9 +25,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
         <ul className="project-card-tags" aria-label={`${project.title} 역할`}>
           {project.roles.slice(0, 3).map((role) => <li key={role}>{role}</li>)}
         </ul>
-        <Link href={project.detailPageUrl} aria-label={`${project.title} 프로젝트 보기`} className="project-card-cta">
-          프로젝트 보기 <span aria-hidden="true">↗</span>
-        </Link>
+        {ctaLabel ? <Link href={project.detailPageUrl} aria-label={`${project.title} 자세히 보기`} className="project-card-cta">
+          {ctaLabel} <span aria-hidden="true">↗</span>
+        </Link> : null}
       </div>
     </article>
   );

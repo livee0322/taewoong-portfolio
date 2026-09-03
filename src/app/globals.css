@@ -388,13 +388,13 @@ ul, ol { margin: 0; padding: 0; }
   .contact-layout > div { grid-column: 3 / span 5; grid-row: 2; margin-top: var(--space-6); }
 }
 
-/* Featured projects share one 4:3 card contract across source image ratios. */
+/* Featured projects share one 16:9 card contract across source image ratios. */
 .projects-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(var(--space-8), 2.5vw, 2.5rem); row-gap: clamp(var(--space-12), 3.5vw, 3.5rem); }
 .projects-list > [data-reveal] + [data-reveal] { margin-top: 0; }
 .project-card { display: flex; height: 100%; flex-direction: column; gap: 0; padding: 0; border: 0; }
 .project-card:last-child { border-bottom: 0; }
 .project-card:nth-child(n) .project-card-media { order: 0; }
-.project-card-media .media-placeholder { width: 100%; aspect-ratio: 4 / 3; }
+.project-card-media .media-placeholder { width: 100%; aspect-ratio: 16 / 9; }
 .project-card-media .media-real-image { object-fit: cover; }
 .project-card-meta { display: grid; min-width: 0; flex: 1; grid-template-rows: auto auto minmax(0, 1fr) auto auto; padding-top: var(--space-4) !important; }
 .project-card-meta > .eyebrow { overflow: hidden; color: var(--color-soft); font-size: 0.6875rem; font-weight: 400; letter-spacing: 0.055em; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }

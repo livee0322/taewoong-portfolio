@@ -13,7 +13,7 @@ export const projects: Project[] = [
     roles: ["Product Planning", "UX/UI", "AI Workflow", "Browser QA", "Project Management"],
     tools: ["Figma", "Asana", "Obsidian", "ChatGPT", "Claude", "Codex", "GitHub", "Vercel"],
     summary:
-      "쇼핑라이브 현장의 섭외와 조건 협의 문제를 서비스로 풀고 있습니다. 기능 기획과 화면 설계부터 브라우저 QA까지 직접 이어갑니다.",
+      "쇼핑라이브 매칭 과정에서 느낀 문제를 바탕으로 직접 기획한 개인 프로젝트입니다. 서비스 구조와 화면을 기획하고 UI/UX, QA, 개발 협업까지 진행했습니다.",
     thumbnail: {
       src: "/images/livbee/main-desktop.png",
       alt: "LIVBEE 프리뷰의 데스크톱 메인 화면. 쇼호스트 매칭 배너와 쇼핑라이브 목록이 보인다.",
@@ -84,7 +84,7 @@ export const projects: Project[] = [
     roles: ["Product Analysis", "Content Planning", "Promotion Design", "Live Operation"],
     tools: ["Photoshop", "Illustrator", "Premiere Pro", "Camera workflow"],
     summary:
-      "상품 정보를 정리하고 촬영, 상세페이지, 프로모션, 방송 현장까지 연결했습니다. 방송에 쓰인 이미지와 현장 작업을 선별했습니다.",
+      "상품 정보를 정리하고 방송에서 강조할 내용을 기획했습니다. 제품 촬영, 상세페이지와 프로모션 콘텐츠 제작, 쇼핑라이브 준비와 현장 운영까지 경험했습니다.",
     thumbnail: {
       src: "/images/selected-works/tv-purchase-knowhow-thumbnail.jpg",
       alt: "TV 전시장과 진행자 두 명, TV 구매 관련 문구가 들어간 유튜브 썸네일",
@@ -147,7 +147,7 @@ export const projects: Project[] = [
     type: "Design / Content",
     roles: ["Visual Design", "Content Design", "Photo / Video", "Production"],
     tools: ["Photoshop", "Illustrator", "Premiere Pro", "Figma"],
-    summary: "제품과 채널의 목적을 정리해 상세페이지, 프로모션 배너, 유튜브 썸네일과 영상 그래픽으로 제작했습니다. 공개 가능한 결과물을 소개합니다.",
+    summary: "상세페이지, 배너, 유튜브 썸네일, 영상 타이틀과 자막 등을 제작했습니다. 제품 촬영과 영상 편집 작업도 함께 진행했습니다.",
     thumbnail: {
       src: "/images/selected-works/innos-brand-day-banner.jpg",
       alt: "이노스 브랜드데이 행사 혜택과 TV 제품을 구성한 프로모션 배너",
@@ -197,7 +197,7 @@ export const projects: Project[] = [
     type: "App QA / UI Design",
     roles: ["Release QA", "UI Improvement", "Component Design", "Design QA"],
     tools: ["Figma", "Auto Layout", "Component System"],
-    summary: "셀러노트 출시 전 웹·앱 화면을 QA하고 반복 UI를 Figma 컴포넌트로 정리했습니다. 발견한 문제는 화면 개선으로 연결했습니다.",
+    summary: "셀러노트 웹과 앱 출시 과정에서 화면 QA와 디자인 수정 업무를 진행했습니다. 반복되는 UI를 Figma 컴포넌트로 정리하고 개발 반영 결과를 확인했습니다.",
     thumbnail: {
       alt: "셀러노트 앱 출시 QA 및 UI 디자인 개선 프로젝트 대표 이미지가 등록될 영역",
       ratio: "wide",
