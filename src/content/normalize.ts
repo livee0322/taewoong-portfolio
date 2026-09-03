@@ -60,6 +60,11 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
         ...legacyHome?.projects,
         ...(isLegacy ? fallback.home.projects : {}),
       },
+      workflow: {
+        ...fallback.home.workflow,
+        ...legacyHome?.workflow,
+        ...(isLegacy ? fallback.home.workflow : {}),
+      },
     },
     projects: orderedProjects,
   } as PortfolioSnapshot;
