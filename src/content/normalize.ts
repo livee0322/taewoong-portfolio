@@ -90,9 +90,13 @@ const previousHomeWorkIds = new Set([
   "ocean-content-thumbnail",
   "traffic-safety-thumbnail",
   "safety-ga-sister-thumbnail",
-  "editor-pick-dochi-caption",
   "pyojoon-gobaek-thumbnail",
+  "seobu-hope-concert-thumbnail",
+  "seobu-yellow-dust-thumbnail",
+  "sea-forest-invitation-thumbnail",
+  "editor-pick-dochi-caption",
   "shopping-live-studio",
+  "innos-monster-tv-banner",
 ]);
 
 function normalizeCapabilities(incoming: PortfolioSnapshot["home"]["about"]["capabilities"] | undefined, fallback: PortfolioSnapshot["home"]["about"]["capabilities"]) {
