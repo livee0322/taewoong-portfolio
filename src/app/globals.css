@@ -106,7 +106,7 @@ ul, ol { margin: 0; padding: 0; }
 .home-hero { display: grid; min-height: calc(100svh - 76px); align-items: end; padding-top: clamp(5rem, 9vw, 8rem); padding-bottom: clamp(4rem, 7vw, 6rem); }
 .hero-copy { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: start; gap: 0 24px; }
 .hero-eyebrow { grid-column: 1 / span 2; align-self: start; padding-top: 0.55rem; }
-.home-hero h1 { grid-column: 4 / -1; max-width: 12ch; font-size: clamp(3.75rem, 5.8vw, 5.25rem); letter-spacing: -0.065em; }
+.home-hero h1 { grid-column: 4 / -1; max-width: 48rem; font-size: clamp(3.75rem, 5.8vw, 5.25rem); letter-spacing: -0.065em; }
 .hero-statement { grid-column: 4 / span 6; max-width: 38rem; margin-top: var(--space-heading-body); font-size: clamp(1.125rem, 1.4vw, 1.35rem); line-height: 1.65; word-break: keep-all; }
 .hero-intro-note { grid-column: 4 / -1; display: flex; justify-content: space-between; gap: var(--space-6); margin-top: clamp(3.5rem, 7vh, 5.5rem); padding-top: var(--space-4); border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 0.8125rem; line-height: 1.5; }
 
