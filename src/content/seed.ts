@@ -90,7 +90,7 @@ export const seedSnapshot: PortfolioSnapshot = {
     },
     contact: {
       eyebrow: "Contact",
-      title: "다양한 실무 경험을 바탕으로 함께 일할 기회를 찾고 있습니다.",
+      title: "더 자세한 작업 경험이 궁금하다면 연락 주세요.",
       description: "디자인, 콘텐츠 제작, 쇼핑라이브, 서비스 기획과 QA 경험을 정리했습니다. 더 필요한 내용은 작업물과 함께 설명드릴 수 있습니다.",
       ctaLabel: "작업 모음 보기",
       ctaUrl: "/works",

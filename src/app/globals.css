@@ -419,7 +419,7 @@ ul, ol { margin: 0; padding: 0; }
   .home-hero { min-height: 0; padding-top: 4.5rem; padding-bottom: 6rem; }
   .hero-copy { display: block; min-height: 0; }
   .hero-eyebrow { margin-bottom: var(--space-6); padding-top: 0; }
-  .home-hero h1 { max-width: 11ch; font-size: clamp(3rem, 13vw, 4.5rem); letter-spacing: -0.065em; }
+  .home-hero h1 { max-width: none; font-size: clamp(2.75rem, 11.5vw, 3.25rem); letter-spacing: -0.065em; }
   .hero-statement { margin-top: var(--space-6); font-size: 1.125rem; }
   .hero-intro-note { display: block; margin-top: var(--space-12); font-size: 0.75rem; }
   .hero-intro-note p + p { margin-top: 0.3rem; }
