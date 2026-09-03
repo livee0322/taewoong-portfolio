@@ -238,6 +238,7 @@
   margin-top: 12px;
   background: var(--admin-bg);
 }
+.emptyImage { display: grid; min-height: 100%; place-items: center; padding: 1.5rem; color: var(--muted); font-size: 0.8125rem; text-align: center; }
 
 .imagePreview img,
 .assetThumb img,

@@ -11,12 +11,13 @@ type ProjectDetailProps = {
 
 export function ProjectDetail({ slug }: ProjectDetailProps) {
   const { projects } = usePortfolioContent();
-  const project = projects.find((item) => item.slug === slug && item.visible);
+  const visibleProjects = projects.filter((item) => item.visible).sort((a, b) => a.sortOrder - b.sortOrder);
+  const project = visibleProjects.find((item) => item.slug === slug);
 
   if (!project) notFound();
 
-  const currentIndex = projects.findIndex((item) => item.slug === project.slug);
-  const nextProject = projects[(currentIndex + 1) % projects.length];
+  const currentIndex = visibleProjects.findIndex((item) => item.slug === project.slug);
+  const nextProject = visibleProjects[(currentIndex + 1) % visibleProjects.length];
 
   return (
     <main data-cms-section="projects.index">
@@ -27,7 +28,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
           <p className="project-subtitle">{project.subtitle}</p>
           <p className="project-summary">{project.summary}</p>
         </div>
-        <MediaPlaceholder media={project.hero} priority className="project-hero-media" />
+        <MediaPlaceholder media={project.thumbnail} priority className="project-hero-media" />
       </section>
 
       <section className="project-overview section page-shell">
@@ -61,7 +62,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
         ))}
       </section>
 
-      <section className="project-gallery page-shell section" aria-labelledby="gallery-title">
+      {project.gallery.length ? <section className="project-gallery page-shell section" aria-labelledby="gallery-title">
         <div className="gallery-heading">
           <p className="eyebrow">Selected material</p>
           <h2 id="gallery-title">{project.slug === "livbee" ? "같은 화면을, 크기에 맞게 다시 설계했습니다." : "준비부터 현장까지 이어진 작업입니다."}</h2>
@@ -73,7 +74,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
           <div className="responsive-pairs">
             <article className="responsive-pair" data-reveal>
               <div className="responsive-pair-copy"><p className="eyebrow">01 / Main</p><h3>넓은 탐색 화면과 한 손의 탐색 흐름</h3><p>데스크톱의 좌측 탐색과 넓은 콘텐츠 영역을, 모바일에서는 상단 정보와 하단 내비게이션 중심으로 다시 배치했습니다.</p></div>
-              <figure className="pair-desktop"><MediaPlaceholder media={project.hero} /><figcaption>Main · Desktop</figcaption></figure>
+              <figure className="pair-desktop"><MediaPlaceholder media={project.thumbnail} /><figcaption>Main · Desktop</figcaption></figure>
               <figure className="pair-mobile"><MediaPlaceholder media={project.gallery[1]} /><figcaption>Main · Mobile</figcaption></figure>
             </article>
             <article className="responsive-pair responsive-pair-reverse" data-reveal>
@@ -97,12 +98,12 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
             ))}
           </div>
         )}
-        {project.liveUrl ? (
-          <TextLink className="project-live-link" href={project.liveUrl} target="_blank" rel="noreferrer">
-            LIVBEE 방문하기
+        {project.externalUrl ? (
+          <TextLink className="project-live-link" href={project.externalUrl} target="_blank" rel="noreferrer">
+            외부 사이트 보기
           </TextLink>
         ) : null}
-      </section>
+      </section> : project.externalUrl ? <section className="project-gallery page-shell section"><TextLink className="project-live-link" href={project.externalUrl} target="_blank" rel="noreferrer">외부 사이트 보기</TextLink></section> : null}
 
       <section className="next-project page-shell section">
         <p className="eyebrow">Next project</p>

@@ -27,10 +27,7 @@ export type CmsCareerEntry = CareerEntry & {
   visible: boolean;
 };
 
-export type CmsProject = Project & {
-  visible: boolean;
-  showOnHome: boolean;
-};
+export type CmsProject = Project;
 
 export type CmsWork = VisualWork & {
   caption?: string;
@@ -61,11 +58,11 @@ export type AssetRecord = {
 };
 
 export type PortfolioSnapshot = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   home: {
     hero: EditableSection & { period: string; disciplines: string; lineBreaks: "auto" | "manual" };
     about: EditableSection & { image: AssetRecord; capabilities: Capability[] };
-    projects: EditableSection & { supportingEyebrow: string; supportingTitle: string; supportingDescription: string; supportingUrl: string };
+    projects: EditableSection;
     works: EditableSection;
     career: EditableSection;
     workflow: EditableSection;

@@ -12,13 +12,14 @@ type AdminPreviewProps = {
   onViewportChange: (viewport: AdminViewport) => void;
   onModeChange: (mode: PreviewMode) => void;
   onSelectSection: (section: AdminSectionId) => void;
+  projectSlug?: string;
 };
 
-export function AdminPreview({ selectedItem, viewport, mode, onViewportChange, onModeChange, onSelectSection }: AdminPreviewProps) {
+export function AdminPreview({ selectedItem, viewport, mode, onViewportChange, onModeChange, onSelectSection, projectSlug = "livbee" }: AdminPreviewProps) {
   const frameRef = useRef<HTMLIFrameElement>(null);
   const anchor = selectedItem.previewAnchor ? `#${selectedItem.previewAnchor}` : "";
   const isHomeSection = selectedItem.id.startsWith("home.");
-  const path = selectedItem.id === "works.archive" ? "/works" : selectedItem.id === "projects.index" ? "/projects/livbee" : "/";
+  const path = selectedItem.id === "works.archive" ? "/works" : selectedItem.id === "projects.index" ? `/projects/${projectSlug}` : "/";
   const source = `${path}?cmsPreview=draft${anchor}`;
   const frameWidth = viewportWidths[viewport];
 

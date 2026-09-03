@@ -36,8 +36,19 @@ const workAssets: AssetRecord[] = visualWorks.map((work) => ({
   objectPosition: work.focus ?? "center",
 }));
 
+const projectAssets: AssetRecord[] = projects.flatMap((project) => project.thumbnail.src ? [{
+  id: `project-${project.id}`,
+  filename: project.thumbnail.src.split("/").pop() ?? project.id,
+  src: project.thumbnail.src,
+  alt: project.thumbnail.alt,
+  caption: project.thumbnail.caption,
+  category: "Projects",
+  source: "library" as const,
+  objectPosition: project.thumbnail.focus ?? "center",
+}] : []);
+
 export const seedSnapshot: PortfolioSnapshot = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   home: {
     hero: {
       eyebrow: "이태웅 · 디자이너",
@@ -61,12 +72,8 @@ export const seedSnapshot: PortfolioSnapshot = {
     },
     projects: {
       eyebrow: "대표 프로젝트",
-      title: "서비스와 커머스에서 맡은 과정을 두 프로젝트로 정리했습니다.",
-      description: "LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다.",
-      supportingEyebrow: "GPA KOREA / SellerChart",
-      supportingTitle: "웹·앱을 QA하고 반복되는 UI를 컴포넌트로 정리했습니다.",
-      supportingDescription: "Figma Auto Layout으로 자주 쓰이는 요소를 컴포넌트로 묶고, 디자인 수정 사항을 실제 화면에 반영했습니다.",
-      supportingUrl: "https://msellerchart.com/",
+      title: "대표적인 네 가지 프로젝트를 정리했습니다.",
+      description: "개인 프로젝트 LIVBEE부터 쇼핑라이브, 디자인 실무, 앱 출시 QA까지 실제로 맡은 일을 중심으로 소개합니다.",
     },
     works: {
       eyebrow: "작업 모음",
@@ -107,7 +114,7 @@ export const seedSnapshot: PortfolioSnapshot = {
     homeFeatured: work.id === featuredId,
     showOnHome: work.id === featuredId || reelIds.includes(work.id),
   })),
-  projects: projects.map((project) => ({ ...project, visible: true, showOnHome: true })),
+  projects,
   career: [
     ...careerEntries.map((entry, index) => ({ ...entry, id: `career-${index + 1}`, entryType: "career" as const, visible: true })),
     {
@@ -129,5 +136,5 @@ export const seedSnapshot: PortfolioSnapshot = {
     { id: "commerce", title: "Commerce", description: "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비했습니다.", tools: ["Promotion", "Detail page", "Shopping Live"], visible: true },
     { id: "product", title: "Product", description: "서비스를 기획하고 UX 흐름을 설계한 뒤, 구현 화면을 QA하며 개발과 협업했습니다.", tools: ["Service planning", "UX flow", "QA", "Dev collaboration"], visible: true },
   ],
-  assets: [aboutImage, ...workAssets],
+  assets: [aboutImage, ...projectAssets, ...workAssets].filter((asset, index, all) => all.findIndex((item) => item.src === asset.src) === index),
 };

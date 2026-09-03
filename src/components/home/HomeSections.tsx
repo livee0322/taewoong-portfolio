@@ -21,6 +21,9 @@ export function HomeSections() {
     ?? content.works.find((work) => work.published && work.showOnHome)
     ?? content.works[0];
   const reelWorks = content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id);
+  const homeProjects = content.projects
+    .filter((project) => project.visible && project.showOnHome)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <main>
@@ -45,8 +48,7 @@ export function HomeSections() {
 
       <section id="projects" className="selected-projects section page-shell" data-cms-section="home.projects">
         <SectionHeading eyebrow={home.projects.eyebrow} title={home.projects.title} description={home.projects.description} />
-        <div className="projects-list">{content.projects.filter((project) => project.visible && project.showOnHome).map((project) => <div data-reveal key={project.slug}><ProjectCard project={project} /></div>)}</div>
-        <article className="representative-note"><p className="eyebrow">{home.projects.supportingEyebrow}</p><div><h3>{home.projects.supportingTitle}</h3><p>{home.projects.supportingDescription}</p><TextLink href={home.projects.supportingUrl} target="_blank" rel="noreferrer">셀러차트 보기</TextLink></div></article>
+        <div className="projects-list">{homeProjects.map((project) => <div data-reveal key={project.id}><ProjectCard project={project} /></div>)}</div>
       </section>
 
       <section id="works" className="selected-works section page-shell" data-cms-section="home.works">

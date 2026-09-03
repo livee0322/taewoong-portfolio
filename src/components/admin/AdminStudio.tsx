@@ -24,6 +24,7 @@ export function AdminStudio() {
   const [revisions, setRevisions] = useState<RevisionRecord[]>([]);
   const [message, setMessage] = useState("");
   const [connectionState, setConnectionState] = useState<ConnectionState>("checking");
+  const [projectPreviewSlug, setProjectPreviewSlug] = useState("livbee");
 
   useEffect(() => {
     Promise.all([loadDraft(), loadRevisions()]).then(([draft, history]) => {
@@ -95,8 +96,8 @@ export function AdminStudio() {
         <nav>{adminNavigation.map((group) => <section key={group.label} className={styles.navGroup}><h2>{group.label}</h2><div>{group.items.map((item) => <button key={item.id} className={selectedId === item.id ? styles.navActive : ""} type="button" aria-current={selectedId === item.id ? "page" : undefined} onClick={() => { setSelectedId(item.id); if (item.id === "works.archive" || item.id === "projects.index") setPreviewMode("page"); }}><span>{item.number ?? "—"}</span><strong>{item.label}</strong>{selectedId === item.id ? <i aria-hidden="true" /> : null}</button>)}</div></section>)}</nav>
         <div className={styles.navigatorFooter}><span>Public write CMS</span><p>No login · Draft / Publish separated</p></div>
       </aside>
-      <div className={styles.editorColumn}><PropertyEditor selectedItem={selectedItem} content={content} onChange={updateContent} revisions={revisions} onRestore={handleRestore} /></div>
-      <div className={styles.previewColumn}><AdminPreview selectedItem={selectedItem} viewport={viewport} mode={previewMode} onViewportChange={setViewport} onModeChange={setPreviewMode} onSelectSection={setSelectedId} /></div>
+      <div className={styles.editorColumn}><PropertyEditor selectedItem={selectedItem} content={content} onChange={updateContent} revisions={revisions} onRestore={handleRestore} onProjectSelect={setProjectPreviewSlug} /></div>
+      <div className={styles.previewColumn}><AdminPreview selectedItem={selectedItem} viewport={viewport} mode={previewMode} onViewportChange={setViewport} onModeChange={setPreviewMode} onSelectSection={setSelectedId} projectSlug={projectPreviewSlug} /></div>
     </div>
   </main>;
 }

@@ -2,7 +2,9 @@ import type { Project } from "@/types/content";
 
 export const projects: Project[] = [
   {
+    id: "livbee",
     slug: "livbee",
+    category: "Product / Service",
     number: "01",
     title: "LIVBEE",
     subtitle: "브랜드와 쇼호스트가 조건과 작업 이력을 확인하고 대화를 시작하는 매칭 서비스.",
@@ -12,13 +14,18 @@ export const projects: Project[] = [
     tools: ["Figma", "Asana", "Obsidian", "ChatGPT", "Claude", "Codex", "GitHub", "Vercel"],
     summary:
       "쇼핑라이브 현장에서 겪은 섭외와 조건 협의의 불편을 서비스로 풀고 있습니다. 기능을 기획하고 화면을 설계한 뒤, 구현 결과를 브라우저에서 확인하며 계속 고쳤습니다.",
-    hero: {
+    thumbnail: {
       src: "/images/livbee/main-desktop.png",
       alt: "LIVBEE 프리뷰의 데스크톱 메인 화면. 쇼호스트 매칭 배너와 쇼핑라이브 목록이 보인다.",
       ratio: "wide",
       tone: "paper",
       caption: "LIVBEE preview · main",
     },
+    detailPageUrl: "/projects/livbee",
+    externalUrl: "https://www.livbee.co.kr",
+    visible: true,
+    showOnHome: true,
+    sortOrder: 1,
     intro:
       "쇼핑라이브 현장에서는 출연 조건이 명확하지 않거나, DM과 지인 소개에 의존해 사람을 찾는 일이 반복됐습니다. 브랜드와 출연자가 서로의 조건과 작업 이력을 먼저 확인할 수 있도록 LIVBEE를 기획했습니다.",
     sections: [
@@ -64,12 +71,13 @@ export const projects: Project[] = [
         caption: "모바일 · 커뮤니티",
       },
     ],
-    liveUrl: "https://www.livbee.co.kr",
   },
   {
+    id: "shopping-live",
     slug: "shopping-live",
+    category: "Shopping Live / Commerce Content",
     number: "02",
-    title: "쇼핑라이브 & 커머스 콘텐츠",
+    title: "쇼핑라이브 촬영 및 기획",
     subtitle: "상품의 포인트를 찾고, 촬영과 콘텐츠를 거쳐 방송 현장까지 연결한 실무 작업.",
     year: "Commerce experience",
     type: "Shopping Live / Commerce Content",
@@ -77,13 +85,17 @@ export const projects: Project[] = [
     tools: ["Photoshop", "Illustrator", "Premiere Pro", "Camera workflow"],
     summary:
       "상품 정보를 정리한 뒤 촬영, 상세페이지, 프로모션, 쇼핑라이브 순서로 준비했습니다. 실제 방송에 쓰인 이미지와 현장 작업을 중심으로 선별했습니다.",
-    hero: {
+    thumbnail: {
       src: "/images/selected-works/tv-purchase-knowhow-thumbnail.jpg",
       alt: "TV 전시장과 진행자 두 명, TV 구매 관련 문구가 들어간 유튜브 썸네일",
       ratio: "wide",
       tone: "stone",
       caption: "Commerce content · YouTube thumbnail",
     },
+    detailPageUrl: "/projects/shopping-live",
+    visible: true,
+    showOnHome: true,
+    sortOrder: 2,
     intro:
       "쇼핑라이브는 방송 전의 준비에서 많은 부분이 결정됐습니다. 상품의 포인트와 필요한 장면을 정리한 뒤, 상세페이지·프로모션·현장 운영까지 하나의 판매 맥락으로 연결했습니다.",
     sections: [
@@ -123,6 +135,91 @@ export const projects: Project[] = [
         caption: "Product detail page · crop preview",
       },
     ],
+  },
+  {
+    id: "design-content",
+    slug: "design-content",
+    category: "Design / Content",
+    number: "03",
+    title: "실무 디자인 및 콘텐츠 제작",
+    subtitle: "상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 실제 운영 목적에 맞춰 제작한 작업.",
+    year: "Professional experience",
+    type: "Design / Content",
+    roles: ["Visual Design", "Content Design", "Photo / Video", "Production"],
+    tools: ["Photoshop", "Illustrator", "Premiere Pro", "Figma"],
+    summary: "제품과 콘텐츠의 목적을 먼저 정리하고 상세페이지, 프로모션 배너, 유튜브 썸네일과 영상 그래픽으로 만들었습니다. 공개 가능한 실무 결과를 중심으로 소개합니다.",
+    thumbnail: {
+      src: "/images/selected-works/innos-brand-day-banner.jpg",
+      alt: "이노스 브랜드데이 행사 혜택과 TV 제품을 구성한 프로모션 배너",
+      ratio: "wide",
+      tone: "ink",
+      caption: "Design · content production",
+      focus: "center",
+    },
+    detailPageUrl: "/projects/design-content",
+    visible: true,
+    showOnHome: true,
+    sortOrder: 3,
+    intro: "상품과 채널에 따라 필요한 정보의 순서를 정리하고, 실제 게시와 운영에 쓰이는 그래픽과 영상 콘텐츠를 제작했습니다.",
+    sections: [
+      {
+        label: "Scope",
+        title: "한 장의 결과물보다 운영에 필요한 콘텐츠 흐름을 만들었습니다.",
+        body: "제품 정보와 노출 채널을 확인한 뒤 상세페이지, 프로모션 배너, 유튜브 썸네일과 영상 타이틀·자막까지 목적에 맞게 제작했습니다.",
+        items: ["Detail page", "Promotion", "YouTube thumbnail", "Title / Caption"],
+      },
+    ],
+    gallery: [
+      {
+        src: "/images/selected-works/quantum-mini-led-campaign-banner.jpg",
+        alt: "퀀텀 미니 LED TV의 화면 표현을 강조한 캠페인 배너",
+        ratio: "wide",
+        tone: "ink",
+        caption: "Campaign banner",
+      },
+      {
+        src: "/images/selected-works/ocean-content-thumbnail.jpg",
+        alt: "바다와 인물을 조합한 유튜브 콘텐츠 썸네일",
+        ratio: "wide",
+        tone: "sage",
+        caption: "YouTube thumbnail",
+      },
+    ],
+  },
+  {
+    id: "sellernote",
+    slug: "sellernote",
+    category: "App QA / UI Design",
+    number: "04",
+    title: "셀러노트 앱 출시 QA 및 디자인 개선",
+    subtitle: "출시 전 웹·앱 화면을 점검하고 반복되는 UI를 컴포넌트로 정리해 실제 화면 개선으로 연결한 경험.",
+    year: "GPA KOREA / SellerNote",
+    type: "App QA / UI Design",
+    roles: ["Release QA", "UI Improvement", "Component Design", "Design QA"],
+    tools: ["Figma", "Auto Layout", "Component System"],
+    summary: "셀러노트 앱 출시 과정에서 웹·앱 화면을 QA하고, 반복되는 UI를 Figma 컴포넌트로 정리했습니다. 확인한 수정 사항은 실제 화면 개선으로 연결했습니다.",
+    thumbnail: {
+      alt: "셀러노트 앱 출시 QA 및 UI 디자인 개선 프로젝트 대표 이미지가 등록될 영역",
+      ratio: "wide",
+      tone: "sand",
+      caption: "SellerNote · image pending",
+      focus: "center",
+    },
+    detailPageUrl: "/projects/sellernote",
+    externalUrl: "https://msellerchart.com/",
+    visible: true,
+    showOnHome: true,
+    sortOrder: 4,
+    intro: "출시 전 화면을 사용자 흐름에 따라 확인하고, 화면마다 달랐던 반복 요소를 같은 규칙과 컴포넌트로 정리했습니다.",
+    sections: [
+      {
+        label: "Available scope",
+        title: "출시 QA와 반복 UI 개선을 맡았습니다.",
+        body: "웹·앱의 실제 화면을 확인하며 수정이 필요한 지점을 기록하고, Figma Auto Layout과 컴포넌트로 반복 UI의 기준을 정리했습니다. 공개 가능한 대표 이미지는 CMS에서 추가할 수 있도록 준비했습니다.",
+        items: ["Web / App QA", "Figma Auto Layout", "UI components", "Design improvement"],
+      },
+    ],
+    gallery: [],
   },
 ];
 

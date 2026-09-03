@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | `home.hero` | `HomeSections` Hero | `data-cms-section="home.hero"` |
 | `home.about` | About + capabilities | `home.about` |
-| `home.projects` | project cards + supporting note | `home.projects` |
+| `home.projects` | four ordered project cards | `home.projects` |
 | `home.works` | single featured + ordered reel | `home.works` |
 | `home.career` | career/personal records | `home.career` |
 | `home.workflow` | workflow records | `home.workflow` |
@@ -30,7 +30,7 @@ Public route server components read the current Published snapshot before render
 
 ## Projects
 
-The two existing slugs remain statically routable. The client detail renderer resolves the current snapshot by slug, so title, subtitle, summary, intro, roles, tools, external URL and visibility can change without code edits. The original specialized LIVBEE responsive comparison layout is retained.
+The four canonical slugs (`livbee`, `shopping-live`, `design-content`, `sellernote`) are routable. Home order is the same `sortOrder` managed in Admin. The client detail renderer resolves the current snapshot by slug, so category, title, summary, thumbnail/alt/focal position, roles, detail/external URL and visibility can change without a separate Home model. Legacy schema-v1 snapshots are normalized to this contract at read time. The original specialized LIVBEE responsive comparison layout is retained.
 
 ## Failure behavior
 
