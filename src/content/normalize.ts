@@ -95,6 +95,10 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
   const projects = canonicalProjects.map((project) => byId.get(project.id) ?? structuredClone(project));
   const orderedProjects = (isLegacy ? projects.map((project, index) => ({ ...project, sortOrder: index + 1 })) : projects)
     .sort((a, b) => a.sortOrder - b.sortOrder);
+  const isKnownOutdatedOrder = orderedProjects.map((project) => project.id).join(",") === "livbee,design-content,sellernote,shopping-live";
+  const normalizedProjects = isKnownOutdatedOrder
+    ? canonicalProjects.map((canonical, index) => ({ ...orderedProjects.find((project) => project.id === canonical.id)!, sortOrder: index + 1 }))
+    : orderedProjects;
   const legacyHome = legacy.home;
 
   return {
@@ -112,7 +116,7 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
       workflow: isLegacy ? structuredClone(fallback.home.workflow) : migrateSectionCopy(legacyHome?.workflow, fallback.home.workflow, obsoleteHomeCopy.workflow),
       contact: migrateSectionCopy(legacyHome?.contact, fallback.home.contact, obsoleteHomeCopy.contact),
     },
-    projects: orderedProjects,
+    projects: normalizedProjects,
     workflow: normalizeWorkflowEntries(legacy.workflow, fallback.workflow),
   } as PortfolioSnapshot;
 }
