@@ -11,7 +11,7 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -37,25 +37,15 @@ jobs:
           echo "No public portfolio deployment returned 2xx" >&2
           exit 1
 
-      - name: Capture deployed desktop site with Chrome DevTools
+      - name: Capture deployed desktop site
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p artifacts
           CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)
-          echo "Chrome: $CHROME"
-          "$CHROME" \
-            --headless=new \
-            --no-sandbox \
-            --disable-gpu \
-            --hide-scrollbars \
-            --remote-debugging-port=9222 \
-            --user-data-dir=/tmp/portfolio-chrome \
-            --window-size=1440,900 \
-            about:blank >/tmp/portfolio-chrome.log 2>&1 &
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --remote-debugging-port=9222 --user-data-dir=/tmp/portfolio-chrome --window-size=1440,900 about:blank >/tmp/portfolio-chrome.log 2>&1 &
           CHROME_PID=$!
           trap 'kill "$CHROME_PID" 2>/dev/null || true' EXIT
-
           for i in {1..40}; do
             if curl -fsS http://127.0.0.1:9222/json/version >/dev/null; then break; fi
             sleep 0.25
@@ -65,119 +55,58 @@ jobs:
           const fs = require('fs');
           const url = process.env.SITE_URL;
           const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
           async function main() {
             const tabs = await fetch('http://127.0.0.1:9222/json/list').then((r) => r.json());
-            const wsUrl = tabs[0].webSocketDebuggerUrl;
-            const ws = new WebSocket(wsUrl);
-            await new Promise((resolve, reject) => {
-              ws.addEventListener('open', resolve, { once: true });
-              ws.addEventListener('error', reject, { once: true });
-            });
-
+            const ws = new WebSocket(tabs[0].webSocketDebuggerUrl);
+            await new Promise((resolve, reject) => { ws.addEventListener('open', resolve, { once: true }); ws.addEventListener('error', reject, { once: true }); });
             let nextId = 0;
             const pending = new Map();
             ws.addEventListener('message', (event) => {
               const message = JSON.parse(event.data);
               if (message.id && pending.has(message.id)) {
-                const { resolve, reject } = pending.get(message.id);
-                pending.delete(message.id);
-                if (message.error) reject(new Error(JSON.stringify(message.error)));
-                else resolve(message);
+                const p = pending.get(message.id); pending.delete(message.id);
+                message.error ? p.reject(new Error(JSON.stringify(message.error))) : p.resolve(message);
               }
             });
-            const send = (method, params = {}) => new Promise((resolve, reject) => {
-              const id = ++nextId;
-              pending.set(id, { resolve, reject });
-              ws.send(JSON.stringify({ id, method, params }));
-            });
-
+            const send = (method, params = {}) => new Promise((resolve, reject) => { const id = ++nextId; pending.set(id, { resolve, reject }); ws.send(JSON.stringify({ id, method, params })); });
             await send('Page.enable');
             await send('Runtime.enable');
-            await send('Emulation.setDeviceMetricsOverride', {
-              width: 1440,
-              height: 900,
-              deviceScaleFactor: 1,
-              mobile: false,
-            });
+            await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
             await send('Page.navigate', { url });
-
             for (let i = 0; i < 80; i++) {
               await sleep(250);
-              const state = await send('Runtime.evaluate', {
-                expression: 'document.readyState',
-                returnByValue: true,
-              });
+              const state = await send('Runtime.evaluate', { expression: 'document.readyState', returnByValue: true });
               if (state.result.result.value === 'complete') break;
             }
-            await sleep(1800);
-
+            await sleep(1600);
             await send('Runtime.evaluate', {
               expression: `(async () => {
                 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
                 const total = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-                for (let y = 0; y < total; y += 650) {
-                  window.scrollTo(0, y);
-                  await sleep(70);
-                }
+                for (let y = 0; y < total; y += 650) { window.scrollTo(0, y); await sleep(60); }
                 window.scrollTo(0, 0);
                 if (document.fonts && document.fonts.ready) await document.fonts.ready;
-                await sleep(800);
-                return {
-                  width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
-                  height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight),
-                  title: document.title,
-                  url: location.href,
-                };
-              })()`,
-              awaitPromise: true,
-              returnByValue: true,
+                await sleep(700);
+              })()`, awaitPromise: true, returnByValue: true,
             });
-
             const metrics = await send('Page.getLayoutMetrics');
             const width = Math.ceil(metrics.result.cssContentSize.width);
             const height = Math.ceil(metrics.result.cssContentSize.height);
             console.log(`content size: ${width}x${height}`);
-
-            const screenshot = await send('Page.captureScreenshot', {
-              format: 'png',
-              fromSurface: true,
-              captureBeyondViewport: true,
-              clip: { x: 0, y: 0, width, height, scale: 1 },
-            });
-            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.png', Buffer.from(screenshot.result.data, 'base64'));
-
-            await send('Emulation.setEmulatedMedia', { media: 'screen' });
-            const pdf = await send('Page.printToPDF', {
-              printBackground: true,
-              landscape: false,
-              displayHeaderFooter: false,
-              paperWidth: width / 96,
-              paperHeight: height / 96,
-              marginTop: 0,
-              marginBottom: 0,
-              marginLeft: 0,
-              marginRight: 0,
-              preferCSSPageSize: false,
-              transferMode: 'ReturnAsBase64',
-            });
-            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf', Buffer.from(pdf.result.data, 'base64'));
+            const shot = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: true, clip: { x: 0, y: 0, width, height, scale: 1 } });
+            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.png', Buffer.from(shot.result.data, 'base64'));
+            console.log('screenshot written');
             ws.close();
           }
-
-          main().catch((error) => {
-            console.error(error);
-            process.exit(1);
-          });
+          main().catch((error) => { console.error(error); process.exit(1); });
           NODE
-
-          node /tmp/capture.cjs
+          timeout 120 node /tmp/capture.cjs
           ls -lh artifacts
 
       - name: Upload export
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-web-main-pdf
+          name: portfolio-web-main-capture
           path: artifacts/*
           if-no-files-found: error
           retention-days: 7
