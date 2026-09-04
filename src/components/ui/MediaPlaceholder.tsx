@@ -10,6 +10,8 @@ type MediaPlaceholderProps = {
     | { tone: MediaTone; ratio: "wide" | "portrait" | "square" | "detail"; title: string; description?: string; focus?: ObjectPosition };
   priority?: boolean;
   className?: string;
+  /** Explicit fit mode. Use this when the content contract determines whether an image must be cropped or shown in full. */
+  fit?: "cover" | "contain";
   /** When true, a portrait-oriented source image is shown uncropped (contain) instead of being cover-cropped to the frame. Landscape/square sources are unaffected. */
   fitToOrientation?: boolean;
 };
@@ -26,7 +28,7 @@ const FOCUS_POSITION: Record<ObjectPosition, string> = {
   "bottom-right": "right 80%",
 };
 
-export function MediaPlaceholder({ media, priority = false, className = "", fitToOrientation = false }: MediaPlaceholderProps) {
+export function MediaPlaceholder({ media, priority = false, className = "", fit, fitToOrientation = false }: MediaPlaceholderProps) {
   const isProjectMedia = "alt" in media;
   const title = isProjectMedia ? media.caption : media.title;
   const description = isProjectMedia ? media.alt : media.description ?? "";
@@ -40,9 +42,13 @@ export function MediaPlaceholder({ media, priority = false, className = "", fitT
         setIsPortraitSource(img.naturalHeight > img.naturalWidth);
       }
     : undefined;
-  const style = fitToOrientation && isPortraitSource
+  const style = fit === "contain"
     ? { objectFit: "contain" as const, objectPosition: "center" }
-    : objectPosition ? { objectFit: "cover" as const, objectPosition } : undefined;
+    : fit === "cover"
+      ? { objectFit: "cover" as const, objectPosition: objectPosition ?? "center" }
+      : fitToOrientation && isPortraitSource
+        ? { objectFit: "contain" as const, objectPosition: "center" }
+        : objectPosition ? { objectFit: "cover" as const, objectPosition } : undefined;
 
   return (
     <div
