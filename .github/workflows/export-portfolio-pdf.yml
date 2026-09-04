@@ -1,0 +1,119 @@
+name: Export portfolio PDF
+
+on:
+  push:
+    branches:
+      - export/portfolio-pdf-main-20260904-final
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_SUPABASE_URL: "https://nmsvfseemyidzpuoqkgm.supabase.co"
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_gXwcv9f7lZBQ0XsDT7eSdw_gbQci3Hj"
+    steps:
+      - name: Checkout latest main snapshot
+        uses: actions/checkout@v4
+        with:
+          ref: cffef9181f0e8cce8af8ad409b4a46be0a548981
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Install browser tooling
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Build production app
+        run: npm run build
+
+      - name: Start app
+        run: |
+          npm run start -- -p 3000 > /tmp/portfolio-next.log 2>&1 &
+          echo $! > /tmp/portfolio-next.pid
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/portfolio-next.log
+          exit 1
+
+      - name: Capture desktop site as full-height PDF
+        run: |
+          mkdir -p artifacts
+          cat > /tmp/export-portfolio.cjs <<'NODE'
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch({ headless: true });
+            const page = await browser.newPage({
+              viewport: { width: 1440, height: 900 },
+              deviceScaleFactor: 1,
+            });
+
+            await page.goto('http://127.0.0.1:3000/', { waitUntil: 'networkidle', timeout: 120000 });
+            await page.evaluate(async () => {
+              const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+              const total = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+              for (let y = 0; y < total; y += 650) {
+                window.scrollTo(0, y);
+                await sleep(80);
+              }
+              window.scrollTo(0, 0);
+              if (document.fonts?.ready) await document.fonts.ready;
+            });
+            await page.waitForTimeout(1800);
+
+            const dimensions = await page.evaluate(() => ({
+              width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+              height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight),
+            }));
+            console.log('capture dimensions', dimensions);
+
+            await page.screenshot({
+              path: 'artifacts/Lee_Taewoong_Portfolio_Website_Main.png',
+              fullPage: true,
+            });
+
+            await page.emulateMedia({ media: 'screen' });
+            await page.pdf({
+              path: 'artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf',
+              printBackground: true,
+              width: '1440px',
+              height: `${Math.ceil(dimensions.height)}px`,
+              margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+              preferCSSPageSize: false,
+              displayHeaderFooter: false,
+              tagged: true,
+            });
+
+            await browser.close();
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
+          node /tmp/export-portfolio.cjs
+          ls -lh artifacts
+
+      - name: Upload export
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-web-main-pdf
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 7
