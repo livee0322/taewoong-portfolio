@@ -37,7 +37,7 @@ export function MediaPlaceholder({ media, priority = false, className = "", fitT
   const handleLoad = fitToOrientation
     ? (event: SyntheticEvent<HTMLImageElement>) => {
         const img = event.currentTarget;
-        if (img.naturalHeight > img.naturalWidth) setIsPortraitSource(true);
+        setIsPortraitSource(img.naturalHeight > img.naturalWidth);
       }
     : undefined;
   const style = fitToOrientation && isPortraitSource

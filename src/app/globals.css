@@ -129,8 +129,6 @@ ul, ol { margin: 0; padding: 0; }
 .project-card:nth-child(even) .project-card-media { grid-column: 6 / -1; order: 2; }
 .project-card:nth-child(even) .project-card-meta { grid-column: 1 / span 4; padding-top: var(--space-2); }
 .project-card-media { display: block; overflow: hidden; background: var(--color-surface); }
-.project-card-media .media-placeholder { transition: transform var(--motion-base) var(--ease-out); }
-.project-card:hover .project-card-media .media-placeholder, .project-card:focus-within .project-card-media .media-placeholder { transform: scale(1.018); }
 .project-card-title-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); margin-top: var(--space-4); }
 .project-card-title-row h3 { font-size: clamp(2rem, 3vw, 3rem); }
 .round-link { display: grid; width: 2.8rem; height: 2.8rem; flex: 0 0 auto; place-items: center; border: 1px solid var(--color-border); border-radius: 100%; font-size: 1.125rem; transition: background-color var(--motion-fast) var(--ease-out), transform var(--motion-base) var(--ease-out); }
@@ -238,11 +236,11 @@ ul, ol { margin: 0; padding: 0; }
 .workflow-item > p { color: var(--color-muted); font-size: 0.9375rem; }
 .workflow-item .workflow-tools { grid-column: 2; color: var(--color-text); font-size: 0.8125rem; }
 
-.contact-ending { display: flex; flex-direction: column; align-items: center; max-width: 42rem; margin-inline: auto; padding-bottom: clamp(6rem, 10vw, 9rem); text-align: center; }
+.contact-ending { display: flex; flex-direction: column; align-items: flex-start; max-width: 42rem; padding-bottom: clamp(6rem, 10vw, 9rem); text-align: left; }
 .contact-ending > .eyebrow { padding-top: 0.4rem; }
 .contact-ending h2 { margin-top: var(--space-6); font-size: clamp(2.5rem, 4.5vw, 3.75rem); }
 .contact-intro { max-width: 34rem; margin-top: var(--space-6); color: var(--color-muted); font-size: 1.0625rem; line-height: 1.72; }
-.contact-card { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
+.contact-card { display: flex; flex-direction: column; align-items: flex-start; gap: 0.35rem; margin-top: var(--space-12); padding-top: var(--space-8); border-top: 1px solid var(--color-border); }
 .contact-name { font-size: 1.375rem; font-weight: 500; }
 .contact-role { color: var(--color-muted); font-size: 0.9375rem; }
 .contact-line { display: flex; align-items: center; gap: 0.6rem; margin-top: var(--space-4); font-size: 0.9375rem; }

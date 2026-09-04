@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Project } from "@/types/content";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
 
@@ -9,9 +8,9 @@ type ProjectCardProps = {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="project-card">
-      <Link className="project-card-media" href={project.detailPageUrl} aria-label={`${project.title} 프로젝트 보기`}>
-        <MediaPlaceholder media={project.thumbnail} priority={project.sortOrder === 1} fitToOrientation />
-      </Link>
+      <div className="project-card-media">
+        <MediaPlaceholder media={project.thumbnail} priority={project.sortOrder === 1} fitToOrientation={project.slug === "shopping-live"} />
+      </div>
       <div className="project-card-meta">
         <p className="eyebrow">{project.number} / {project.category}</p>
         <h3>{project.title}</h3>
