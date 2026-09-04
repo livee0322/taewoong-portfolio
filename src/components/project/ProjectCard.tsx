@@ -9,7 +9,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article className="project-card">
       <div className="project-card-media">
-        <MediaPlaceholder media={project.thumbnail} priority={project.sortOrder === 1} fitToOrientation={project.slug === "shopping-live"} />
+        <MediaPlaceholder
+          media={project.thumbnail}
+          priority={project.sortOrder === 1}
+          fit={project.slug === "shopping-live" ? "contain" : undefined}
+        />
       </div>
       <div className="project-card-meta">
         <p className="eyebrow">{project.number} / {project.category}</p>
