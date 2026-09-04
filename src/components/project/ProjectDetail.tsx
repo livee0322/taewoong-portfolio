@@ -28,7 +28,7 @@ export function ProjectDetail({ slug }: ProjectDetailProps) {
           <p className="project-subtitle">{project.subtitle}</p>
           <p className="project-summary">{project.summary}</p>
         </div>
-        <MediaPlaceholder media={project.thumbnail} priority className="project-hero-media" />
+        <MediaPlaceholder media={project.thumbnail} priority className="project-hero-media" fitToOrientation />
       </section>
 
       <section className="project-overview section page-shell">
