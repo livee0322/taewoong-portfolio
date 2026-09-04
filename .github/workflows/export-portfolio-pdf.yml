@@ -11,7 +11,7 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 8
     steps:
       - name: Resolve deployed portfolio URL
         shell: bash
@@ -32,39 +32,122 @@ jobs:
           echo "No public portfolio deployment returned 2xx" >&2
           exit 1
 
-      - name: Install Korean fonts
+      - name: Install Korean fonts and Selenium
         shell: bash
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends fonts-noto-cjk
           fc-cache -f
+          python -m pip install --quiet selenium
+          google-chrome --version || google-chrome-stable --version
+          chromedriver --version
 
-      - name: Capture 1440px desktop long screenshot
+      - name: Export deployed desktop site as one-page PDF
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p artifacts
-          CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)
-          timeout 120 "$CHROME" \
-            --headless=new \
-            --no-sandbox \
-            --disable-gpu \
-            --disable-dev-shm-usage \
-            --disable-features=LazyImageLoading,LazyFrameLoading \
-            --run-all-compositor-stages-before-draw \
-            --virtual-time-budget=15000 \
-            --hide-scrollbars \
-            --window-size=1440,16000 \
-            --screenshot="$PWD/artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png" \
-            "$SITE_URL"
-          test -s artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
-          file artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
-          ls -lh artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
+          cat > /tmp/export_portfolio.py <<'PY'
+          import base64, json, os, time
+          from pathlib import Path
+          from selenium import webdriver
+          from selenium.webdriver.chrome.options import Options
+
+          url = os.environ['SITE_URL']
+          out = Path('artifacts/Lee_Taewoong_Portfolio_Website_Desktop_1440.pdf')
+
+          options = Options()
+          options.add_argument('--headless=new')
+          options.add_argument('--no-sandbox')
+          options.add_argument('--disable-gpu')
+          options.add_argument('--disable-dev-shm-usage')
+          options.add_argument('--window-size=1440,900')
+          options.add_argument('--hide-scrollbars')
+          options.add_argument('--force-device-scale-factor=1')
+          options.add_argument('--disable-features=LazyFrameLoading')
+
+          driver = webdriver.Chrome(options=options)
+          try:
+              driver.set_page_load_timeout(90)
+              driver.get(url)
+              time.sleep(3)
+
+              # Scroll through the real 1440px desktop layout to trigger reveals and lazy assets.
+              total = int(driver.execute_script('return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)'))
+              for y in range(0, total + 1, 600):
+                  driver.execute_script('window.scrollTo(0, arguments[0])', y)
+                  time.sleep(0.12)
+              driver.execute_script('window.scrollTo(0, 0)')
+              time.sleep(1.5)
+
+              # Make the static PDF deterministic while preserving the site's desktop geometry.
+              driver.execute_script(r'''
+                document.querySelectorAll('[data-reveal]').forEach((el) => {
+                  el.classList.remove('reveal-pending');
+                  el.style.setProperty('opacity', '1', 'important');
+                  el.style.setProperty('transform', 'none', 'important');
+                });
+                const style = document.createElement('style');
+                style.textContent = `
+                  @page { margin: 0; }
+                  html, body { width: 1440px !important; max-width: none !important; }
+                  [data-reveal], [data-reveal].reveal-pending {
+                    opacity: 1 !important;
+                    transform: none !important;
+                    transition: none !important;
+                  }
+                  .site-header {
+                    position: static !important;
+                    backdrop-filter: none !important;
+                    -webkit-backdrop-filter: none !important;
+                  }
+                  .mobile-nav { display: none !important; }
+                  * { animation: none !important; }
+                `;
+                document.head.appendChild(style);
+                document.querySelectorAll('img').forEach((img) => { img.loading = 'eager'; });
+              ''')
+
+              # One more pass after forcing eager images.
+              total = int(driver.execute_script('return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)'))
+              for y in range(0, total + 1, 700):
+                  driver.execute_script('window.scrollTo(0, arguments[0])', y)
+                  time.sleep(0.10)
+              driver.execute_script('window.scrollTo(0, 0)')
+              time.sleep(1.2)
+
+              height = int(driver.execute_script('return Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)'))
+              width = 1440
+              print(f'final desktop document: {width}x{height}px')
+
+              # Use a 15-inch paper width (=1440 CSS px at 96dpi), so print layout stays desktop.
+              result = driver.execute_cdp_cmd('Page.printToPDF', {
+                  'printBackground': True,
+                  'landscape': False,
+                  'displayHeaderFooter': False,
+                  'paperWidth': width / 96,
+                  'paperHeight': height / 96,
+                  'marginTop': 0,
+                  'marginBottom': 0,
+                  'marginLeft': 0,
+                  'marginRight': 0,
+                  'preferCSSPageSize': False,
+                  'scale': 1,
+                  'transferMode': 'ReturnAsBase64',
+              })
+              out.write_bytes(base64.b64decode(result['data']))
+              print(f'wrote {out} ({out.stat().st_size} bytes)')
+          finally:
+              driver.quit()
+          PY
+          timeout 180 python /tmp/export_portfolio.py
+          test -s artifacts/Lee_Taewoong_Portfolio_Website_Desktop_1440.pdf
+          pdfinfo artifacts/Lee_Taewoong_Portfolio_Website_Desktop_1440.pdf | head -20
 
       - name: Upload export
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-web-main-desktop-long
-          path: artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
+          name: portfolio-web-main-desktop-1440-pdf
+          path: artifacts/Lee_Taewoong_Portfolio_Website_Desktop_1440.pdf
           if-no-files-found: error
           retention-days: 7
