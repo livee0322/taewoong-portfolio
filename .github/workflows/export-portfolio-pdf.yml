@@ -11,7 +11,7 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 6
     steps:
       - name: Resolve deployed portfolio URL
         shell: bash
@@ -31,6 +31,14 @@ jobs:
           done
           echo "No public portfolio deployment returned 2xx" >&2
           exit 1
+
+      - name: Install Korean fonts
+        shell: bash
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-cache -f
+          fc-match 'Noto Sans CJK KR' | head -1
 
       - name: Print deployed site to PDF
         shell: bash
@@ -55,7 +63,7 @@ jobs:
       - name: Upload export
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-web-main-pdf-direct
+          name: portfolio-web-main-pdf-korean
           path: artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf
           if-no-files-found: error
           retention-days: 7
