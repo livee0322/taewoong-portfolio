@@ -83,14 +83,16 @@ export function HomeSections() {
         <div className="works-footer-link"><TextLink href="/works">작업 전체 보기</TextLink></div>
       </section>
 
-      <section id="contact" className="contact contact-ending section page-shell" data-cms-section="home.contact">
-        <p className="eyebrow">{home.contact.eyebrow}</p>
-        <h2><Lines value={home.contact.title} /></h2>
-        <p className="contact-intro">{home.contact.description}</p>
-        <div className="contact-card">
-          <p className="contact-name">{name}</p>
-          {role ? <p className="contact-role">{role}</p> : null}
-          {home.contact.email ? <p className="contact-line"><span>Contact</span><a href={`mailto:${home.contact.email}`}>{home.contact.email}</a></p> : null}
+      <section id="contact" className="contact section page-shell" data-cms-section="home.contact">
+        <div className="contact-ending">
+          <p className="eyebrow">{home.contact.eyebrow}</p>
+          <h2><Lines value={home.contact.title} /></h2>
+          <p className="contact-intro">{home.contact.description}</p>
+          <div className="contact-card">
+            <p className="contact-name">{name}</p>
+            {role ? <p className="contact-role">{role}</p> : null}
+            {home.contact.email ? <p className="contact-line"><span>Contact</span><a href={`mailto:${home.contact.email}`}>{home.contact.email}</a></p> : null}
+          </div>
         </div>
       </section>
     </main>
