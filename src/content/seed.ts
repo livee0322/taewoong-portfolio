@@ -6,12 +6,20 @@ import type { AssetRecord, PortfolioSnapshot } from "./schema";
 const featuredId = "ocean-content-thumbnail";
 const reelIds = [
   "traffic-safety-thumbnail",
+  "innos-tv-showroom-thumbnail",
+  "tv-purchase-thumbnail",
   "safety-ga-sister-thumbnail",
-  "editor-pick-dochi-caption",
   "pyojoon-gobaek-thumbnail",
-  "shopping-live-studio",
-  "innos-monster-tv-banner",
-  "sea-forest-invitation-thumbnail",
+  "seobu-hope-concert-thumbnail",
+  "traffic-safety-title",
+  "editor-pick-dochi-caption",
+  "ocean-content-title",
+  "golf-swing-caption",
+  "gomindeulgo-caption",
+  "safe-tv-event-open",
+  "standards-event",
+  "mobis-umbrella-event",
+  "energy-agency-event",
 ];
 
 const aboutImage: AssetRecord = {
@@ -36,57 +44,64 @@ const workAssets: AssetRecord[] = visualWorks.map((work) => ({
   objectPosition: work.focus ?? "center",
 }));
 
+const projectAssets: AssetRecord[] = projects.flatMap((project) => project.thumbnail.src ? [{
+  id: `project-${project.id}`,
+  filename: project.thumbnail.src.split("/").pop() ?? project.id,
+  src: project.thumbnail.src,
+  alt: project.thumbnail.alt,
+  caption: project.thumbnail.caption,
+  category: "Projects",
+  source: "library" as const,
+  objectPosition: project.thumbnail.focus ?? "center",
+}] : []);
+
 export const seedSnapshot: PortfolioSnapshot = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   home: {
     hero: {
       eyebrow: "이태웅 · 디자이너",
-      title: "디자인과 콘텐츠를 만들고,\n서비스 화면까지 직접 확인합니다.",
-      description: "상세페이지와 배너, 유튜브 썸네일·타이틀·자막을 만들었습니다. 제품 촬영과 영상, 쇼핑라이브 현장을 거쳐 최근에는 서비스 기획과 UI/UX, QA, 개발 협업을 맡고 있습니다.",
+      title: "디자인을 시작으로 다양한 실무를 경험했습니다.",
+      description: "상세페이지, 배너, 유튜브 썸네일과 영상 그래픽을 제작했습니다. 제품 촬영과 쇼핑라이브 기획·운영을 경험했고, 최근에는 서비스 기획과 UI/UX, QA 업무도 진행했습니다.",
       period: "2019 — NOW",
       disciplines: "Design · Content · Commerce · Product",
-      lineBreaks: "manual",
+      lineBreaks: "auto",
     },
     about: {
       eyebrow: "About",
-      title: "화면 안의 디자인과 촬영 현장의 일을 함께 해봤습니다.",
-      description: "제품을 촬영하고 상세페이지와 배너를 만들었습니다. 영상에서는 썸네일·타이틀·자막을 제작했고, 쇼핑라이브에서는 방송 준비와 현장 운영을 맡았습니다.",
+      title: "디자인 외에도 다양한 실무를 경험했습니다.",
+      description: "상세페이지와 배너, 썸네일 제작부터 제품 촬영, 영상 편집, 쇼핑라이브 기획과 운영까지 진행했습니다. 이후에는 서비스 기획, UI/UX, QA 업무도 경험했습니다.",
       image: aboutImage,
       capabilities: [
-        { id: "design", title: "Design", description: "UI/UX · 그래픽 · 상세페이지", visible: true },
-        { id: "content", title: "Content", description: "촬영 기획 · YouTube 썸네일 · 타이틀/자막", visible: true },
-        { id: "commerce", title: "Commerce", description: "상품 정보 · 프로모션 · 쇼핑라이브", visible: true },
-        { id: "product", title: "Product", description: "서비스 기획 · UX 흐름 · QA · 개발 협업", visible: true },
+        { id: "design", title: "Design", description: "매뉴얼 · DVD 커버 · 제안서 포스터 · 이벤트/대판 배너 · 카드뉴스", visible: true },
+        { id: "content", title: "Content", description: "유튜브 썸네일 · 영상 타이틀/자막 · 보도자료 이미지 · 일러스트 캐릭터", visible: true },
+        { id: "commerce", title: "Commerce", description: "상세페이지 · 프로모션 배너 · 쇼핑라이브 이미지 · 제품 촬영", visible: true },
+        { id: "product", title: "Product", description: "UI/UX · 화면 QA · Figma 컴포넌트 · 서비스 기획 · 개발 협업", visible: true },
       ],
     },
     projects: {
       eyebrow: "대표 프로젝트",
-      title: "서비스와 커머스에서 맡은 과정을 두 프로젝트로 정리했습니다.",
-      description: "LIVBEE에서는 서비스 흐름과 반응형 화면을 설계하고 검토했습니다. 쇼핑라이브에서는 상품의 포인트를 찾고, 촬영·콘텐츠·방송 준비까지 연결했습니다.",
-      supportingEyebrow: "GPA KOREA / SellerChart",
-      supportingTitle: "웹·앱을 QA하고 반복되는 UI를 컴포넌트로 정리했습니다.",
-      supportingDescription: "Figma Auto Layout으로 자주 쓰이는 요소를 컴포넌트로 묶고, 디자인 수정 사항을 실제 화면에 반영했습니다.",
-      supportingUrl: "https://msellerchart.com/",
+      title: "대표적으로 진행한 프로젝트를 소개합니다.",
+      description: "개인 프로젝트 LIVBEE, 쇼핑라이브 촬영 및 기획, 실무 디자인 작업, 셀러노트 앱 출시 QA와 디자인 개선 경험을 정리했습니다.",
     },
     works: {
       eyebrow: "작업 모음",
-      title: "공개 가능한 실무 작업을 골라 소개합니다.",
-      description: "유튜브 썸네일, 영상 타이틀과 자막, 이벤트 그래픽, 쇼핑라이브 배너, 상세페이지 중 공개 가능한 결과물을 골랐습니다.",
+      title: "실무에서 제작한 작업을 모았습니다.",
+      description: "유튜브 썸네일, 영상 타이틀과 자막, 이벤트 배너, 쇼핑라이브 콘텐츠, 상세페이지 등 공개 가능한 작업을 정리했습니다.",
     },
     career: {
       eyebrow: "경력",
-      title: "2019년 제품 디자인부터 지금의 서비스 기획까지.",
-      description: "회사와 팀이 바뀔 때마다 맡은 역할도 달라졌습니다. 아래에 실제 경력 순서와 각 시기에 담당한 일을 적었습니다.",
+      title: "2019년부터 다양한 디자인과 콘텐츠 업무를 경험했습니다.",
+      description: "회사마다 맡은 역할이 달랐고, 제품 디자인부터 콘텐츠 제작, 쇼핑라이브, 서비스 QA와 기획 업무까지 경험했습니다.",
     },
     workflow: {
       eyebrow: "작업 방식",
-      title: "목적을 정리하고, 만든 뒤에는 실제 화면에서 확인합니다.",
-      description: "무엇을 보여줘야 하는지 먼저 정리합니다. 직접 제작하거나 협업으로 구현한 뒤에는 화면과 현장에서 빠진 부분을 다시 확인합니다.",
+      title: "업무에 필요한 방법을 찾아 직접 진행합니다.",
+      description: "디자인 툴뿐 아니라 업무 관리, 파일 관리, AI 도구 등 필요한 방법을 익혀 사용해왔습니다. 작업 이후에는 실제 화면이나 결과물을 확인하면서 수정하는 편입니다.",
     },
     contact: {
       eyebrow: "Contact",
-      title: "디자인부터 운영까지,\n해온 일을 더 보여드리겠습니다.",
-      description: "그래픽, 콘텐츠, 커머스, 서비스 화면을 함께 다뤄온 경험이 필요하다면 작업 모음과 경력을 살펴봐 주세요.",
+      title: "더 자세한 작업 경험이 궁금하다면 연락 주세요.",
+      description: "디자인, 콘텐츠 제작, 쇼핑라이브, 서비스 기획과 QA 경험을 정리했습니다. 더 필요한 내용은 작업물과 함께 설명드릴 수 있습니다.",
       ctaLabel: "작업 모음 보기",
       ctaUrl: "/works",
       email: "",
@@ -95,10 +110,11 @@ export const seedSnapshot: PortfolioSnapshot = {
   },
   categories: [
     { id: "youtube-thumbnail", label: "유튜브 썸네일", frame: "video", visible: true },
-    { id: "caption-title", label: "자막·타이틀 디자인", frame: "video", visible: true },
-    { id: "event-banner", label: "이벤트 배너", frame: "square", visible: true },
+    { id: "caption-title", label: "타이틀 및 자막 스타일 제작", frame: "video", visible: true },
+    { id: "event-banner", label: "카드뉴스 및 배너", frame: "square", visible: true },
     { id: "shopping-live", label: "쇼핑라이브 콘텐츠", frame: "video", visible: true },
     { id: "detail-page", label: "상세페이지", frame: "detail", visible: true },
+    { id: "graphic-editorial", label: "그래픽·편집 디자인", frame: "video", visible: true },
   ],
   works: visualWorks.map((work) => ({
     ...work,
@@ -107,7 +123,7 @@ export const seedSnapshot: PortfolioSnapshot = {
     homeFeatured: work.id === featuredId,
     showOnHome: work.id === featuredId || reelIds.includes(work.id),
   })),
-  projects: projects.map((project) => ({ ...project, visible: true, showOnHome: true })),
+  projects,
   career: [
     ...careerEntries.map((entry, index) => ({ ...entry, id: `career-${index + 1}`, entryType: "career" as const, visible: true })),
     {
@@ -124,10 +140,10 @@ export const seedSnapshot: PortfolioSnapshot = {
     },
   ],
   workflow: [
-    { id: "design", title: "Design", description: "서비스 화면, 그래픽, 상세페이지에서 정보의 우선순위를 화면으로 정리했습니다.", tools: ["Figma", "Photoshop", "Illustrator"], visible: true },
-    { id: "content", title: "Content", description: "촬영의 포인트를 잡고 썸네일·타이틀·자막으로 영상의 첫인상을 만들었습니다.", tools: ["Camera workflow", "Premiere Pro"], visible: true },
-    { id: "commerce", title: "Commerce", description: "상품의 특징을 읽고 프로모션, 상세페이지, 쇼핑라이브로 이어지는 흐름을 준비했습니다.", tools: ["Promotion", "Detail page", "Shopping Live"], visible: true },
-    { id: "product", title: "Product", description: "서비스를 기획하고 UX 흐름을 설계한 뒤, 구현 화면을 QA하며 개발과 협업했습니다.", tools: ["Service planning", "UX flow", "QA", "Dev collaboration"], visible: true },
+    { id: "planning", title: "기획", description: "필요한 내용과 우선순위를 먼저 정리하고 작업을 시작했습니다.", tools: ["Asana", "Obsidian", "ChatGPT"], visible: true },
+    { id: "production", title: "제작", description: "디자인, 촬영, 영상 편집 등 직접 할 수 있는 작업은 직접 진행했습니다.", tools: ["Figma", "Photoshop", "Illustrator", "Premiere Pro"], visible: true },
+    { id: "collaboration", title: "협업", description: "개발, MD, 촬영팀 등 다른 역할과 필요한 내용을 정리하며 협업했습니다.", tools: ["Figma", "Asana", "GitHub"], visible: true },
+    { id: "review", title: "검토", description: "결과물을 실제 화면과 운영 환경에서 확인하고 수정했습니다.", tools: ["Browser QA", "Vercel", "Figma"], visible: true },
   ],
-  assets: [aboutImage, ...workAssets],
+  assets: [aboutImage, ...projectAssets, ...workAssets].filter((asset, index, all) => all.findIndex((item) => item.src === asset.src) === index),
 };

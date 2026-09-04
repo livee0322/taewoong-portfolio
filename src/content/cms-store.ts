@@ -3,6 +3,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { seedSnapshot } from "./seed";
 import type { AssetRecord, PortfolioSnapshot, RevisionRecord } from "./schema";
+import { normalizeSnapshot } from "./normalize";
 
 export const STORAGE_KEYS = {
   draft: "portfolio-cms-draft-v1",
@@ -18,11 +19,15 @@ export function validateSnapshot(snapshot: PortfolioSnapshot) {
   if (!snapshot.home.hero.title.trim()) errors.push("Hero title은 필수입니다.");
   if (!snapshot.home.hero.description.trim()) errors.push("Hero description은 필수입니다.");
   if (!snapshot.home.about.image.alt.trim()) errors.push("About 이미지 alt는 필수입니다.");
+  if (snapshot.projects.length !== 4) errors.push("대표 프로젝트는 4개여야 합니다.");
+  if (new Set(snapshot.projects.map((project) => project.id)).size !== snapshot.projects.length) errors.push("Project ID는 중복될 수 없습니다.");
+  if (new Set(snapshot.projects.map((project) => project.sortOrder)).size !== snapshot.projects.length) errors.push("Project 순서는 중복될 수 없습니다.");
+  if (snapshot.projects.some((project) => !project.id.trim() || !project.slug.trim() || !project.category.trim() || !project.title.trim() || !project.summary.trim() || !project.thumbnail.alt.trim() || !project.detailPageUrl.startsWith("/projects/"))) errors.push("모든 Project에는 ID, slug, category, title, summary, thumbnail alt, detail URL이 필요합니다.");
   const featured = snapshot.works.filter((work) => work.homeFeatured);
   if (featured.length !== 1) errors.push("홈 대표작은 정확히 한 개여야 합니다.");
   if (featured.some((work) => !work.showOnHome)) errors.push("홈 대표작은 Home 노출 상태여야 합니다.");
   if (snapshot.works.some((work) => !work.title.trim() || !work.alt.trim() || !work.src.trim())) errors.push("모든 Work에는 title, image, alt가 필요합니다.");
-  const urls = [snapshot.home.projects.supportingUrl, snapshot.home.contact.resumeUrl, ...snapshot.projects.map((project) => project.liveUrl ?? "")].filter(Boolean);
+  const urls = [snapshot.home.contact.resumeUrl, ...snapshot.projects.map((project) => project.externalUrl ?? "")].filter(Boolean);
   for (const value of urls) {
     try { const url = new URL(value); if (url.protocol !== "https:") errors.push(`HTTPS URL만 게시할 수 있습니다: ${value}`); }
     catch { errors.push(`올바르지 않은 URL입니다: ${value}`); }
@@ -45,10 +50,21 @@ function writeLocal(key: string, value: unknown) {
   new BroadcastChannel("portfolio-cms").postMessage({ key });
 }
 
+let browserSupabase: SupabaseClient | null | undefined;
+
 function getSupabase(): SupabaseClient | null {
+  if (browserSupabase !== undefined) return browserSupabase;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  return url && key ? createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } }) : null;
+  browserSupabase = url && key ? createClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      storageKey: `portfolio-cms-${crypto.randomUUID()}`,
+    },
+  }) : null;
+  return browserSupabase;
 }
 
 type AssetRow = {
@@ -137,9 +153,9 @@ export async function loadDraft(): Promise<PortfolioSnapshot> {
       const seedAssets = data?.draft_snapshot ? [] : snapshot.assets;
       snapshot.assets = [...seedAssets, ...assets].filter((asset, index, all) => all.findIndex((item) => item.id === asset.id) === index);
     }
-    return snapshot;
+    return normalizeSnapshot(snapshot, cloneSeed());
   }
-  return readLocal(STORAGE_KEYS.draft, cloneSeed());
+  return normalizeSnapshot(readLocal(STORAGE_KEYS.draft, cloneSeed()), cloneSeed());
 }
 
 export async function loadPublished(preview = false): Promise<PortfolioSnapshot> {
@@ -148,10 +164,10 @@ export async function loadPublished(preview = false): Promise<PortfolioSnapshot>
   if (client) {
     const { data, error } = await client.from("published_versions").select("snapshot").eq("is_current", true).maybeSingle();
     if (error) throw error;
-    if (data?.snapshot) return data.snapshot as PortfolioSnapshot;
+    if (data?.snapshot) return normalizeSnapshot(data.snapshot, cloneSeed());
     return cloneSeed();
   }
-  return readLocal(STORAGE_KEYS.published, cloneSeed());
+  return normalizeSnapshot(readLocal(STORAGE_KEYS.published, cloneSeed()), cloneSeed());
 }
 
 export async function saveDraft(snapshot: PortfolioSnapshot, note = "Draft saved") {

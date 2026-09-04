@@ -24,7 +24,9 @@ export type ProjectMedia = {
 };
 
 export type Project = {
+  id: string;
   slug: string;
+  category: string;
   number: string;
   title: string;
   subtitle: string;
@@ -33,11 +35,15 @@ export type Project = {
   roles: string[];
   tools: string[];
   summary: string;
-  hero: ProjectMedia;
+  thumbnail: ProjectMedia;
+  detailPageUrl: string;
+  externalUrl?: string;
+  visible: boolean;
+  showOnHome: boolean;
+  sortOrder: number;
   intro: string;
   sections: ProjectSection[];
   gallery: ProjectMedia[];
-  liveUrl?: string;
 };
 
 export type VisualWork = {

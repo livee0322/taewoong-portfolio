@@ -20,7 +20,8 @@
 
 - Hero: eyebrow, title, line breaks, description, period, disciplines
 - About: heading, image, alt, caption, 3×3 object position, capability order/copy
-- Featured Projects: existing LIVBEE/Shopping Live visibility/order and project copy
+- Featured Projects: four canonical Project records, Home visibility and keyboard reorder
+- Project entry: category, title, summary, thumbnail/alt/focal position, roles/tools, detail URL, external URL, visibility and Home exposure
 - Selected Works: search/filter, title, category, description, Asset Replace, alt, published, Home reel, single featured, drag/keyboard order
 - Category: fixed five labels, visibility, order
 - Career: company/personal project copy, visibility, order
@@ -37,7 +38,7 @@
 
 ## Validation
 
-저장과 Publish 전에 required Hero copy, image/alt, Work title/image/alt, HTTPS URL, 정확히 한 개의 Home featured, featured의 Home 노출 상태를 검사한다. DB도 같은 핵심 invariant를 JSON validation function과 constraints로 확인한다. Published version은 삭제하지 않고 restore가 새 Draft를 만든다.
+저장과 Publish 전에 required Hero copy, image/alt, Work title/image/alt, 정확히 4개의 unique Project ID/order, Project 필수 필드/detail URL, HTTPS external URL, 정확히 한 개의 Home featured, featured의 Home 노출 상태를 검사한다. Published version은 삭제하지 않고 restore가 새 Draft를 만든다.
 
 ## Runtime modes
 

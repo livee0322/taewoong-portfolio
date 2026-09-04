@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { seedSnapshot } from "./seed";
 import type { PortfolioSnapshot } from "./schema";
+import { normalizeSnapshot } from "./normalize";
 
 export async function getInitialPublishedSnapshot(): Promise<PortfolioSnapshot> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,5 +14,5 @@ export async function getInitialPublishedSnapshot(): Promise<PortfolioSnapshot> 
   });
   const { data, error } = await client.from("published_versions").select("snapshot").eq("is_current", true).maybeSingle();
   if (error) throw new Error(`Published content query failed: ${error.message}`);
-  return data?.snapshot ? (data.snapshot as PortfolioSnapshot) : structuredClone(seedSnapshot);
+  return data?.snapshot ? normalizeSnapshot(data.snapshot, structuredClone(seedSnapshot)) : structuredClone(seedSnapshot);
 }

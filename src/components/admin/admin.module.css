@@ -193,6 +193,19 @@
 .propertyScroll { overflow: hidden auto; padding: 18px; }
 .editorForm { display: grid; gap: 18px; padding-bottom: 40px; }
 
+.selectedProjectHeading { padding: 2px 0 18px; border-bottom: 1px solid var(--admin-line-strong); }
+.selectedProjectHeading h3 { margin-top: 5px; font-size: 20px; font-weight: 500; letter-spacing: -0.035em; }
+.selectedProjectHeading > p:last-child { margin-top: 5px; color: var(--admin-muted); font-size: 11px; }
+.fieldGroup { display: grid; gap: 14px; padding-top: 24px; border-top: 1px solid var(--admin-line-strong); }
+.fieldGroup > header h3 { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
+.fieldGroup > header p { margin-top: 5px; color: var(--admin-muted); font-size: 10px; line-height: 1.5; }
+.fieldGroup > div { display: grid; gap: 14px; }
+.fieldGroup .imageProperty,
+.fieldGroup .editorBlock { padding-top: 0; border-top: 0; }
+.systemData { margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--admin-line); }
+.systemData summary { color: var(--admin-muted); font-size: 10px; cursor: pointer; }
+.systemData > div { margin-top: 12px; }
+
 .field { display: grid; gap: 7px; }
 .field > span,
 .fieldset legend { font-size: 11px; font-weight: 600; }
@@ -238,6 +251,7 @@
   margin-top: 12px;
   background: var(--admin-bg);
 }
+.emptyImage { display: grid; min-height: 100%; place-items: center; padding: 1.5rem; color: var(--muted); font-size: 0.8125rem; text-align: center; }
 
 .imagePreview img,
 .assetThumb img,
@@ -450,6 +464,8 @@
   .assetGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .propertyHeader { padding: 14px 12px; }
   .propertyScroll { padding: 14px 12px; }
+  .fieldGroup { gap: 12px; padding-top: 24px; }
+  .fieldGroup > div { gap: 12px; }
   .twoFields,
   .workFilters { grid-template-columns: 1fr; }
   .compactRow { grid-template-columns: 20px 24px minmax(0, 1fr) repeat(3, 26px); padding-inline: 5px; }

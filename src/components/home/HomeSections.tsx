@@ -20,7 +20,17 @@ export function HomeSections() {
   const featuredWork = content.works.find((work) => work.published && work.showOnHome && work.homeFeatured)
     ?? content.works.find((work) => work.published && work.showOnHome)
     ?? content.works[0];
-  const reelWorks = content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id);
+  const homeWorkGroups = content.categories
+    .filter((category) => category.visible)
+    .map((category) => ({
+      category,
+      works: content.works.filter((work) => work.published && work.showOnHome && work.id !== featuredWork?.id && work.category === category.label),
+    }))
+    .filter((group) => group.works.length > 0);
+  const homeProjects = content.projects
+    .filter((project) => project.visible && project.showOnHome)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
+  const [name, role] = home.hero.eyebrow.split("·").map((part) => part.trim());
 
   return (
     <main>
@@ -36,7 +46,6 @@ export function HomeSections() {
       <section id="about" className="identity section page-shell" data-cms-section="home.about">
         <SectionHeading eyebrow={home.about.eyebrow} title={home.about.title} description={home.about.description} />
         <div className="identity-layout" data-reveal>
-          <MediaPlaceholder media={{ src: home.about.image.src, alt: home.about.image.alt, ratio: "wide", tone: "sand", caption: home.about.image.caption, focus: home.about.image.objectPosition }} />
           <div className="capability-list">
             {capabilities.map((item, index) => <article key={item.id} className="capability-item"><p className="eyebrow">{String(index + 1).padStart(2, "0")}</p><h3>{item.title}</h3><p>{item.description}</p></article>)}
           </div>
@@ -45,19 +54,7 @@ export function HomeSections() {
 
       <section id="projects" className="selected-projects section page-shell" data-cms-section="home.projects">
         <SectionHeading eyebrow={home.projects.eyebrow} title={home.projects.title} description={home.projects.description} />
-        <div className="projects-list">{content.projects.filter((project) => project.visible && project.showOnHome).map((project) => <div data-reveal key={project.slug}><ProjectCard project={project} /></div>)}</div>
-        <article className="representative-note"><p className="eyebrow">{home.projects.supportingEyebrow}</p><div><h3>{home.projects.supportingTitle}</h3><p>{home.projects.supportingDescription}</p><TextLink href={home.projects.supportingUrl} target="_blank" rel="noreferrer">셀러차트 보기</TextLink></div></article>
-      </section>
-
-      <section id="works" className="selected-works section page-shell" data-cms-section="home.works">
-        <div className="works-heading-row"><SectionHeading eyebrow={home.works.eyebrow} title={home.works.title} description={home.works.description} /><TextLink href="/works">작업 전체 보기</TextLink></div>
-        {featuredWork ? <div className="work-showcase">
-          <article className="featured-work" data-reveal>
-            <MediaPlaceholder media={{ src: featuredWork.src, alt: featuredWork.alt, tone: featuredWork.tone, ratio: featuredWork.ratio, caption: featuredWork.caption ?? featuredWork.category, focus: featuredWork.focus }} />
-            <div className="featured-work-copy"><p className="eyebrow">{featuredWork.category}</p><h3><WorkTitle title={featuredWork.title} /></h3>{featuredWork.description ? <p>{featuredWork.description}</p> : null}</div>
-          </article>
-          <div className="work-reel" aria-label="추가 작업 가로 갤러리">{reelWorks.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: work.ratio, caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h3><WorkTitle title={work.title} /></h3></article>)}</div>
-        </div> : null}
+        <div className="projects-list">{homeProjects.map((project) => <div data-reveal key={project.id}><ProjectCard project={project} /></div>)}</div>
       </section>
 
       <section id="experience" className="career section page-shell" data-cms-section="home.career">
@@ -66,14 +63,37 @@ export function HomeSections() {
         <ol className="career-list">{content.career.filter((entry) => entry.visible).map((entry) => <li className={`career-item${entry.entryType === "personal-project" ? " career-item-personal" : ""}`} key={entry.id}><p className="career-period">{entry.period}</p><div className="career-company"><h3>{entry.company}</h3><p>{entry.team}</p></div><div className="career-detail"><p className="career-role">{entry.role}</p><p>{entry.description}</p></div></li>)}</ol>
       </section>
 
-      <section className="workflow section page-shell" data-cms-section="home.workflow">
+      <section id="workflow" className="workflow section page-shell" data-cms-section="home.workflow">
         <SectionHeading eyebrow={home.workflow.eyebrow} title={home.workflow.title} description={home.workflow.description} />
         <div className="workflow-list">{content.workflow.filter((item) => item.visible).map((item) => <article className="workflow-item" key={item.id}><h3>{item.title}</h3><p>{item.description}</p><p className="workflow-tools">{item.tools.join(" · ")}</p></article>)}</div>
       </section>
 
+      <section id="works" className="selected-works section page-shell" data-cms-section="home.works">
+        <div className="works-heading-row"><SectionHeading eyebrow={home.works.eyebrow} title={home.works.title} description={home.works.description} /></div>
+        {featuredWork ? <div className="work-showcase">
+          <article className="featured-work" data-reveal>
+            <MediaPlaceholder media={{ src: featuredWork.src, alt: featuredWork.alt, tone: featuredWork.tone, ratio: featuredWork.ratio, caption: featuredWork.caption ?? featuredWork.category, focus: featuredWork.focus }} />
+            <div className="featured-work-copy"><p className="eyebrow">{featuredWork.category}</p><h3><WorkTitle title={featuredWork.title} /></h3>{featuredWork.description ? <p>{featuredWork.description}</p> : null}</div>
+          </article>
+          <div className="home-work-groups">{homeWorkGroups.map(({ category, works }) => <section className="home-work-group" key={category.id} aria-labelledby={`home-work-${category.id}`}>
+            <div className="home-work-group-heading"><h3 id={`home-work-${category.id}`}>{category.label}</h3><p>{String(works.length).padStart(2, "0")} selected works</p></div>
+            <div className={`work-reel work-reel-${category.frame}`} aria-label={`${category.label} 가로 갤러리`}>{works.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: category.frame === "square" ? "square" : "wide", caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h4><WorkTitle title={work.title} /></h4></article>)}</div>
+          </section>)}</div>
+        </div> : null}
+        <div className="works-footer-link"><TextLink href="/works">작업 전체 보기</TextLink></div>
+      </section>
+
       <section id="contact" className="contact section page-shell" data-cms-section="home.contact">
-        <p className="eyebrow">{home.contact.eyebrow}</p>
-        <div className="contact-layout"><h2><Lines value={home.contact.title} /></h2><div><p>{home.contact.description}</p><TextLink href={home.contact.ctaUrl}>{home.contact.ctaLabel}</TextLink>{home.contact.email ? <TextLink href={`mailto:${home.contact.email}`}>{home.contact.email}</TextLink> : null}</div></div>
+        <div className="contact-ending">
+          <p className="eyebrow">{home.contact.eyebrow}</p>
+          <h2><Lines value={home.contact.title} /></h2>
+          <p className="contact-intro">{home.contact.description}</p>
+          <div className="contact-card">
+            <p className="contact-name">{name}</p>
+            {role ? <p className="contact-role">{role}</p> : null}
+            {home.contact.email ? <p className="contact-line"><span>Contact</span><a href={`mailto:${home.contact.email}`}>{home.contact.email}</a></p> : null}
+          </div>
+        </div>
       </section>
     </main>
   );
