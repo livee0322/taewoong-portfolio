@@ -38,9 +38,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends fonts-noto-cjk
           fc-cache -f
-          fc-match 'Noto Sans CJK KR' | head -1
 
-      - name: Print deployed site to PDF
+      - name: Capture 1440px desktop long screenshot
         shell: bash
         run: |
           set -euo pipefail
@@ -51,19 +50,21 @@ jobs:
             --no-sandbox \
             --disable-gpu \
             --disable-dev-shm-usage \
-            --no-pdf-header-footer \
-            --print-to-pdf-no-header \
+            --disable-features=LazyImageLoading,LazyFrameLoading \
             --run-all-compositor-stages-before-draw \
-            --virtual-time-budget=12000 \
-            --print-to-pdf="$PWD/artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf" \
+            --virtual-time-budget=15000 \
+            --hide-scrollbars \
+            --window-size=1440,16000 \
+            --screenshot="$PWD/artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png" \
             "$SITE_URL"
-          test -s artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf
-          ls -lh artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf
+          test -s artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
+          file artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
+          ls -lh artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
 
       - name: Upload export
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-web-main-pdf-korean
-          path: artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf
+          name: portfolio-web-main-desktop-long
+          path: artifacts/Lee_Taewoong_Portfolio_Website_Desktop_Long.png
           if-no-files-found: error
           retention-days: 7
