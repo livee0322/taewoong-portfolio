@@ -37,11 +37,11 @@ jobs:
           echo "No public portfolio deployment returned 2xx" >&2
           exit 1
 
-      - name: Capture deployed desktop site
+      - name: Capture deployed desktop site in slices
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p artifacts
+          mkdir -p artifacts/slices
           CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)
           "$CHROME" --headless=new --no-sandbox --disable-gpu --remote-debugging-port=9222 --user-data-dir=/tmp/portfolio-chrome --window-size=1440,900 about:blank >/tmp/portfolio-chrome.log 2>&1 &
           CHROME_PID=$!
@@ -79,34 +79,46 @@ jobs:
               if (state.result.result.value === 'complete') break;
             }
             await sleep(1600);
-            await send('Runtime.evaluate', {
+
+            const prep = await send('Runtime.evaluate', {
               expression: `(async () => {
                 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
                 const total = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-                for (let y = 0; y < total; y += 650) { window.scrollTo(0, y); await sleep(60); }
+                for (let y = 0; y < total; y += 650) { window.scrollTo(0, y); await sleep(55); }
                 window.scrollTo(0, 0);
                 if (document.fonts && document.fonts.ready) await document.fonts.ready;
-                await sleep(700);
+                const style = document.createElement('style');
+                style.textContent = '.site-header{position:static!important;backdrop-filter:none!important}.site-header.is-scrolled{background:var(--color-bg)!important}';
+                document.head.appendChild(style);
+                await sleep(600);
+                return { width: document.documentElement.clientWidth, height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) };
               })()`, awaitPromise: true, returnByValue: true,
             });
-            const metrics = await send('Page.getLayoutMetrics');
-            const width = Math.ceil(metrics.result.cssContentSize.width);
-            const height = Math.ceil(metrics.result.cssContentSize.height);
-            console.log(`content size: ${width}x${height}`);
-            const shot = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: true, clip: { x: 0, y: 0, width, height, scale: 1 } });
-            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.png', Buffer.from(shot.result.data, 'base64'));
-            console.log('screenshot written');
+            const { width, height } = prep.result.result.value;
+            const viewport = 900;
+            const count = Math.ceil(height / viewport);
+            console.log(`capture ${width}x${height} in ${count} slices`);
+            fs.writeFileSync('artifacts/meta.json', JSON.stringify({ width, height, viewport, count, url }, null, 2));
+
+            for (let i = 0; i < count; i++) {
+              const y = Math.min(i * viewport, Math.max(0, height - viewport));
+              await send('Runtime.evaluate', { expression: `window.scrollTo(0, ${y});`, returnByValue: true });
+              await sleep(120);
+              const shot = await send('Page.captureScreenshot', { format: 'png', fromSurface: true, captureBeyondViewport: false });
+              fs.writeFileSync(`artifacts/slices/slice-${String(i).padStart(3, '0')}.png`, Buffer.from(shot.result.data, 'base64'));
+            }
             ws.close();
           }
           main().catch((error) => { console.error(error); process.exit(1); });
           NODE
-          timeout 120 node /tmp/capture.cjs
+          timeout 150 node /tmp/capture.cjs
           ls -lh artifacts
+          ls artifacts/slices | head
 
       - name: Upload export
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-web-main-capture
+          name: portfolio-web-main-slices
           path: artifacts/*
           if-no-files-found: error
           retention-days: 7
