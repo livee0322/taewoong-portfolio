@@ -11,103 +11,167 @@ permissions:
 jobs:
   export:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      NEXT_TELEMETRY_DISABLED: "1"
-      NEXT_PUBLIC_SUPABASE_URL: "https://nmsvfseemyidzpuoqkgm.supabase.co"
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_gXwcv9f7lZBQ0XsDT7eSdw_gbQci3Hj"
+    timeout-minutes: 10
     steps:
-      - name: Checkout latest main snapshot
-        uses: actions/checkout@v4
-        with:
-          ref: cffef9181f0e8cce8af8ad409b4a46be0a548981
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
-      - name: Install app dependencies
-        run: npm ci
-
-      - name: Install browser tooling
+      - name: Resolve deployed portfolio URL
+        shell: bash
         run: |
-          npm install --no-save --package-lock=false playwright@1.55.0
-          npx playwright install --with-deps chromium
-
-      - name: Build production app
-        run: npm run build
-
-      - name: Start app
-        run: |
-          npm run start -- -p 3000 > /tmp/portfolio-next.log 2>&1 &
-          echo $! > /tmp/portfolio-next.pid
-          for i in {1..60}; do
-            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then
+          set -euo pipefail
+          candidates=(
+            "https://taewoong-portfolio.vercel.app/"
+            "https://taewoong-portfolio-git-feat-portfolio-projects-livees-projects.vercel.app/"
+          )
+          for url in "${candidates[@]}"; do
+            code=$(curl -L --max-time 30 -sS -o /tmp/portfolio-page.html -w '%{http_code}' "$url" || true)
+            echo "$url -> $code"
+            if [[ "$code" =~ ^2 ]]; then
+              echo "SITE_URL=$url" >> "$GITHUB_ENV"
               exit 0
             fi
-            sleep 1
           done
-          cat /tmp/portfolio-next.log
+          echo "No public portfolio deployment returned 2xx" >&2
           exit 1
 
-      - name: Capture desktop site as full-height PDF
+      - name: Capture deployed desktop site with Chrome DevTools
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p artifacts
-          cat > /tmp/export-portfolio.cjs <<'NODE'
-          const { chromium } = require('playwright');
+          CHROME=$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser)
+          echo "Chrome: $CHROME"
+          "$CHROME" \
+            --headless=new \
+            --no-sandbox \
+            --disable-gpu \
+            --hide-scrollbars \
+            --remote-debugging-port=9222 \
+            --user-data-dir=/tmp/portfolio-chrome \
+            --window-size=1440,900 \
+            about:blank >/tmp/portfolio-chrome.log 2>&1 &
+          CHROME_PID=$!
+          trap 'kill "$CHROME_PID" 2>/dev/null || true' EXIT
 
-          (async () => {
-            const browser = await chromium.launch({ headless: true });
-            const page = await browser.newPage({
-              viewport: { width: 1440, height: 900 },
-              deviceScaleFactor: 1,
+          for i in {1..40}; do
+            if curl -fsS http://127.0.0.1:9222/json/version >/dev/null; then break; fi
+            sleep 0.25
+          done
+
+          cat > /tmp/capture.cjs <<'NODE'
+          const fs = require('fs');
+          const url = process.env.SITE_URL;
+          const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+          async function main() {
+            const tabs = await fetch('http://127.0.0.1:9222/json/list').then((r) => r.json());
+            const wsUrl = tabs[0].webSocketDebuggerUrl;
+            const ws = new WebSocket(wsUrl);
+            await new Promise((resolve, reject) => {
+              ws.addEventListener('open', resolve, { once: true });
+              ws.addEventListener('error', reject, { once: true });
             });
 
-            await page.goto('http://127.0.0.1:3000/', { waitUntil: 'networkidle', timeout: 120000 });
-            await page.evaluate(async () => {
-              const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-              const total = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
-              for (let y = 0; y < total; y += 650) {
-                window.scrollTo(0, y);
-                await sleep(80);
+            let nextId = 0;
+            const pending = new Map();
+            ws.addEventListener('message', (event) => {
+              const message = JSON.parse(event.data);
+              if (message.id && pending.has(message.id)) {
+                const { resolve, reject } = pending.get(message.id);
+                pending.delete(message.id);
+                if (message.error) reject(new Error(JSON.stringify(message.error)));
+                else resolve(message);
               }
-              window.scrollTo(0, 0);
-              if (document.fonts?.ready) await document.fonts.ready;
             });
-            await page.waitForTimeout(1800);
-
-            const dimensions = await page.evaluate(() => ({
-              width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
-              height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight),
-            }));
-            console.log('capture dimensions', dimensions);
-
-            await page.screenshot({
-              path: 'artifacts/Lee_Taewoong_Portfolio_Website_Main.png',
-              fullPage: true,
+            const send = (method, params = {}) => new Promise((resolve, reject) => {
+              const id = ++nextId;
+              pending.set(id, { resolve, reject });
+              ws.send(JSON.stringify({ id, method, params }));
             });
 
-            await page.emulateMedia({ media: 'screen' });
-            await page.pdf({
-              path: 'artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf',
+            await send('Page.enable');
+            await send('Runtime.enable');
+            await send('Emulation.setDeviceMetricsOverride', {
+              width: 1440,
+              height: 900,
+              deviceScaleFactor: 1,
+              mobile: false,
+            });
+            await send('Page.navigate', { url });
+
+            for (let i = 0; i < 80; i++) {
+              await sleep(250);
+              const state = await send('Runtime.evaluate', {
+                expression: 'document.readyState',
+                returnByValue: true,
+              });
+              if (state.result.result.value === 'complete') break;
+            }
+            await sleep(1800);
+
+            await send('Runtime.evaluate', {
+              expression: `(async () => {
+                const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+                const total = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+                for (let y = 0; y < total; y += 650) {
+                  window.scrollTo(0, y);
+                  await sleep(70);
+                }
+                window.scrollTo(0, 0);
+                if (document.fonts && document.fonts.ready) await document.fonts.ready;
+                await sleep(800);
+                return {
+                  width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+                  height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight),
+                  title: document.title,
+                  url: location.href,
+                };
+              })()`,
+              awaitPromise: true,
+              returnByValue: true,
+            });
+
+            const metrics = await send('Page.getLayoutMetrics');
+            const width = Math.ceil(metrics.result.cssContentSize.width);
+            const height = Math.ceil(metrics.result.cssContentSize.height);
+            console.log(`content size: ${width}x${height}`);
+
+            const screenshot = await send('Page.captureScreenshot', {
+              format: 'png',
+              fromSurface: true,
+              captureBeyondViewport: true,
+              clip: { x: 0, y: 0, width, height, scale: 1 },
+            });
+            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.png', Buffer.from(screenshot.result.data, 'base64'));
+
+            await send('Emulation.setEmulatedMedia', { media: 'screen' });
+            const pdf = await send('Page.printToPDF', {
               printBackground: true,
-              width: '1440px',
-              height: `${Math.ceil(dimensions.height)}px`,
-              margin: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
-              preferCSSPageSize: false,
+              landscape: false,
               displayHeaderFooter: false,
-              tagged: true,
+              paperWidth: width / 96,
+              paperHeight: height / 96,
+              marginTop: 0,
+              marginBottom: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              preferCSSPageSize: false,
+              transferMode: 'ReturnAsBase64',
             });
+            fs.writeFileSync('artifacts/Lee_Taewoong_Portfolio_Website_Main.pdf', Buffer.from(pdf.result.data, 'base64'));
+            ws.close();
+          }
 
-            await browser.close();
-          })().catch((error) => {
+          main().catch((error) => {
             console.error(error);
             process.exit(1);
           });
           NODE
-          node /tmp/export-portfolio.cjs
+
+          node /tmp/capture.cjs
           ls -lh artifacts
 
       - name: Upload export
