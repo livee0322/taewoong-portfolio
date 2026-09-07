@@ -39,6 +39,7 @@ export function HomeSections() {
           <p className="eyebrow hero-eyebrow" data-reveal>{home.hero.eyebrow}</p>
           <h1 id="hero-title" data-reveal><Lines value={home.hero.title} manual={home.hero.lineBreaks === "manual"} /></h1>
           <p className="hero-statement" data-reveal>{home.hero.description}</p>
+          <a className="hero-work-link" href="#projects">대표 작업 보기 <span aria-hidden="true">↓</span></a>
           <div className="hero-intro-note"><p>{home.hero.period}</p><p>{home.hero.disciplines}</p></div>
         </div>
       </section>
@@ -77,7 +78,7 @@ export function HomeSections() {
           </article>
           <div className="home-work-groups">{homeWorkGroups.map(({ category, works }) => <section className="home-work-group" key={category.id} aria-labelledby={`home-work-${category.id}`}>
             <div className="home-work-group-heading"><h3 id={`home-work-${category.id}`}>{category.label}</h3><p>{String(works.length).padStart(2, "0")} selected works</p></div>
-            <div className={`work-reel work-reel-${category.frame}`} aria-label={`${category.label} 가로 갤러리`}>{works.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: category.frame === "square" ? "square" : "wide", caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h4><WorkTitle title={work.title} /></h4></article>)}</div>
+            <div className={`work-reel work-reel-${category.frame}`} tabIndex={0} role="region" aria-label={`${category.label} 가로 갤러리`}>{works.map((work) => <article className="reel-card" data-reveal key={work.id}><MediaPlaceholder media={{ src: work.src, alt: work.alt, tone: work.tone, ratio: category.frame === "square" ? "square" : "wide", caption: work.caption ?? work.category, focus: work.focus }} /><p className="eyebrow">{work.category}</p><h4><WorkTitle title={work.title} /></h4></article>)}</div>
           </section>)}</div>
         </div> : null}
         <div className="works-footer-link"><TextLink href="/works">작업 전체 보기</TextLink></div>

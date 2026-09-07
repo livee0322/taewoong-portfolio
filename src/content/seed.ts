@@ -60,16 +60,16 @@ export const seedSnapshot: PortfolioSnapshot = {
   home: {
     hero: {
       eyebrow: "이태웅 · 디자이너",
-      title: "디자인을 시작으로 다양한 실무를 경험했습니다.",
-      description: "상세페이지, 배너, 유튜브 썸네일과 영상 그래픽을 제작했습니다. 제품 촬영과 쇼핑라이브 기획·운영을 경험했고, 최근에는 서비스 기획과 UI/UX, QA 업무도 진행했습니다.",
+      title: "디자인을 만들고, 기획과 운영도 함께합니다.",
+      description: "상세페이지와 영상 그래픽을 만들고, 제품을 촬영했습니다. 쇼핑라이브를 준비하고 운영한 경험을 바탕으로 서비스 화면을 기획하고 QA합니다.",
       period: "2019 — NOW",
       disciplines: "Design · Content · Commerce · Product",
       lineBreaks: "auto",
     },
     about: {
       eyebrow: "About",
-      title: "디자인 외에도 다양한 실무를 경험했습니다.",
-      description: "상세페이지와 배너, 썸네일 제작부터 제품 촬영, 영상 편집, 쇼핑라이브 기획과 운영까지 진행했습니다. 이후에는 서비스 기획, UI/UX, QA 업무도 경험했습니다.",
+      title: "직접 만들며 넓혀온 업무",
+      description: "제품을 어떻게 보여줄지 고민하며 촬영과 콘텐츠 제작을 함께 맡았습니다. 방송 현장을 거쳐, 웹과 앱의 화면을 검토하는 일까지 이어졌습니다.",
       image: aboutImage,
       capabilities: [
         { id: "design", title: "Design", description: "매뉴얼 · DVD 커버 · 제안서 포스터 · 이벤트/대판 배너 · 카드뉴스", visible: true },
@@ -80,28 +80,28 @@ export const seedSnapshot: PortfolioSnapshot = {
     },
     projects: {
       eyebrow: "대표 프로젝트",
-      title: "대표적으로 진행한 프로젝트를 소개합니다.",
+      title: "맡은 일과 만든 결과",
       description: "개인 프로젝트 LIVBEE, 쇼핑라이브 촬영 및 기획, 실무 디자인 작업, 셀러노트 앱 출시 QA와 디자인 개선 경험을 정리했습니다.",
     },
     works: {
       eyebrow: "작업 모음",
-      title: "실무에서 제작한 작업을 모았습니다.",
+      title: "이미지로 보는 작업들",
       description: "유튜브 썸네일, 영상 타이틀과 자막, 이벤트 배너, 쇼핑라이브 콘텐츠, 상세페이지 등 공개 가능한 작업을 정리했습니다.",
     },
     career: {
       eyebrow: "경력",
-      title: "2019년부터 다양한 디자인과 콘텐츠 업무를 경험했습니다.",
+      title: "회사마다 맡았던 일",
       description: "회사마다 맡은 역할이 달랐고, 제품 디자인부터 콘텐츠 제작, 쇼핑라이브, 서비스 QA와 기획 업무까지 경험했습니다.",
     },
     workflow: {
       eyebrow: "작업 방식",
-      title: "업무에 필요한 방법을 찾아 직접 진행합니다.",
-      description: "디자인 툴뿐 아니라 업무 관리, 파일 관리, AI 도구 등 필요한 방법을 익혀 사용해왔습니다. 작업 이후에는 실제 화면이나 결과물을 확인하면서 수정하는 편입니다.",
+      title: "정리하고, 만들고, 확인합니다.",
+      description: "작업 내용을 먼저 정리하고, 제작한 뒤에는 실제 화면에서 확인합니다. 함께 일하는 사람이 진행 상황과 수정할 부분을 알 수 있도록 기록합니다.",
     },
     contact: {
       eyebrow: "Contact",
-      title: "더 자세한 작업 경험이 궁금하다면 연락 주세요.",
-      description: "디자인, 콘텐츠 제작, 쇼핑라이브, 서비스 기획과 QA 경험을 정리했습니다. 더 필요한 내용은 작업물과 함께 설명드릴 수 있습니다.",
+      title: "함께할 일이 있다면 편하게 연락 주세요.",
+      description: "작업 과정이나 제가 맡았던 역할이 궁금하다면 메일 주세요. 필요한 내용을 작업물과 함께 설명드리겠습니다.",
       ctaLabel: "작업 모음 보기",
       ctaUrl: "/works",
       email: "",
