@@ -181,7 +181,7 @@ export function normalizeSnapshot(value: unknown, fallback: PortfolioSnapshot): 
     works: normalizeWorks(legacy.works, fallback.works),
     career: (legacy.career ?? fallback.career).map((entry) => ({
       ...entry,
-      description: entry.description === "영상의 썸네일, 타이틀과 자막을 만들고 카드뉴스·이벤트 그래픽 등 디자인 작업을 진행 사업 제안을 위한 제안 프로젝트 진행"
+      description: normalizeCopyWhitespace(entry.description) === "영상의 썸네일, 타이틀과 자막을 만들고 카드뉴스·이벤트 그래픽 등 디자인 작업을 진행 사업 제안을 위한 제안 프로젝트 진행"
         ? "영상 썸네일과 타이틀·자막, 카드뉴스와 이벤트 그래픽을 제작했습니다. 사업 제안에 필요한 디자인 작업도 함께 진행했습니다."
         : entry.description,
     })),
