@@ -1,0 +1,109 @@
+.livbeeMediaLink {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.livbeeMediaLink :global(.media-real-image) {
+  transition: transform var(--motion-slow) var(--ease-out), filter var(--motion-base) var(--ease-out);
+}
+
+.livbeeMediaLink:hover :global(.media-real-image),
+.livbeeMediaLink:focus-visible :global(.media-real-image) {
+  transform: scale(1.018);
+  filter: brightness(0.97);
+}
+
+.mediaCta {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.72rem 0.95rem 0.72rem 1.05rem;
+  border: 1px solid color-mix(in srgb, white 24%, transparent);
+  border-radius: 999px;
+  color: white;
+  background: color-mix(in srgb, #171717 88%, transparent);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.16);
+  backdrop-filter: blur(8px);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  transition: transform var(--motion-base) var(--ease-out), background-color var(--motion-fast) var(--ease-out);
+}
+
+.mediaCta svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: transform var(--motion-base) var(--ease-out);
+}
+
+.livbeeMediaLink:hover .mediaCta,
+.livbeeMediaLink:focus-visible .mediaCta {
+  background: #171717;
+  transform: translateY(-2px);
+}
+
+.livbeeMediaLink:hover .mediaCta svg,
+.livbeeMediaLink:focus-visible .mediaCta svg {
+  transform: translate(2px, -2px);
+}
+
+.titleRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+}
+
+.titleLink {
+  display: inline-grid;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 0.42rem;
+  color: var(--color-muted);
+  background: color-mix(in srgb, var(--color-surface) 65%, transparent);
+  transition: color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out), transform var(--motion-base) var(--ease-out);
+}
+
+.titleLink svg {
+  width: 0.86rem;
+  height: 0.86rem;
+}
+
+.titleLink:hover,
+.titleLink:focus-visible {
+  color: var(--color-surface);
+  border-color: var(--color-text);
+  background: var(--color-text);
+  transform: translate(1px, -1px);
+}
+
+@media (max-width: 700px) {
+  .mediaCta {
+    right: 0.7rem;
+    bottom: 0.7rem;
+    padding: 0.62rem 0.8rem 0.62rem 0.9rem;
+    font-size: 0.72rem;
+  }
+
+  .titleLink {
+    width: 1.55rem;
+    height: 1.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .livbeeMediaLink :global(.media-real-image),
+  .mediaCta,
+  .mediaCta svg,
+  .titleLink {
+    transition: none;
+  }
+}
