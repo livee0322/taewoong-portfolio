@@ -1,0 +1,167 @@
+.livbeeMediaLink {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.livbeeMediaLink::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 34%;
+  z-index: 1;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(to top, rgb(0 0 0 / 0.12), transparent);
+  opacity: 0.38;
+  transition: opacity var(--motion-base) var(--ease-out);
+}
+
+.livbeeMediaLink :global(.media-real-image) {
+  transform-origin: center;
+  transition: transform var(--motion-slow) var(--ease-out), filter var(--motion-base) var(--ease-out);
+}
+
+.mediaCta {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.68rem 0.82rem 0.68rem 1rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 999px;
+  color: #fff;
+  background: rgb(23 23 23 / 0.88);
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.08), 0 10px 28px rgb(0 0 0 / 0.18);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  transition: transform var(--motion-base) var(--ease-out), background-color var(--motion-fast) var(--ease-out), box-shadow var(--motion-base) var(--ease-out);
+}
+
+.mediaCta svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  transition: transform var(--motion-base) var(--ease-out);
+}
+
+.livbeeMediaLink:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-text);
+}
+
+.livbeeMediaLink:focus-visible .mediaCta {
+  background: #171717;
+  transform: translateY(-2px);
+  box-shadow: inset 0 1px rgb(255 255 255 / 0.08), 0 14px 34px rgb(0 0 0 / 0.22);
+}
+
+.livbeeMediaLink:focus-visible .mediaCta svg {
+  transform: translate(1.5px, -1.5px);
+}
+
+.titleRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.titleLink {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  color: var(--color-muted);
+  border-radius: 999px;
+  background: transparent;
+  transition: color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out), transform var(--motion-base) var(--ease-out);
+}
+
+.titleLink svg {
+  width: 1.08rem;
+  height: 1.08rem;
+  transition: transform var(--motion-base) var(--ease-out);
+}
+
+.titleLink:hover,
+.titleLink:focus-visible {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+}
+
+.titleLink:hover svg,
+.titleLink:focus-visible svg {
+  transform: translate(1.5px, -1.5px);
+}
+
+@media (hover: hover) {
+  .livbeeMediaLink:hover :global(.media-real-image) {
+    transform: scale(1.014);
+    filter: brightness(0.985);
+  }
+
+  .livbeeMediaLink:hover::after {
+    opacity: 0.55;
+  }
+
+  .livbeeMediaLink:hover .mediaCta {
+    background: #171717;
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px rgb(255 255 255 / 0.08), 0 14px 34px rgb(0 0 0 / 0.22);
+  }
+
+  .livbeeMediaLink:hover .mediaCta svg {
+    transform: translate(1.5px, -1.5px);
+  }
+}
+
+@media (max-width: 700px) {
+  .mediaCta {
+    right: 0.7rem;
+    bottom: 0.7rem;
+    min-height: 2.25rem;
+    gap: 0.5rem;
+    padding: 0.6rem 0.72rem 0.6rem 0.86rem;
+    font-size: 0.72rem;
+  }
+
+  .mediaCta svg {
+    width: 0.86rem;
+    height: 0.86rem;
+  }
+
+  .titleRow {
+    gap: 0.2rem;
+  }
+
+  .titleLink {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .titleLink svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .livbeeMediaLink::after,
+  .livbeeMediaLink :global(.media-real-image),
+  .mediaCta,
+  .mediaCta svg,
+  .titleLink,
+  .titleLink svg {
+    transition: none;
+  }
+}
