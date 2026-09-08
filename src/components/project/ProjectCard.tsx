@@ -10,9 +10,9 @@ const LIVBEE_URL = "https://www.livbee.co.kr/?utm_source=portfolio&utm_medium=re
 
 function ExternalLinkIcon() {
   return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M5.25 10.75 10.75 5.25M6.25 5.25h4.5v4.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10.25 8.75v2.5a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5v-4a1.5 1.5 0 0 1 1.5-1.5h2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false">
+      <path d="M5.25 10.75 10.75 5.25M6.25 5.25h4.5v4.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.25 8.75v2.5a1.5 1.5 0 0 1-1.5 1.5h-4a1.5 1.5 0 0 1-1.5-1.5v-4a1.5 1.5 0 0 1 1.5-1.5h2.5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -36,8 +36,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
             className={styles.livbeeMediaLink}
             href={LIVBEE_URL}
             target="_blank"
-            rel="noreferrer"
-            aria-label="LIVBEE 서비스 새 탭에서 열기"
+            rel="noopener noreferrer"
+            aria-label="LIVBEE 서비스로 이동 (새 탭)"
           >
             {media}
             <span className={styles.mediaCta} aria-hidden="true">
@@ -56,8 +56,8 @@ export function ProjectCard({ project }: ProjectCardProps) {
               className={styles.titleLink}
               href={LIVBEE_URL}
               target="_blank"
-              rel="noreferrer"
-              aria-label="LIVBEE 서비스 새 탭에서 열기"
+              rel="noopener noreferrer"
+              aria-label="LIVBEE 서비스로 이동 (새 탭)"
               title="LIVBEE 바로가기"
             >
               <ExternalLinkIcon />
