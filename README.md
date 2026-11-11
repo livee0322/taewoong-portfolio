@@ -6,7 +6,7 @@
 
 - Next.js (App Router), React, TypeScript
 - CSS variables 기반 design token
-- 파일 기반 TypeScript 콘텐츠 데이터
+- GitHub 파일 기반 CMS 콘텐츠 데이터
 
 ## Local development
 
@@ -16,6 +16,8 @@ npm run dev
 ```
 
 `http://localhost:3000`에서 확인합니다.
+
+CMS에서 저장하려면 `.env.local`에 서버 전용 `GITHUB_CONTENT_TOKEN`을 설정합니다. 토큰은 이 저장소의 Contents 읽기/쓰기 권한만 부여하고 `NEXT_PUBLIC_` 접두사를 사용하지 않습니다. `/admin`의 Draft와 Publish는 각각 `content/portfolio.draft.json`, `content/portfolio.published.json`에 저장되며, 업로드 이미지는 `public/images/uploads/`에 추가됩니다.
 
 ## Quality commands
 
@@ -33,7 +35,7 @@ npm run build
 | `src/components` | layout, home, project, reusable UI components |
 | `src/data` | projects, works, career data |
 | `src/types` | shared content types |
-| `content` | future long-form project and work content source |
+| `content` | CMS Draft, Published snapshot, revision history |
 | `public/images` | optimized visual assets by project |
 | `docs` | this portfolio's canonical operating documents |
 

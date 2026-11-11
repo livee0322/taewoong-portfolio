@@ -2,7 +2,7 @@
 
 ## Goal
 
-`/admin`은 현재 Portfolio 디자인을 그대로 편집하는 공개 시각 편집기다. 로그인, 비밀번호, admin token, Supabase Auth, allowlist, feature gate는 사용하지 않는다. 개인 포트폴리오 운영 편의를 위해 누구나 읽고 쓸 수 있는 public write CMS로 운영하며, URL을 아는 제3자가 콘텐츠를 변경할 수 있다는 위험을 의도적으로 수용한다.
+`/admin`은 현재 Portfolio 디자인을 그대로 편집하는 공개 시각 편집기다. 별도의 로그인, 비밀번호, allowlist, feature gate는 사용하지 않는다. GitHub 쓰기 토큰은 서버 환경변수에만 두며 브라우저에는 노출하지 않는다. 개인 포트폴리오 운영 편의를 위해 public write CMS로 운영하며, URL을 아는 제3자가 콘텐츠를 변경할 수 있다는 위험을 의도적으로 수용한다.
 
 ## Editing experience
 
@@ -40,9 +40,12 @@
 
 저장과 Publish 전에 required Hero copy, image/alt, Work title/image/alt, 정확히 4개의 unique Project ID/order, Project 필수 필드/detail URL, HTTPS external URL, 정확히 한 개의 Home featured, featured의 Home 노출 상태를 검사한다. Published version은 삭제하지 않고 restore가 새 Draft를 만든다.
 
-## Runtime modes
+## Persistence
 
-1. Supabase configured: `portfolio_cms_state`, `draft_revisions`, `published_versions`, `assets`, public Storage bucket를 유일한 persistence source로 사용
-2. Supabase not configured: 같은 브라우저의 localStorage fallback 사용
+- Draft: `content/portfolio.draft.json`
+- Published: `content/portfolio.published.json`
+- 최근 게시 이력: `content/portfolio.revisions.json`
+- 업로드 이미지: `public/images/uploads/`
+- 서버 환경변수: `GITHUB_CONTENT_TOKEN`, `GITHUB_REPOSITORY`, `GITHUB_CONTENT_BRANCH`
 
-Supabase 환경값이 존재하면 query/RLS/network/Storage 오류를 localStorage fallback으로 숨기지 않고 CMS Error로 표시한다. Fallback은 환경값 자체가 없는 로컬 개발에만 사용한다.
+게시본이 아직 없거나 GitHub 읽기가 일시적으로 실패하면 저장소에 포함된 기존 seed 콘텐츠를 사용해 공개 사이트가 계속 표시된다. 저장 실패는 브라우저 localStorage로 숨기지 않고 CMS Error로 표시한다.

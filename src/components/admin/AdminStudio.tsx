@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { adminNavigation } from "@/admin/navigation";
 import type { AdminNavItem, AdminSectionId, AdminViewport, PreviewMode } from "@/admin/types";
-import { isSupabaseConfigured, loadDraft, loadRevisions, PublishError, publishDraft, restoreRevision, saveDraft, setLivePreview } from "@/content/cms-store";
+import { loadDraft, loadRevisions, PublishError, publishDraft, restoreRevision, saveDraft, setLivePreview } from "@/content/cms-store";
 import { seedSnapshot } from "@/content/seed";
 import type { PortfolioSnapshot, RevisionRecord } from "@/content/schema";
 import { AdminPreview } from "./AdminPreview";
@@ -28,7 +28,7 @@ export function AdminStudio() {
 
   useEffect(() => {
     Promise.all([loadDraft(), loadRevisions()]).then(([draft, history]) => {
-      setContent(draft); setRevisions(history); setLivePreview(draft); setSaveState("saved"); setConnectionState(isSupabaseConfigured() ? "connected" : "local");
+      setContent(draft); setRevisions(history); setLivePreview(draft); setSaveState("saved"); setConnectionState("connected");
     }).catch((error: unknown) => { setMessage(error instanceof Error ? error.message : "CMS를 불러오지 못했습니다."); setSaveState("error"); setConnectionState("error"); });
   }, []);
 
@@ -46,17 +46,17 @@ export function AdminStudio() {
   const updateContent = (next: PortfolioSnapshot) => { setContent(next); setSaveState("unsaved"); setMessage(""); };
 
   const handleSave = async () => {
-    setSaveState("saving"); if (isSupabaseConfigured()) setConnectionState("saving");
-    try { await saveDraft(content); setSaveState("draft"); setConnectionState(isSupabaseConfigured() ? "connected" : "local"); setMessage("Draft가 저장되었습니다. 공개 화면은 아직 변경되지 않았습니다."); }
+    setSaveState("saving"); setConnectionState("saving");
+    try { await saveDraft(content); setSaveState("draft"); setConnectionState("connected"); setMessage("Draft가 GitHub에 저장되었습니다. 공개 화면은 아직 변경되지 않았습니다."); }
     catch (error) { setSaveState("error"); setConnectionState("error"); setMessage(error instanceof Error ? error.message : "Draft 저장에 실패했습니다."); }
   };
 
   const handlePublish = async () => {
-    setSaveState("publishing"); if (isSupabaseConfigured()) setConnectionState("saving");
+    setSaveState("publishing"); setConnectionState("saving");
     try {
       const revision = await publishDraft(content);
       setRevisions((current) => [revision, ...current.filter((item) => item.id !== revision.id)].slice(0, 20));
-      setSaveState("published"); setConnectionState(isSupabaseConfigured() ? "connected" : "local"); setMessage(`Version ${revision.versionNumber}을 ${new Date(revision.publishedAt).toLocaleString("ko-KR")}에 공개했습니다.`);
+      setSaveState("published"); setConnectionState("connected"); setMessage(`Version ${revision.versionNumber}을 ${new Date(revision.publishedAt).toLocaleString("ko-KR")}에 공개했습니다.`);
     } catch (error) {
       if (error instanceof PublishError) {
         setSaveState("draft"); setConnectionState("error"); setMessage(`Draft saved · Publish failed: ${error.message}`);
@@ -79,7 +79,7 @@ export function AdminStudio() {
 
   return <main className={`${styles.adminRoot} admin-route-marker`}>
     <header className={styles.topbar}>
-      <div className={styles.brandBlock}><span className={styles.brandMark}>TL</span><div><strong>Portfolio Editor</strong><span>{isSupabaseConfigured() ? `Supabase · ${connectionLabel[connectionState]}` : "Local fallback · env missing"}</span></div></div>
+      <div className={styles.brandBlock}><span className={styles.brandMark}>TL</span><div><strong>Portfolio Editor</strong><span>GitHub · {connectionLabel[connectionState]}</span></div></div>
       <div className={styles.documentState} aria-live="polite"><span className={`${styles.stateDot} ${saveState === "unsaved" || connectionState === "error" ? styles.stateDirty : ""}`} />{connectionLabel[connectionState]} · {stateLabel[saveState]}</div>
       <div className={styles.topActions}>
         <button className={styles.secondaryButton} type="button" disabled={saveState === "saving" || saveState === "publishing"} onClick={handleSave}>Save Draft</button>
