@@ -13,7 +13,7 @@ export function ContentProvider({ children, initialContent = seedSnapshot }: { c
   useEffect(() => {
     const preview = new URLSearchParams(window.location.search).get("cmsPreview") === "draft";
     let active = true;
-    const refresh = () => loadPublished(preview).then((next) => { if (active) setContent(next); });
+    const refresh = () => loadPublished(preview).then((next) => { if (active) setContent(next); }).catch(() => undefined);
     void refresh();
     const channel = new BroadcastChannel("portfolio-cms");
     const receive = (key: string | null | undefined) => {
